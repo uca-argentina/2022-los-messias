@@ -18,13 +18,6 @@ Board class >> assertValid: numberOfLockers [
 ]
 
 { #category : #'instance creation' }
-Board class >> loadShips: anArrayOfShips [
-
-	"Aca tendría que validar que el array of ships sean una instancia de la clase ship"
-	ships := anArrayOfShips
-]
-
-{ #category : #'instance creation' }
 Board class >> with: aNumberOfLockers [
 	self assertValid: aNumberOfLockers.
 	^ self new initializeWith: aNumberOfLockers
