@@ -22,7 +22,7 @@ DiceTest >> testDiceCupRollResultIsTheSumOfTheResultsOfEachIndividualDie [
 	die2 := LoadedDie with: 7.
 	die3 := LoadedDie with: 2.
 
-	aDiceCup := DiceCup witAll: { 
+	aDiceCup := DiceCup withAll: { 
 			        die1.
 			        die2.
 			        die3 }.

@@ -2,19 +2,32 @@ Class {
 	#name : #Ship,
 	#superclass : #Object,
 	#instVars : [
-		'position'
+		'position',
+		'id'
 	],
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #initialization }
-Ship class >> start [
-	^self new withPosition: 0.
+{ #category : #'instance creation' }
+Ship class >> with: anId [
+	
+	^ self new initializeWith: anId.
 ]
 
 { #category : #actions }
 Ship >> advances: anInteger [ 
 	position := position + anInteger .
+]
+
+{ #category : #getters }
+Ship >> getId [
+	^ id.
+]
+
+{ #category : #initialization }
+Ship >> initializeWith: anId [
+	position := 0.
+	id := anId.
 ]
 
 { #category : #'accessing - attributes' }
@@ -25,9 +38,4 @@ Ship >> isInPosition [
 { #category : #methods }
 Ship >> playsWith: aLoadedDie in: aBoard [ 
 	position := position + ( aLoadedDie roll ).
-]
-
-{ #category : #initialization }
-Ship >> withPosition: anInteger [ 
-	position := anInteger.
 ]

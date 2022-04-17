@@ -33,7 +33,7 @@ Class {
 }
 
 { #category : #initialization }
-DiceCup class >> witAll: dice [
+DiceCup class >> withAll: dice [
 
 	^ self new initializeWithAll: dice
 ]

@@ -13,8 +13,8 @@ Class {
 { #category : #'instance creation' }
 Board class >> assertValid: numberOfLockers [
 
-	numberOfLockers positive ifFalse: [ 
-		Error signal: 'Number of Lockers should be positive' ].
+	numberOfLockers >= 2 ifFalse: [ 
+		Error signal: 'Zathura cannot be played with a board with less than two lockers' ]
 ]
 
 { #category : #'instance creation' }
@@ -26,13 +26,19 @@ Board class >> with: aNumberOfLockers [
 { #category : #initialization }
 Board >> didShipCrossFinishLine: aShip [
 
-	^ aShip > numberOfLockers
+	| result |
+	result := aShip isInPosition >= numberOfLockers.
+	result ifTrue: [ 
+		aShip advances: numberOfLockers - aShip isInPosition ].
+	
+
+	^ result
 ]
 
 { #category : #initialization }
 Board >> getPositionShip: aShip [
 
-	^ aShip.
+	^ aShip isInPosition 
 ]
 
 { #category : #initialization }
