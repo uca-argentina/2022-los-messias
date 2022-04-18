@@ -76,7 +76,7 @@ ZathuraGame >> start [
 	[ finished == false ] whileTrue: [ 
 		i := i % ships size + 1.
 		shipPlaying := ships at: i.
-		shipPlaying playsWith: diceCup in: board.
+		shipPlaying playsWith: diceCup.
 
 		(board didShipCrossFinishLine: shipPlaying) ifTrue: [ winner := shipPlaying. self end ].
 

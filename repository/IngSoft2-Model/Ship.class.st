@@ -36,6 +36,6 @@ Ship >> isInPosition [
 ]
 
 { #category : #methods }
-Ship >> playsWith: aLoadedDie in: aBoard [ 
-	position := position + ( aLoadedDie roll ).
+Ship >> playsWith: aDiceCup [
+	position := position + ( aDiceCup roll ).
 ]
