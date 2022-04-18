@@ -37,5 +37,5 @@ Ship >> isInPosition [
 
 { #category : #methods }
 Ship >> playsWith: aDiceCup [
-	position := position + ( aDiceCup roll ).
+	self advances: (aDiceCup roll).
 ]
