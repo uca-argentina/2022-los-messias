@@ -4,66 +4,101 @@ Class {
 	#category : #'IngSoft2-Tests'
 }
 
-{ #category : #tests }
+{ #category : #asserting }
 BoardTest >> should: aBlock raise: anError withMessage: anErrorMessage [
 
-	| tmp2 tmp3 |
+	| blockFail errorMessage |
+	blockFail := false.
 	aBlock
 		on: anError
 		do: [ :error | 
-			tmp2 := true.
-			tmp3 := error messageText ].
+			blockFail := true.
+			errorMessage := error messageText ].
 	self
-		assert: tmp2;
-		assert: tmp3 equals: anErrorMessage
+		assert: blockFail;
+		assert: errorMessage equals: anErrorMessage
 ]
 
 { #category : #tests }
-BoardTest >> testBoardUpdatesPositionOfShipToLastLockerWhenPassingThroughTheGoal [
-	| aQuantityLockers aBoard aShip |
+BoardTest >> testBoardKnowsThePositionOfAShip [
+
+	| aQuantityLockers aBoard aRedShip ships aBlueShip |
 	aQuantityLockers := 3.
-	aShip := Ship with: 1.
-	aShip advances: 5.
-	aBoard := Board with: aQuantityLockers.
-	aBoard didShipCrossFinishLine: aShip.
-	self assert: (aShip isInPosition == aQuantityLockers )
+	aBlueShip := 'BlueShip'.
+	aRedShip := 'RedShip'.
+	ships := { aRedShip. aBlueShip }.
+	aBoard := Board withLockers: aQuantityLockers withShips: ships.
+	self assert: (aBoard positionOfShip: aRedShip) equals: 0
+]
+
+{ #category : #tests }
+BoardTest >> testBoardMovesThePositionOfShipToLastLockerWhenPassingThroughTheGoal [
+
+	| aQuantityLockers aBoard aBlueShip aRedShip ships |
+	aQuantityLockers := 3.
+	aBlueShip := 'BlueShip'.
+	aRedShip := 'RedShip'.
+	ships := { 
+		         aRedShip.
+		         aBlueShip }.
+	aBoard := Board withLockers: aQuantityLockers withShips: ships.
+
+	aBoard movesShip: aRedShip lockers: 5.
+	self
+		assert: (aBoard positionOfShip: aRedShip)
+		equals: aQuantityLockers
 ]
 
 { #category : #tests }
 BoardTest >> testBoardWithNumberOfLockersSmallerThanTwoIsNotValid [
 
 	self
-		should: [ Board with: -3 ]
+		should: [ Board withLockers: -3 withShips: { 'RedShip'. 'BlueShip' } ]
 		raise: Error
-		withMessage: 'Zathura cannot be played with a board with less than two lockers'
+		withMessage:
+		'Zathura cannot be played with a board with less than two lockers'
 ]
 
 { #category : #tests }
 BoardTest >> testDidShipCrossFinishLineWithShipPositionGreaterThanFinishLineIsTrue [
 
-	| aQuantityLockers aBoard aShip |
+	| aQuantityLockers aBoard aBlueShip aRedShip ships |
 	aQuantityLockers := 3.
-	aShip := Ship with: 1.
-	aShip advances: 4.
-	aBoard := Board with: aQuantityLockers.
-	self assert: (aBoard didShipCrossFinishLine: aShip)
+	aBlueShip := 'BlueShip'.
+	aRedShip := 'RedShip'.
+	ships := { 
+		         aRedShip.
+		         aBlueShip }.
+	aBoard := Board withLockers: aQuantityLockers withShips: ships.
+
+	self assert: (aBoard movesShip: aRedShip lockers: 5)
 ]
 
 { #category : #tests }
 BoardTest >> testDidShipCrossFinishLineWithShipPositionLessThanFinishLineIsFalse [
 
-	| aQuantityLockers aBoard aShip |
+	| aQuantityLockers aBoard aBlueShip aRedShip ships |
 	aQuantityLockers := 3.
-	aShip := Ship with: 1.
-	aBoard := Board with: aQuantityLockers.
-	self deny: (aBoard didShipCrossFinishLine: aShip)
+	aBlueShip := 'BlueShip'.
+	aRedShip := 'RedShip'.
+	ships := { 
+		         aRedShip.
+		         aBlueShip }.
+	aBoard := Board withLockers: aQuantityLockers withShips: ships.
+
+	self deny: (aBoard movesShip: aRedShip lockers: 1)
 ]
 
 { #category : #tests }
 BoardTest >> testNumberOfLockersPostiveAndIntegerIsValid [
 
-	| aQuantityLockers aBoard |
+	| aQuantityLockers aBoard aBlueShip aRedShip ships |
 	aQuantityLockers := 3.
-	aBoard := Board with: aQuantityLockers.
+	aBlueShip := 'BlueShip'.
+	aRedShip := 'RedShip'.
+	ships := { 
+		         aRedShip.
+		         aBlueShip }.
+	aBoard := Board withLockers: aQuantityLockers withShips: ships.
 	self assert: aQuantityLockers > 0
 ]

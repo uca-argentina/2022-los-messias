@@ -12,22 +12,15 @@ Class {
 }
 
 { #category : #asserting }
-ZathuraGame class >> assertNumberOfDieInCupDiceIsValid: aDiceCup [
+ZathuraGame class >> assertNumberOfShipsIsValid: aCollectionOfShips [
 
-	(aDiceCup roll) > 0 ifFalse: [ Error signal: 'Zathura cannot be played with an empty dice cup' ]
-]
-
-{ #category : #asserting }
-ZathuraGame class >> assertNumberOfShipsIsValid: aNumberOfShips [
-
-	aNumberOfShips >= 2 ifFalse: [ Error signal: 'Zathura cannot be played with less than two players' ]
+	aCollectionOfShips size >= 2 ifFalse: [ Error signal: 'Zathura cannot be played with less than two ships' ]
 ]
 
 { #category : #initialization }
 ZathuraGame class >> withShips: aNumberOfShips withNumberOfLockers: aNumberOfLockers withDiceCup: aDiceCup [
 
 	self assertNumberOfShipsIsValid: aNumberOfShips.
-	self assertNumberOfDieInCupDiceIsValid: aDiceCup.
 	^ self new
 		  initializeWithShips: aNumberOfShips
 		  withNumberOfLockers: aNumberOfLockers
@@ -39,18 +32,6 @@ ZathuraGame >> end [
 	finished := true.
 ]
 
-{ #category : #getters }
-ZathuraGame >> getPositionOfShip: anId [ 
-	| ship |
-	ship := (ships select: [ :aShip | aShip getId == anId ]).
-	^ (ship at: 1) isInPosition 
-]
-
-{ #category : #ending }
-ZathuraGame >> getWinner [
-	^ winner.
-]
-
 { #category : #state }
 ZathuraGame >> hasFinished [
 
@@ -58,27 +39,31 @@ ZathuraGame >> hasFinished [
 ]
 
 { #category : #initialization }
-ZathuraGame >> initializeWithShips: aNumberOfShips withNumberOfLockers: aNumberOfLockers withDiceCup: aDiceCup [
+ZathuraGame >> initializeWithShips: aCollectionOfShips withNumberOfLockers: aNumberOfLockers withDiceCup: aDiceCup [
 
 	diceCup := aDiceCup.
-	board := Board with: aNumberOfLockers.
-	ships := OrderedCollection new.
-	1 to: aNumberOfShips do: [ :i | ships add: (Ship with: i) ]
+	board := Board withLockers: aNumberOfLockers withShips:aCollectionOfShips.
+	ships := aCollectionOfShips
+]
+
+{ #category : #positioning }
+ZathuraGame >> positionOfShip: aShip [ 
+	^board positionOfShip: aShip
 ]
 
 { #category : #starting }
 ZathuraGame >> start [
 
-	| i shipPlaying |
+	| shipPlaying |
 	finished := false.
 
-	i := 0.
-	[ finished == false ] whileTrue: [ 
-		i := i % ships size + 1.
-		shipPlaying := ships at: i.
-		shipPlaying playsWith: diceCup.
+	[ finished not ] whileTrue: [ 
+		ships do: [ :aShip | finished ifFalse: [(board movesShip: aShip lockers: diceCup roll) ifTrue: [ winner := aShip. self end ] ] ]
 
-		(board didShipCrossFinishLine: shipPlaying) ifTrue: [ winner := shipPlaying. self end ].
+	]
+]
 
-		i := i + 1 ]
+{ #category : #ending }
+ZathuraGame >> winner [
+	^ winner.
 ]

@@ -32,9 +32,14 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
+{ #category : #asserting }
+DiceCup class >> assertValid: aDice [
+	aDice size >= 1 ifFalse:  [ Error signal:  'Dice Cup should be initialized with at least one die'] 
+]
+
 { #category : #initialization }
 DiceCup class >> withAll: dice [
-
+	self assertValid: dice.
 	^ self new initializeWithAll: dice
 ]
 

@@ -15,6 +15,16 @@ DiceTest >> should: createRandomDie raise: error withMessage: errorMessage [
 ]
 
 { #category : #'tests  - DiceCup' }
+DiceTest >> testDiceCupIsInitializedWithLessThanOneDieThrowsError [
+
+	| error errorMessage createLoadedDie |
+	error := Error.
+	errorMessage := 'Dice Cup should be initialized with at least one die'.
+	createLoadedDie := [ DiceCup withAll: {  } ].
+	self should: createLoadedDie raise: error withMessage: errorMessage
+]
+
+{ #category : #'tests  - DiceCup' }
 DiceTest >> testDiceCupRollResultIsTheSumOfTheResultsOfEachIndividualDie [
 
 	| die1 die2 die3 aDiceCup rollResult |
@@ -28,6 +38,67 @@ DiceTest >> testDiceCupRollResultIsTheSumOfTheResultsOfEachIndividualDie [
 			        die3 }.
 	rollResult := aDiceCup roll.
 	self assert: rollResult equals: 13
+]
+
+{ #category : #tests }
+DiceTest >> testDiceIsThrownAndReturnsANumberBetweenOneAndNumberOfDiceFacesIsValid [
+
+	| aDice aNumber aNumberOfFaces |
+	aNumberOfFaces := 4.
+	aDice := Dice with: aNumberOfFaces.
+	aNumber := aDice throw.
+	
+	self assert: (aNumber >= 1 and: aNumber <= aNumberOfFaces)
+]
+
+{ #category : #tests }
+DiceTest >> testDiceIsThrownAndReturnsANumberBetweenOneAndSixIsValid [
+
+	| aDice aNumber |
+	aDice := Dice with: 6.
+	aNumber := aDice throw.
+	
+	self assert: (aNumber >= 1 and: aNumber <= 6)
+]
+
+{ #category : #tests }
+DiceTest >> testDiceIsThrownAndReturnsANumberBiggerThanNumberOfFacesIsNotValid [
+
+	| aDice aNumber |
+	aDice := Dice with: 10.
+	aNumber := aDice throw.
+
+	self deny: aNumber > 10
+]
+
+{ #category : #tests }
+DiceTest >> testDiceIsThrownAndReturnsANumberBiggerThanSixIsNotValid [
+
+	| aDice aNumber |
+	
+	aDice := Dice with: 6.
+	aNumber := aDice throw.
+	
+	self deny: aNumber > 6
+]
+
+{ #category : #tests }
+DiceTest >> testDiceIsThrownAndReturnsANumberIsValid [
+
+	| aDice |
+	aDice := Dice with: 6.
+	
+	self assert: aDice throw isInteger
+]
+
+{ #category : #tests }
+DiceTest >> testDiceIsThrownAndReturnsANumberSmallerThanOneIsNotValid [
+
+	| aDice aNumber |
+	aDice := Dice with: 6.
+	aNumber := aDice throw.
+	
+	self deny: aNumber < 1
 ]
 
 { #category : #'tests - LoadedDice' }

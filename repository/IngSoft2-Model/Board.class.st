@@ -2,7 +2,8 @@ Class {
 	#name : #Board,
 	#superclass : #Object,
 	#instVars : [
-		'numberOfLockers'
+		'numberOfLockers',
+		'positionOfShips'
 	],
 	#classInstVars : [
 		'ships'
@@ -17,32 +18,41 @@ Board class >> assertValid: numberOfLockers [
 		Error signal: 'Zathura cannot be played with a board with less than two lockers' ]
 ]
 
-{ #category : #'instance creation' }
-Board class >> with: aNumberOfLockers [
+{ #category : #initialization }
+Board class >> withLockers: aNumberOfLockers withShips: aCollectionOfShips [
 	self assertValid: aNumberOfLockers.
-	^ self new initializeWith: aNumberOfLockers
+	^self new initializeWithLockers: aNumberOfLockers withShips: aCollectionOfShips  .
 ]
 
 { #category : #initialization }
-Board >> didShipCrossFinishLine: aShip [
+Board >> didShipCrossFinishLine: aNewPosition [
 
-	| result |
-	result := aShip isInPosition >= numberOfLockers.
-	result ifTrue: [ 
-		aShip advances: numberOfLockers - aShip isInPosition ].
-	
+	^aNewPosition  >= numberOfLockers
 
-	^ result
 ]
 
 { #category : #initialization }
-Board >> getPositionShip: aShip [
+Board >> initializeWithLockers: aNumberOfLockers withShips: aCollectionOfShips [
+	numberOfLockers := aNumberOfLockers.
+	positionOfShips := Dictionary new.
+	aCollectionOfShips do:  [ :aShip | positionOfShips at: aShip put: 0].
+]
 
-	^ aShip isInPosition 
+{ #category : #moving }
+Board >> movesShip: aShip lockers: aNumberOfLockers [
+
+	| actualPosition newPosition checkIfShipWon |
+	actualPosition := positionOfShips at: aShip.
+	newPosition := actualPosition + aNumberOfLockers.
+	checkIfShipWon := (self didShipCrossFinishLine: newPosition ).
+	checkIfShipWon
+		ifTrue: [ positionOfShips at: aShip put: numberOfLockers ]
+		ifFalse: [ positionOfShips at: aShip put: newPosition ].
+	^checkIfShipWon
 ]
 
 { #category : #initialization }
-Board >> initializeWith: aNumberOfLockers [
+Board >> positionOfShip: aShip [
 
-	numberOfLockers := aNumberOfLockers
+	^ positionOfShips at: aShip 
 ]

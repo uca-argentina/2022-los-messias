@@ -17,24 +17,26 @@ ZathuraTest >> should: creationOfZathura raise: error withMessage: errorMessage 
 { #category : #tests }
 ZathuraTest >> testZathuraFirstShipWinsWhenPlayingWithALoadedDie [
 
-	| zathura diceCup |
+	| zathura diceCup ships |
 	diceCup := DiceCup withAll: { (LoadedDie with: 5) }.
+	ships := { 'GreenShip'. 'RedShip'. 'BlueShip' }.
 	zathura := ZathuraGame
-		           withShips: 5
+		           withShips: ships
 		           withNumberOfLockers: 10
 		           withDiceCup: diceCup.
 
 	zathura start.
-	self assert: zathura getWinner getId equals: 1
+	self assert: zathura winner equals: 'GreenShip'
 ]
 
 { #category : #tests }
-ZathuraTest >> testZathuraHasFinishedReturnsTrueWhenStartPlayingWithFiveShipsAndABoardAndACupDice [
+ZathuraTest >> testZathuraHasFinishedReturnsTrueWhenStartPlayingWithThreeShipsAndABoardAndACupDice [
 
-	| zathura diceCup |
+	| zathura diceCup ships |
 	diceCup := DiceCup withAll: { (LoadedDie with: 6) }.
+	ships := { 'BlueShip'. 'RedShip'. 'GreenShip'}.
 	zathura := ZathuraGame
-		           withShips: 5
+		           withShips: ships
 		           withNumberOfLockers: 10
 		           withDiceCup: diceCup.
 
@@ -43,63 +45,33 @@ ZathuraTest >> testZathuraHasFinishedReturnsTrueWhenStartPlayingWithFiveShipsAnd
 ]
 
 { #category : #tests }
-ZathuraTest >> testZathuraInitializeWithABoardWithLessThanTwoLockersThrowsError [
+ZathuraTest >> testZathuraInitializeWithLessThanTwoShipsThrowsError [
 
-	| diceCup creationOfZathura error errorMessage |
+	| diceCup creationOfZathura error errorMessage ships |
 	diceCup := DiceCup withAll: { (LoadedDie with: 6) }.
+	ships := { 'BlueShip' }.
 	creationOfZathura := [ 
 	                     ZathuraGame
-		                     withShips: 5
-		                     withNumberOfLockers: 1
-		                     withDiceCup: diceCup ].
-	error := Error.
-	errorMessage := 'Zathura cannot be played with a board with less than two lockers'.
-
-	self should: creationOfZathura raise: error withMessage: errorMessage
-]
-
-{ #category : #tests }
-ZathuraTest >> testZathuraInitializeWithAnEmptyDiceCupThrowsError [
-
-	| diceCup creationOfZathura error errorMessage |
-	diceCup := DiceCup withAll: {  }.
-	creationOfZathura := [ 
-	                     ZathuraGame
-		                     withShips: 5
+		                     withShips: ships
 		                     withNumberOfLockers: 10
 		                     withDiceCup: diceCup ].
 	error := Error.
-	errorMessage := 'Zathura cannot be played with an empty dice cup'.
+	errorMessage := 'Zathura cannot be played with less than two ships'.
 
 	self should: creationOfZathura raise: error withMessage: errorMessage
 ]
 
 { #category : #tests }
-ZathuraTest >> testZathuraInitializeWithLessThanTwoPlayersThrowsError [
+ZathuraTest >> testZathuraKnowsThePositionOfShipNumberOneAfterCrossingTheFinaLocker [
 
-	| diceCup creationOfZathura error errorMessage |
+	| zathura diceCup ships |
 	diceCup := DiceCup withAll: { (LoadedDie with: 6) }.
-	creationOfZathura := [ 
-	                     ZathuraGame
-		                     withShips: 1
-		                     withNumberOfLockers: 10
-		                     withDiceCup: diceCup ].
-	error := Error.
-	errorMessage := 'Zathura cannot be played with less than two players'.
-	
-	self should: creationOfZathura raise: error withMessage: errorMessage
-]
-
-{ #category : #tests }
-ZathuraTest >> testZathuraReturnsTheResultOfShipNumberOne [
-
-	| zathura diceCup |
-	diceCup := DiceCup withAll: { (LoadedDie with: 6) }.
+	ships := { 'BlueShip'. 'RedShip'. 'GreenShip' }.
 	zathura := ZathuraGame
-		           withShips: 5
+		           withShips: ships
 		           withNumberOfLockers: 10
 		           withDiceCup: diceCup.
 
 	zathura start.
-	self assert: (zathura getPositionOfShip: 1) equals: 10
+	self assert: (zathura positionOfShip: 'BlueShip') equals: 10
 ]
