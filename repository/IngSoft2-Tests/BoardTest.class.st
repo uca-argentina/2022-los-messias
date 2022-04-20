@@ -5,18 +5,28 @@ Class {
 }
 
 { #category : #asserting }
-BoardTest >> should: aBlock raise: anError withMessage: anErrorMessage [
+BoardTest >> should: createBoard raise: error withMessage: errorMessage [
 
-	| blockFail errorMessage |
-	blockFail := false.
-	aBlock
-		on: anError
-		do: [ :error | 
-			blockFail := true.
-			errorMessage := error messageText ].
 	self
-		assert: blockFail;
-		assert: errorMessage equals: anErrorMessage
+		should: createBoard
+		raise: error
+		whoseDescriptionIncludes: errorMessage
+		description: 'Test did not failed as expected'
+]
+
+{ #category : #tests }
+BoardTest >> testBoardKnowsThatAShipCrossFinishLine [
+
+	| aQuantityLockers aBoard aBlueShip aRedShip ships |
+	aQuantityLockers := 3.
+	aBlueShip := 'BlueShip'.
+	aRedShip := 'RedShip'.
+	ships := { 
+		         aRedShip.
+		         aBlueShip }.
+	aBoard := Board withLockers: aQuantityLockers withShips: ships.
+
+	self assert: (aBoard movesShip: aRedShip lockers: 5)
 ]
 
 { #category : #tests }
@@ -50,28 +60,16 @@ BoardTest >> testBoardMovesThePositionOfShipToLastLockerWhenPassingThroughTheGoa
 ]
 
 { #category : #tests }
-BoardTest >> testBoardWithNumberOfLockersSmallerThanTwoIsNotValid [
+BoardTest >> testBoardWithNumberOfLockersSmallerThanTwoThrowsError [
 
-	self
-		should: [ Board withLockers: -3 withShips: { 'RedShip'. 'BlueShip' } ]
-		raise: Error
-		withMessage:
-		'Zathura cannot be played with a board with less than two lockers'
-]
-
-{ #category : #tests }
-BoardTest >> testDidShipCrossFinishLineWithShipPositionGreaterThanFinishLineIsTrue [
-
-	| aQuantityLockers aBoard aBlueShip aRedShip ships |
-	aQuantityLockers := 3.
-	aBlueShip := 'BlueShip'.
-	aRedShip := 'RedShip'.
-	ships := { 
-		         aRedShip.
-		         aBlueShip }.
-	aBoard := Board withLockers: aQuantityLockers withShips: ships.
-
-	self assert: (aBoard movesShip: aRedShip lockers: 5)
+	| createBoard error errorMessage |
+	createBoard := [ 
+	               Board
+		               withLockers: -3
+		               withShips: { 'RedShip'. 'BlueShip' } ].
+	error := Error.
+	errorMessage := 'Zathura cannot be played with a board with less than two lockers'.
+	self should: createBoard raise: error withMessage: errorMessage
 ]
 
 { #category : #tests }
@@ -90,7 +88,7 @@ BoardTest >> testDidShipCrossFinishLineWithShipPositionLessThanFinishLineIsFalse
 ]
 
 { #category : #tests }
-BoardTest >> testNumberOfLockersPostiveAndIntegerIsValid [
+BoardTest >> testNumberOfLockersPostiveIsValid [
 
 	| aQuantityLockers aBoard aBlueShip aRedShip ships |
 	aQuantityLockers := 3.

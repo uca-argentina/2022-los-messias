@@ -25,12 +25,12 @@ ZathuraTest >> testZathuraFirstShipWinsWhenPlayingWithALoadedDie [
 		           withNumberOfLockers: 10
 		           withDiceCup: diceCup.
 
-	zathura start.
+	zathura play.
 	self assert: zathura winner equals: 'GreenShip'
 ]
 
 { #category : #tests }
-ZathuraTest >> testZathuraHasFinishedReturnsTrueWhenStartPlayingWithThreeShipsAndABoardAndACupDice [
+ZathuraTest >> testZathuraHasFinisheDWhenPlaysWithThreeShipsAndABoardAndACupDiceUntilTheEnd [
 
 	| zathura diceCup ships |
 	diceCup := DiceCup withAll: { (LoadedDie with: 6) }.
@@ -40,12 +40,12 @@ ZathuraTest >> testZathuraHasFinishedReturnsTrueWhenStartPlayingWithThreeShipsAn
 		           withNumberOfLockers: 10
 		           withDiceCup: diceCup.
 
-	zathura start.
+	zathura play.
 	self assert: zathura hasFinished
 ]
 
 { #category : #tests }
-ZathuraTest >> testZathuraInitializeWithLessThanTwoShipsThrowsError [
+ZathuraTest >> testZathuraInitializedWithLessThanTwoShipsThrowsError [
 
 	| diceCup creationOfZathura error errorMessage ships |
 	diceCup := DiceCup withAll: { (LoadedDie with: 6) }.
@@ -72,6 +72,6 @@ ZathuraTest >> testZathuraKnowsThePositionOfShipNumberOneAfterCrossingTheFinaLoc
 		           withNumberOfLockers: 10
 		           withDiceCup: diceCup.
 
-	zathura start.
+	zathura play.
 	self assert: (zathura positionOfShip: 'BlueShip') equals: 10
 ]

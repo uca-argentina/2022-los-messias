@@ -40,67 +40,6 @@ DiceTest >> testDiceCupRollResultIsTheSumOfTheResultsOfEachIndividualDie [
 	self assert: rollResult equals: 13
 ]
 
-{ #category : #tests }
-DiceTest >> testDiceIsThrownAndReturnsANumberBetweenOneAndNumberOfDiceFacesIsValid [
-
-	| aDice aNumber aNumberOfFaces |
-	aNumberOfFaces := 4.
-	aDice := Dice with: aNumberOfFaces.
-	aNumber := aDice throw.
-	
-	self assert: (aNumber >= 1 and: aNumber <= aNumberOfFaces)
-]
-
-{ #category : #tests }
-DiceTest >> testDiceIsThrownAndReturnsANumberBetweenOneAndSixIsValid [
-
-	| aDice aNumber |
-	aDice := Dice with: 6.
-	aNumber := aDice throw.
-	
-	self assert: (aNumber >= 1 and: aNumber <= 6)
-]
-
-{ #category : #tests }
-DiceTest >> testDiceIsThrownAndReturnsANumberBiggerThanNumberOfFacesIsNotValid [
-
-	| aDice aNumber |
-	aDice := Dice with: 10.
-	aNumber := aDice throw.
-
-	self deny: aNumber > 10
-]
-
-{ #category : #tests }
-DiceTest >> testDiceIsThrownAndReturnsANumberBiggerThanSixIsNotValid [
-
-	| aDice aNumber |
-	
-	aDice := Dice with: 6.
-	aNumber := aDice throw.
-	
-	self deny: aNumber > 6
-]
-
-{ #category : #tests }
-DiceTest >> testDiceIsThrownAndReturnsANumberIsValid [
-
-	| aDice |
-	aDice := Dice with: 6.
-	
-	self assert: aDice throw isInteger
-]
-
-{ #category : #tests }
-DiceTest >> testDiceIsThrownAndReturnsANumberSmallerThanOneIsNotValid [
-
-	| aDice aNumber |
-	aDice := Dice with: 6.
-	aNumber := aDice throw.
-	
-	self deny: aNumber < 1
-]
-
 { #category : #'tests - LoadedDice' }
 DiceTest >> testLoadedDieCannotBeLoadedWithResultLowerThanOne [
 
@@ -131,7 +70,27 @@ DiceTest >> testRandomDieCannotBeCreatedWithNumberOfFacesSmallerThanThree [
 ]
 
 { #category : #'tests - RandomDice' }
-DiceTest >> testRandomDieIsThrownAndReturnsANumberBetweenOneAndNumberOfDiceFacesIsValid [
+DiceTest >> testRandomDieRollsAndTheResultANumberBiggerThanSixIsNotValid [
+
+	| aDie aRollResult |
+	aDie := RandomDie with: 6.
+	aRollResult := aDie roll.
+
+	self deny: aRollResult > 6
+]
+
+{ #category : #'tests - RandomDice' }
+DiceTest >> testRandomDieRollsAndTheResultANumberSmallerThanOneIsNotValid [
+
+	| aDie aRollResult |
+	aDie := RandomDie with: 6.
+	aRollResult := aDie roll.
+
+	self deny: aRollResult < 1
+]
+
+{ #category : #'tests - RandomDice' }
+DiceTest >> testRandomDieRollsAndTheResultIsANumberBetweenOneAndNumberOfDiceFacesIsValid [
 
 	| aDie aRollResutl aNumberOfFaces |
 	aNumberOfFaces := 4.
@@ -142,7 +101,7 @@ DiceTest >> testRandomDieIsThrownAndReturnsANumberBetweenOneAndNumberOfDiceFaces
 ]
 
 { #category : #'tests - RandomDice' }
-DiceTest >> testRandomDieIsThrownAndReturnsANumberBetweenOneAndSixIsValid [
+DiceTest >> testRandomDieRollsAndTheResultIsANumberBetweenOneAndSixIsValid [
 
 	| aDie aRollResult |
 	aDie := RandomDie with: 6.
@@ -152,40 +111,11 @@ DiceTest >> testRandomDieIsThrownAndReturnsANumberBetweenOneAndSixIsValid [
 ]
 
 { #category : #'tests - RandomDice' }
-DiceTest >> testRandomDieIsThrownAndReturnsANumberBiggerThanNumberOfFacesIsNotValid [
+DiceTest >> testRandomDieRollsAndTheResultIsANumberBiggerThanNumberOfFacesIsNotValid [
 
 	| aDie aRollResult |
 	aDie := RandomDie with: 10.
 	aRollResult := aDie roll.
 
 	self deny: aRollResult > 10
-]
-
-{ #category : #'tests - RandomDice' }
-DiceTest >> testRandomDieIsThrownAndReturnsANumberBiggerThanSixIsNotValid [
-
-	| aDie aRollResult |
-	aDie := RandomDie with: 6.
-	aRollResult := aDie roll.
-
-	self deny: aRollResult > 6
-]
-
-{ #category : #'tests - RandomDice' }
-DiceTest >> testRandomDieIsThrownAndReturnsANumberIsValid [
-
-	| aDie |
-	aDie := RandomDie with: 6.
-
-	self assert: aDie roll isInteger
-]
-
-{ #category : #'tests - RandomDice' }
-DiceTest >> testRandomDieIsThrownAndReturnsANumberSmallerThanOneIsNotValid [
-
-	| aDie aRollResult |
-	aDie := RandomDie with: 6.
-	aRollResult := aDie roll.
-
-	self deny: aRollResult < 1
 ]
