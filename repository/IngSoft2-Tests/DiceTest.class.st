@@ -27,20 +27,16 @@ DiceTest >> testDiceCupIsInitializedWithLessThanOneDieThrowsError [
 { #category : #'tests  - DiceCup' }
 DiceTest >> testDiceCupRollResultIsTheSumOfTheResultsOfEachIndividualDie [
 
-	| die1 die2 die3 aDiceCup rollResult |
-	die1 := LoadedDie with: 4.
-	die2 := LoadedDie with: 7.
-	die3 := LoadedDie with: 2.
-
+	| aDiceCup rollResult |
 	aDiceCup := DiceCup withAll: { 
-			        die1.
-			        die2.
-			        die3 }.
+			            (LoadedDie with: 4).
+			            (LoadedDie with: 7).
+			            (LoadedDie with: 2) }.
 	rollResult := aDiceCup roll.
 	self assert: rollResult equals: 13
 ]
 
-{ #category : #'tests - LoadedDice' }
+{ #category : #'tests - LoadedDie' }
 DiceTest >> testLoadedDieCannotBeLoadedWithResultLowerThanOne [
 
 	| error errorMessage createLoadedDie |
@@ -50,7 +46,7 @@ DiceTest >> testLoadedDieCannotBeLoadedWithResultLowerThanOne [
 	self should: createLoadedDie raise: error withMessage: errorMessage
 ]
 
-{ #category : #'tests - LoadedDice' }
+{ #category : #'tests - LoadedDie' }
 DiceTest >> testLoadedDieRollsFiveWhenLoadedWithFive [
 
 	| loadedDie rollResult |
@@ -59,7 +55,7 @@ DiceTest >> testLoadedDieRollsFiveWhenLoadedWithFive [
 	self assert: rollResult equals: 5
 ]
 
-{ #category : #'tests - RandomDice' }
+{ #category : #'tests - RandomDie' }
 DiceTest >> testRandomDieCannotBeCreatedWithNumberOfFacesSmallerThanThree [
 
 	| createRandomDie error errorMessage |
@@ -69,17 +65,7 @@ DiceTest >> testRandomDieCannotBeCreatedWithNumberOfFacesSmallerThanThree [
 	self should: createRandomDie raise: error withMessage: errorMessage
 ]
 
-{ #category : #'tests - RandomDice' }
-DiceTest >> testRandomDieRollsAndTheResultANumberBiggerThanSixIsNotValid [
-
-	| aDie aRollResult |
-	aDie := RandomDie with: 6.
-	aRollResult := aDie roll.
-
-	self deny: aRollResult > 6
-]
-
-{ #category : #'tests - RandomDice' }
+{ #category : #'tests - RandomDie' }
 DiceTest >> testRandomDieRollsAndTheResultANumberSmallerThanOneIsNotValid [
 
 	| aDie aRollResult |
@@ -89,7 +75,7 @@ DiceTest >> testRandomDieRollsAndTheResultANumberSmallerThanOneIsNotValid [
 	self deny: aRollResult < 1
 ]
 
-{ #category : #'tests - RandomDice' }
+{ #category : #'tests - RandomDie' }
 DiceTest >> testRandomDieRollsAndTheResultIsANumberBetweenOneAndNumberOfDiceFacesIsValid [
 
 	| aDie aRollResutl aNumberOfFaces |
@@ -100,17 +86,7 @@ DiceTest >> testRandomDieRollsAndTheResultIsANumberBetweenOneAndNumberOfDiceFace
 	self assert: (aRollResutl between: 1 and: aNumberOfFaces)
 ]
 
-{ #category : #'tests - RandomDice' }
-DiceTest >> testRandomDieRollsAndTheResultIsANumberBetweenOneAndSixIsValid [
-
-	| aDie aRollResult |
-	aDie := RandomDie with: 6.
-	aRollResult := aDie roll.
-
-	self assert: (aRollResult between: 1 and: 6)
-]
-
-{ #category : #'tests - RandomDice' }
+{ #category : #'tests - RandomDie' }
 DiceTest >> testRandomDieRollsAndTheResultIsANumberBiggerThanNumberOfFacesIsNotValid [
 
 	| aDie aRollResult |

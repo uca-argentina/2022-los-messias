@@ -62,7 +62,7 @@ ZathuraTest >> testZathuraInitializedWithLessThanTwoShipsThrowsError [
 ]
 
 { #category : #tests }
-ZathuraTest >> testZathuraKnowsThePositionOfShipNumberOneAfterCrossingTheFinaLocker [
+ZathuraTest >> testZathuraKnowsThePositionOfShipsAfterTheGameFinishes [
 
 	| zathura diceCup ships |
 	diceCup := DiceCup withAll: { (LoadedDie with: 6) }.
@@ -73,5 +73,7 @@ ZathuraTest >> testZathuraKnowsThePositionOfShipNumberOneAfterCrossingTheFinaLoc
 		           withDiceCup: diceCup.
 
 	zathura play.
-	self assert: (zathura positionOfShip: 'BlueShip') equals: 10
+	self assert: (zathura positionOfShip: 'BlueShip') equals: 10.
+	self assert: (zathura positionOfShip: 'RedShip') equals: 6.
+	self assert: (zathura positionOfShip: 'GreenShip') equals: 6.
 ]

@@ -51,10 +51,14 @@ Board class >> withLockers: aNumberOfLockers withShips: aCollectionOfShips [
 ]
 
 { #category : #initialization }
-Board >> didShipCrossFinishLine: aNewPosition [
+Board >> didShipCrossFinishLine: aShip [
 
-	^aNewPosition  >= numberOfLockers
-
+	| shipCrossFinishLine |
+	shipCrossFinishLine := false.
+	(positionOfShips at: aShip) >= numberOfLockers ifTrue: [ 
+		positionOfShips at: aShip put: numberOfLockers.
+		shipCrossFinishLine := true ].
+	^ shipCrossFinishLine
 ]
 
 { #category : #initialization }
@@ -75,14 +79,11 @@ Board >> initializingPositionOfShipsWithAllShipsAtPositionZero [
 { #category : #moving }
 Board >> movesShip: aShip lockers: aNumberOfLockers [
 
-	| actualPosition newPosition checkIfShipWon |
+	| actualPosition newPosition |
 	actualPosition := positionOfShips at: aShip.
 	newPosition := actualPosition + aNumberOfLockers.
-	checkIfShipWon := (self didShipCrossFinishLine: newPosition ).
-	checkIfShipWon
-		ifTrue: [ positionOfShips at: aShip put: numberOfLockers ]
-		ifFalse: [ positionOfShips at: aShip put: newPosition ].
-	^checkIfShipWon
+	positionOfShips at: aShip put: newPosition.
+	^ self didShipCrossFinishLine: aShip
 ]
 
 { #category : #initialization }

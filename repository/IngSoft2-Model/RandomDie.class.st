@@ -35,7 +35,7 @@ Class {
 { #category : #asserting }
 RandomDie class >> assertValid: aNumberOfFaces [
 
-	aNumberOfFaces > 3 ifFalse: [ 
+	aNumberOfFaces >= 3 ifFalse: [ 
 		Error signal: 'Die cannot be created with a number of faces smaller than 3' ]
 ]
 
