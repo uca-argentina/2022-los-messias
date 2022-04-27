@@ -50,9 +50,10 @@ ZathuraTest >> testBoardMovesThePositionOfShipToLastLockerWhenPassingThroughTheG
 ZathuraTest >> testBoardWithNumberOfLockersSmallerThanTwoThrowsError [
 
 	| createBoard error errorMessage |
-	createBoard := Board
+	createBoard := [ 
+	               Board
 		               withLockers: -3
-		               withShips: { 'BlueShip'. 'RedShip' }.
+		               withShips: { 'RedShip'. 'BlueShip' } ].
 	error := Error.
 	errorMessage := 'Zathura cannot be played with a board with less than two lockers'.
 	self should: createBoard raise: error withMessage: errorMessage
