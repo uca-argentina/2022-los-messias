@@ -45,48 +45,43 @@ Board class >> assertValid: numberOfLockers [
 ]
 
 { #category : #initialization }
-Board class >> withLockers: aNumberOfLockers withShips: aCollectionOfShips [
+Board class >> of: aNumberOfLockers withAll: aCollectionOfShips [
 	self assertValid: aNumberOfLockers.
-	^self new initializeWithLockers: aNumberOfLockers withShips: aCollectionOfShips  .
+	^self new initializeWith: aNumberOfLockers andWithAGroupOf: aCollectionOfShips  .
 ]
 
-{ #category : #initialization }
+{ #category : #getvsrev43 }
 Board >> didShipCrossFinishLine: aShip [
 
-	| shipCrossFinishLine |
-	shipCrossFinishLine := false.
-	(positionOfShips at: aShip) >= numberOfLockers ifTrue: [ 
-		positionOfShips at: aShip put: numberOfLockers.
-		shipCrossFinishLine := true ].
-	^ shipCrossFinishLine
+	^ (positionOfShips at: aShip) >= numberOfLockers 
 ]
 
 { #category : #initialization }
-Board >> initializeWithLockers: aNumberOfLockers withShips: aCollectionOfShips [
+Board >> initializeWith: aNumberOfLockers andWithAGroupOf: ships [
 
 	numberOfLockers := aNumberOfLockers.
 	positionOfShips := Dictionary new.
-	aCollectionOfShips do:
+	ships do:
 		self initializingPositionOfShipsWithAllShipsAtPositionZero
 ]
 
-{ #category : #methods }
+{ #category : #initialization }
 Board >> initializingPositionOfShipsWithAllShipsAtPositionZero [
 
 	^ [ :aShip | positionOfShips at: aShip put: 0 ]
 ]
 
 { #category : #moving }
-Board >> movesShip: aShip lockers: aNumberOfLockers [
+Board >> move: aShip by: aNumberOfLockers [
 
-	| actualPosition newPosition |
-	actualPosition := positionOfShips at: aShip.
-	newPosition := actualPosition + aNumberOfLockers.
-	positionOfShips at: aShip put: newPosition.
-	^ self didShipCrossFinishLine: aShip
+	| actualPosition |
+	actualPosition := self positionOfShip: aShip.
+	positionOfShips at: aShip put: actualPosition + aNumberOfLockers.
+	[ self didShipCrossFinishLine: aShip ] ifTrue: [ 
+		positionOfShips at: aShip put: numberOfLockers ]
 ]
 
-{ #category : #initialization }
+{ #category : #getvsrev43 }
 Board >> positionOfShip: aShip [
 
 	^ positionOfShips at: aShip 

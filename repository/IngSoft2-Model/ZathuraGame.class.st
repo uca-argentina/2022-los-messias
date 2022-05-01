@@ -79,7 +79,7 @@ ZathuraGame >> hasFinished [
 ZathuraGame >> initializeWithShips: aCollectionOfShips withNumberOfLockers: aNumberOfLockers withDiceCup: aDiceCup [
 
 	diceCup := aDiceCup.
-	board := Board withLockers: aNumberOfLockers withShips:aCollectionOfShips.
+	board := Board of: aNumberOfLockers withAll:aCollectionOfShips.
 	ships := aCollectionOfShips
 ]
 
@@ -88,13 +88,12 @@ ZathuraGame >> play [
 
 	finished := false.
 
-	[ finished ] whileFalse: self playing
-]
-
-{ #category : #playing }
-ZathuraGame >> playing [
-
-	^ [ ships do: self turnOfShip ]
+	[ finished ] whileFalse: [ 
+		ships do: [ :aShip | 
+			finished ifFalse: [ 
+				(board move: aShip by: diceCup roll).
+				(board didShipCrossFinishLine: aShip ) ifTrue:
+					(self finishingTheGame: aShip) ] ] ]
 ]
 
 { #category : #positioning }
@@ -106,7 +105,7 @@ ZathuraGame >> positionOfShip: aShip [
 ZathuraGame >> rollingDice: aShip [
 
 	^ [ 
-	  (board movesShip: aShip lockers: diceCup roll) ifTrue:
+	  (board move: aShip by: diceCup roll) ifTrue:
 		  (self finishingTheGame: aShip) ]
 ]
 

@@ -24,9 +24,9 @@ ZathuraTest >> testBoardKnowsThatAShipCrossFinishLine [
 	ships := { 
 		         aRedShip.
 		         aBlueShip }.
-	aBoard := Board withLockers: aQuantityLockers withShips: ships.
+	aBoard := Board of: aQuantityLockers withAll: ships.
 
-	self assert: (aBoard movesShip: aRedShip lockers: 5)
+	self assert: (aBoard move: aRedShip by: 5)
 ]
 
 { #category : #tests }
@@ -39,24 +39,11 @@ ZathuraTest >> testBoardMovesThePositionOfShipToLastLockerWhenPassingThroughTheG
 	ships := { 
 		         aRedShip.
 		         aBlueShip }.
-	aBoard := Board withLockers: aQuantityLockers withShips: ships.
+	aBoard := Board of: aQuantityLockers withAll: ships.
 
-	aBoard movesShip: aRedShip lockers: 5.
+	aBoard move: aRedShip by: 5.
 	self
 		assert: (aBoard positionOfShip: aRedShip) equals: aQuantityLockers
-]
-
-{ #category : #tests }
-ZathuraTest >> testBoardWithNumberOfLockersSmallerThanTwoThrowsError [
-
-	| createBoard error errorMessage |
-	createBoard := [ 
-	               Board
-		               withLockers: -3
-		               withShips: { 'RedShip'. 'BlueShip' } ].
-	error := Error.
-	errorMessage := 'Zathura cannot be played with a board with less than two lockers'.
-	self should: createBoard raise: error withMessage: errorMessage
 ]
 
 { #category : #tests }
@@ -69,9 +56,9 @@ ZathuraTest >> testDidShipCrossFinishLineWithShipPositionLessThanFinishLineIsFal
 	ships := { 
 		         aRedShip.
 		         aBlueShip }.
-	aBoard := Board withLockers: aQuantityLockers withShips: ships.
+	aBoard := Board of: aQuantityLockers withAll: ships.
 
-	self deny: (aBoard movesShip: aRedShip lockers: 1)
+	self deny: (aBoard move: aRedShip by: 1)
 ]
 
 { #category : #tests }
@@ -84,12 +71,12 @@ ZathuraTest >> testNumberOfLockersPostiveIsValid [
 	ships := { 
 		         aRedShip.
 		         aBlueShip }.
-	aBoard := Board withLockers: aQuantityLockers withShips: ships.
+	aBoard := Board of: aQuantityLockers withAll: ships.
 	self assert: aQuantityLockers > 0
 ]
 
 { #category : #tests }
-ZathuraTest >> testZathuraHasFinisheDWhenPlaysWithThreeShipsAndABoardAndACupDiceUntilTheEnd [
+ZathuraTest >> testZathuraAfterBeingPlayedHasFinishedReturnsTrue [
 
 	| zathura diceCup ships |
 	diceCup := DiceCup withAll: { (LoadedDie with: 6) }.
@@ -101,6 +88,23 @@ ZathuraTest >> testZathuraHasFinisheDWhenPlaysWithThreeShipsAndABoardAndACupDice
 
 	zathura play.
 	self assert: zathura hasFinished
+]
+
+{ #category : #tests }
+ZathuraTest >> testZathuraAfterTheGameIsPlayedCanGetThePositionOfEachShip [
+
+	| zathura diceCup ships |
+	diceCup := DiceCup withAll: { (LoadedDie with: 6) }.
+	ships := { 'BlueShip'. 'RedShip'. 'GreenShip' }.
+	zathura := ZathuraGame
+		           withShips: ships
+		           withNumberOfLockers: 10
+		           withDiceCup: diceCup.
+
+	zathura play.
+	self assert: (zathura positionOfShip: 'BlueShip') equals: 10.
+	self assert: (zathura positionOfShip: 'RedShip') equals: 6.
+	self assert: (zathura positionOfShip: 'GreenShip') equals: 6.
 ]
 
 { #category : #tests }
@@ -121,24 +125,23 @@ ZathuraTest >> testZathuraInitializedWithLessThanTwoShipsThrowsError [
 ]
 
 { #category : #tests }
-ZathuraTest >> testZathuraKnowsThePositionOfShipsAfterTheGameFinishes [
+ZathuraTest >> testZathuraIsInitializedWithLessThanTwoLockersThrowsError [
 
-	| zathura diceCup ships |
-	diceCup := DiceCup withAll: { (LoadedDie with: 6) }.
-	ships := { 'BlueShip'. 'RedShip'. 'GreenShip' }.
-	zathura := ZathuraGame
-		           withShips: ships
-		           withNumberOfLockers: 10
-		           withDiceCup: diceCup.
-
-	zathura play.
-	self assert: (zathura positionOfShip: 'BlueShip') equals: 10.
-	self assert: (zathura positionOfShip: 'RedShip') equals: 6.
-	self assert: (zathura positionOfShip: 'GreenShip') equals: 6.
+	| error errorMessage die ships creationOfZathura |
+	die := LoadedDie with: 6.
+	ships := { 'BlueShip'. 'RedShip' }.
+	creationOfZathura := [ 
+	                     ZathuraGame
+		                     withShips: ships
+		                     withNumberOfLockers: 1
+		                     withDiceCup: die ].
+	error := Error.
+	errorMessage := 'Zathura cannot be played with a board with less than two lockers'.
+	self should: creationOfZathura raise: error withMessage: errorMessage
 ]
 
 { #category : #tests }
-ZathuraTest >> testZathuraPlayingGameWithShipsAndGreenShipWins [
+ZathuraTest >> testZathuraIsPlayedAndTheWinnerIsTheGreenShip [
 
 	| zathura diceCup ships |
 	diceCup := DiceCup withAll: { (LoadedDie with: 5) }.
