@@ -66,6 +66,24 @@ ZathuraTest >> testZathuraAfterBeingPlayedHasFinishedReturnsTrue [
 	self assert: zathura hasFinished
 ]
 
+{ #category : #'real tests' }
+ZathuraTest >> testZathuraAfterBeingPlayedHasOnlyOneWinnerOfTheShips [
+
+	| zathura diceCup ships aWinner notWinner |
+	diceCup := RandomDie with: 6.
+	ships := { 'BlueShip'. 'RedShip' }.
+	zathura := ZathuraGame
+		           withShips: ships
+		           withNumberOfLockers: 10
+		           withDiceCup: diceCup.
+
+	zathura play.
+	aWinner := ships select: [ :aShip | aShip == zathura winner ].
+	notWinner := ships select: [ :aShip | aShip ~= zathura winner ].
+	self assert: (aWinner at: 1) equals: zathura winner.
+	self deny: (notWinner at: 1) equals: zathura winner
+]
+
 { #category : #tests }
 ZathuraTest >> testZathuraAfterTheGameIsPlayedCanGetThePositionOfEachShip [
 
