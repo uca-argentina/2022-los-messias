@@ -4,16 +4,6 @@ Class {
 	#category : #'IngSoft2-Tests'
 }
 
-{ #category : #asserting }
-DiceTest >> should: createRandomDie raise: error withMessage: errorMessage [
-
-	self
-		should: createRandomDie
-		raise: error
-		whoseDescriptionIncludes: errorMessage
-		description: 'Test did not failed as expected'
-]
-
 { #category : #'tests  - DiceCup' }
 DiceTest >> testDiceCupRollResultIsTheSumOfTheResultsOfEachIndividualDie [
 
@@ -29,7 +19,7 @@ DiceTest >> testDiceCupRollResultIsTheSumOfTheResultsOfEachIndividualDie [
 { #category : #'tests  - DiceCup' }
 DiceTest >> testDiceCupThrowsErrorWhenInitializedWithNoDie [
 
-	self
+	(Asserting new)
 		should: [ DiceCup withAll: {  } ]
 		raise: Error
 		withMessage: 'Dice Cup should be initialized with at least one die'
@@ -38,7 +28,7 @@ DiceTest >> testDiceCupThrowsErrorWhenInitializedWithNoDie [
 { #category : #'tests - LoadedDie' }
 DiceTest >> testLoadedDieCannotBeLoadedWithResultLowerThanOne [
 
-	self
+	(Asserting new)
 		should: [ LoadedDie with: 0 ]
 		raise: Error
 		withMessage: 'Die should be loaded with number greater than 0'
@@ -56,7 +46,7 @@ DiceTest >> testLoadedDieRollsFiveWhenLoadedWithFive [
 { #category : #'tests - RandomDie' }
 DiceTest >> testRandomDieCannotBeCreatedWithNumberOfFacesSmallerThanThree [
 
-	self
+	(Asserting new)
 		should: [ RandomDie with: 2 ]
 		raise: Error
 		withMessage:

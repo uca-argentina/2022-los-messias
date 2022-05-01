@@ -45,9 +45,9 @@ Board class >> assertValid: numberOfLockers [
 ]
 
 { #category : #initialization }
-Board class >> withLockers: aNumberOfLockers withShips: aCollectionOfShips [
+Board class >> of: aNumberOfLockers withAll: aCollectionOfShips [
 	self assertValid: aNumberOfLockers.
-	^self new initializeWithLockers: aNumberOfLockers withShips: aCollectionOfShips  .
+	^self new initializeWith: aNumberOfLockers andWithAGroupOf: aCollectionOfShips  .
 ]
 
 { #category : #initialization }
@@ -62,7 +62,7 @@ Board >> didShipCrossFinishLine: aShip [
 ]
 
 { #category : #initialization }
-Board >> initializeWithLockers: aNumberOfLockers withShips: aCollectionOfShips [
+Board >> initializeWith: aNumberOfLockers andWithAGroupOf: aCollectionOfShips [
 
 	numberOfLockers := aNumberOfLockers.
 	positionOfShips := Dictionary new.
@@ -70,23 +70,23 @@ Board >> initializeWithLockers: aNumberOfLockers withShips: aCollectionOfShips [
 		self initializingPositionOfShipsWithAllShipsAtPositionZero
 ]
 
-{ #category : #methods }
+{ #category : #initialization }
 Board >> initializingPositionOfShipsWithAllShipsAtPositionZero [
 
 	^ [ :aShip | positionOfShips at: aShip put: 0 ]
 ]
 
 { #category : #moving }
-Board >> movesShip: aShip lockers: aNumberOfLockers [
+Board >> move: aShip by: aNumberOfLockers [
 
-	| actualPosition newPosition |
+	| actualPosition|
 	actualPosition := positionOfShips at: aShip.
-	newPosition := actualPosition + aNumberOfLockers.
-	positionOfShips at: aShip put: newPosition.
-	^ self didShipCrossFinishLine: aShip
+	positionOfShips at: aShip put: actualPosition + aNumberOfLockers.
+	( self didShipCrossFinishLine: aShip ) ifTrue: [ 
+		positionOfShips at: aShip put: numberOfLockers]
 ]
 
-{ #category : #initialization }
+{ #category : #'accessing - attributes' }
 Board >> positionOfShip: aShip [
 
 	^ positionOfShips at: aShip 
