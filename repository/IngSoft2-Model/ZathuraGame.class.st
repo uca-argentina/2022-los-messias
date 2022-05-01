@@ -91,28 +91,14 @@ ZathuraGame >> play [
 	[ finished ] whileFalse: [ 
 		ships do: [ :aShip | 
 			finished ifFalse: [ 
-				(board move: aShip by: diceCup roll).
-				(board didShipCrossFinishLine: aShip ) ifTrue:
+				board move: aShip by: diceCup roll.
+				(board didShipCrossFinishLine: aShip) ifTrue:
 					(self finishingTheGame: aShip) ] ] ]
 ]
 
 { #category : #positioning }
 ZathuraGame >> positionOfShip: aShip [ 
 	^board positionOfShip: aShip
-]
-
-{ #category : #playing }
-ZathuraGame >> rollingDice: aShip [
-
-	^ [ 
-	  (board move: aShip by: diceCup roll) ifTrue:
-		  (self finishingTheGame: aShip) ]
-]
-
-{ #category : #playing }
-ZathuraGame >> turnOfShip [
-
-	^ [ :aShip | finished ifFalse: (self rollingDice: aShip) ]
 ]
 
 { #category : #ending }

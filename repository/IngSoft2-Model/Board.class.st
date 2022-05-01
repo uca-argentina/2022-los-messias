@@ -77,7 +77,7 @@ Board >> move: aShip by: aNumberOfLockers [
 	| actualPosition |
 	actualPosition := self positionOfShip: aShip.
 	positionOfShips at: aShip put: actualPosition + aNumberOfLockers.
-	[ self didShipCrossFinishLine: aShip ] ifTrue: [ 
+	( self didShipCrossFinishLine: aShip ) ifTrue: [ 
 		positionOfShips at: aShip put: numberOfLockers ]
 ]
 

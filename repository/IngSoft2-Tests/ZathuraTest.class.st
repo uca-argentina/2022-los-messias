@@ -25,8 +25,8 @@ ZathuraTest >> testBoardKnowsThatAShipCrossFinishLine [
 		         aRedShip.
 		         aBlueShip }.
 	aBoard := Board of: aQuantityLockers withAll: ships.
-
-	self assert: (aBoard move: aRedShip by: 5)
+	aBoard move: aRedShip by: 5.
+	self assert: (aBoard didShipCrossFinishLine: aRedShip )
 ]
 
 { #category : #tests }
@@ -57,8 +57,8 @@ ZathuraTest >> testDidShipCrossFinishLineWithShipPositionLessThanFinishLineIsFal
 		         aRedShip.
 		         aBlueShip }.
 	aBoard := Board of: aQuantityLockers withAll: ships.
-
-	self deny: (aBoard move: aRedShip by: 1)
+	aBoard move: aRedShip by: 1.
+	self deny: (aBoard didShipCrossFinishLine: aRedShip )
 ]
 
 { #category : #tests }
