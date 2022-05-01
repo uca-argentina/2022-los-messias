@@ -4,16 +4,6 @@ Class {
 	#category : #'IngSoft2-Tests'
 }
 
-{ #category : #asserting }
-DiceTest >> should: createRandomDie raise: error withMessage: errorMessage [
-
-	self
-		should: createRandomDie
-		raise: error
-		whoseDescriptionIncludes: errorMessage
-		description: 'Test did not failed as expected'
-]
-
 { #category : #'tests  - DiceCup' }
 DiceTest >> testDiceCupIsInitializedWithLessThanOneDieThrowsError [
 
