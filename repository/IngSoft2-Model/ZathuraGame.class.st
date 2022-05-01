@@ -56,11 +56,6 @@ ZathuraGame class >> withShips: aNumberOfShips withNumberOfLockers: aNumberOfLoc
 		  withDiceCup: aDiceCup
 ]
 
-{ #category : #ending }
-ZathuraGame >> end [
-	finished := true.
-]
-
 { #category : #playing }
 ZathuraGame >> finishingTheGame: aShip [
 

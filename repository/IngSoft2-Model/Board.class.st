@@ -41,7 +41,8 @@ Class {
 Board class >> assertValid: numberOfLockers [
 
 	numberOfLockers >= 2 ifFalse: [ 
-		Error signal: 'Zathura cannot be played with a board with less than two lockers' ]
+		Error signal:
+			'The board cannot be used with less than two lockers' ]
 ]
 
 { #category : #initialization }

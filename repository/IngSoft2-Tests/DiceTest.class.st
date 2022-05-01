@@ -11,7 +11,10 @@ DiceTest >> testDiceCupIsInitializedWithLessThanOneDieThrowsError [
 	error := Error.
 	errorMessage := 'Dice Cup should be initialized with at least one die'.
 	createLoadedDie := [ DiceCup withAll: {  } ].
-	self should: createLoadedDie raise: error withMessage: errorMessage
+	Asserting new
+		should: createLoadedDie
+		raise: error
+		withMessage: errorMessage
 ]
 
 { #category : #'tests  - DiceCup' }
@@ -33,7 +36,10 @@ DiceTest >> testLoadedDieCannotBeLoadedWithResultLowerThanOne [
 	error := Error.
 	errorMessage := 'Die should be loaded with number greater than 0'.
 	createLoadedDie := [ LoadedDie with: -1 ].
-	Asserting should: createLoadedDie raise: error withMessage: errorMessage
+	(Asserting new)
+		should: createLoadedDie
+		raise: error
+		withMessage: errorMessage
 ]
 
 { #category : #'tests - LoadedDie' }
@@ -52,7 +58,7 @@ DiceTest >> testRandomDieCannotBeCreatedWithNumberOfFacesSmallerThanThree [
 	createRandomDie := [ RandomDie with: 2 ].
 	error := Error.
 	errorMessage := 'Die cannot be created with a number of faces smaller than 3'.
-	self should: createRandomDie raise: error withMessage: errorMessage
+	Asserting new should: createRandomDie raise: error withMessage: errorMessage
 ]
 
 { #category : #'tests - RandomDie' }

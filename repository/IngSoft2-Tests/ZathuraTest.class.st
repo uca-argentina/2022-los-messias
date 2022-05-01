@@ -147,8 +147,11 @@ ZathuraTest >> testZathuraIsInitializedWithLessThanTwoLockersThrowsError [
 		                     withNumberOfLockers: 1
 		                     withDiceCup: die ].
 	error := Error.
-	errorMessage := 'Zathura cannot be played with a board with less than two lockers'.
-	Asserting new should: creationOfZathura raise: error withMessage: errorMessage
+	errorMessage := 'The board cannot be used with less than two lockers'.
+	Asserting new
+		should: creationOfZathura
+		raise: error
+		withMessage: errorMessage
 ]
 
 { #category : #tests }
