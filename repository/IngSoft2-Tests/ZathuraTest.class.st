@@ -62,20 +62,6 @@ ZathuraTest >> testDidShipCrossFinishLineWithShipPositionLessThanFinishLineIsFal
 ]
 
 { #category : #tests }
-ZathuraTest >> testNumberOfLockersPostiveIsValid [
-
-	| aQuantityLockers aBoard aBlueShip aRedShip ships |
-	aQuantityLockers := 3.
-	aBlueShip := 'BlueShip'.
-	aRedShip := 'RedShip'.
-	ships := { 
-		         aRedShip.
-		         aBlueShip }.
-	aBoard := Board of: aQuantityLockers withAll: ships.
-	self assert: aQuantityLockers > 0
-]
-
-{ #category : #tests }
 ZathuraTest >> testZathuraAfterBeingPlayedHasFinishedReturnsTrue [
 
 	| zathura diceCup ships |
