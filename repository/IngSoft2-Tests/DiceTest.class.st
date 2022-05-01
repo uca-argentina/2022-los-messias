@@ -33,7 +33,7 @@ DiceTest >> testLoadedDieCannotBeLoadedWithResultLowerThanOne [
 	error := Error.
 	errorMessage := 'Die should be loaded with number greater than 0'.
 	createLoadedDie := [ LoadedDie with: -1 ].
-	self should: createLoadedDie raise: error withMessage: errorMessage
+	Asserting should: createLoadedDie raise: error withMessage: errorMessage
 ]
 
 { #category : #'tests - LoadedDie' }
