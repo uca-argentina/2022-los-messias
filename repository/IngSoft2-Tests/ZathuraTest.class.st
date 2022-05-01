@@ -96,9 +96,10 @@ ZathuraTest >> testZathuraAfterTheGameIsPlayedCanGetThePositionOfEachShip [
 		           withDiceCup: diceCup.
 
 	zathura play.
-	self assert: (zathura positionOfShip: 'BlueShip') equals: 10.
+
 	self assert: (zathura positionOfShip: 'RedShip') equals: 6.
-	self assert: (zathura positionOfShip: 'GreenShip') equals: 6
+	self assert: (zathura positionOfShip: 'GreenShip') equals: 6.
+	self assert: (zathura positionOfShip: 'BlueShip') equals: 10
 ]
 
 { #category : #tests }

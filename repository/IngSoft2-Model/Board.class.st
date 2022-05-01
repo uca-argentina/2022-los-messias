@@ -54,7 +54,7 @@ Board class >> of: aNumberOfLockers withAll: aCollectionOfShips [
 { #category : #getvsrev43 }
 Board >> didShipCrossFinishLine: aShip [
 
-	^ (positionOfShips at: aShip) >= numberOfLockers 
+	^ ((positionOfShips at: aShip) >= numberOfLockers)
 ]
 
 { #category : #initialization }

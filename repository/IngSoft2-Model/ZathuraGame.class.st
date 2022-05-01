@@ -59,9 +59,8 @@ ZathuraGame class >> withShips: aNumberOfShips withNumberOfLockers: aNumberOfLoc
 { #category : #playing }
 ZathuraGame >> finishingTheGame: aShip [
 
-	^ [ 
 	  winner := aShip.
-	  self end ]
+	  finished := true 
 ]
 
 { #category : #state }
