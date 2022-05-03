@@ -41,52 +41,40 @@ Class {
 Board class >> assertValid: numberOfLockers [
 
 	numberOfLockers >= 2 ifFalse: [ 
-		Error signal: 'Zathura cannot be played with a board with less than two lockers' ]
+		Error signal: 'Board cannot be created with less than two lockers' ]
 ]
 
-{ #category : #initialization }
-Board class >> withLockers: aNumberOfLockers withShips: aCollectionOfShips [
+{ #category : #'instance creation' }
+Board class >> of: aNumberOfLockers withAll: aCollectionOfShips [
 	self assertValid: aNumberOfLockers.
-	^self new initializeWithLockers: aNumberOfLockers withShips: aCollectionOfShips  .
+	^self new initializeWith: aNumberOfLockers andWithAGroupOf: aCollectionOfShips  .
 ]
 
 { #category : #initialization }
-Board >> didShipCrossFinishLine: aShip [
+Board >> hasCrossFinishLine: aShip [
 
-	| shipCrossFinishLine |
-	shipCrossFinishLine := false.
-	(positionOfShips at: aShip) >= numberOfLockers ifTrue: [ 
-		positionOfShips at: aShip put: numberOfLockers.
-		shipCrossFinishLine := true ].
-	^ shipCrossFinishLine
+	^ (positionOfShips at: aShip) >= numberOfLockers 
 ]
 
 { #category : #initialization }
-Board >> initializeWithLockers: aNumberOfLockers withShips: aCollectionOfShips [
+Board >> initializeWith: aNumberOfLockers andWithAGroupOf: aCollectionOfShips [
 
 	numberOfLockers := aNumberOfLockers.
 	positionOfShips := Dictionary new.
-	aCollectionOfShips do:
-		self initializingPositionOfShipsWithAllShipsAtPositionZero
-]
-
-{ #category : #methods }
-Board >> initializingPositionOfShipsWithAllShipsAtPositionZero [
-
-	^ [ :aShip | positionOfShips at: aShip put: 0 ]
+	aCollectionOfShips do: [ :aShip | positionOfShips at: aShip put: 0 ]
 ]
 
 { #category : #moving }
-Board >> movesShip: aShip lockers: aNumberOfLockers [
+Board >> move: aShip by: aNumberOfLockers [
 
-	| actualPosition newPosition |
-	actualPosition := positionOfShips at: aShip.
-	newPosition := actualPosition + aNumberOfLockers.
-	positionOfShips at: aShip put: newPosition.
-	^ self didShipCrossFinishLine: aShip
+	| actualPosition |
+	actualPosition := self positionOfShip: aShip.
+	positionOfShips
+		at: aShip
+		put: (actualPosition + aNumberOfLockers min: numberOfLockers)
 ]
 
-{ #category : #initialization }
+{ #category : #'accessing - attributes' }
 Board >> positionOfShip: aShip [
 
 	^ positionOfShips at: aShip 
