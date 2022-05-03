@@ -69,6 +69,21 @@ ZathuraGame >> assertZathuraHasNotBeenPlayed [
 		Error signal: 'Zathura cannot be played more than once' ]
 ]
 
+{ #category : #private }
+ZathuraGame >> changeActivePlayer [
+
+	| aShip |
+	aShip := ships removeFirst.
+	ships addLast: aShip
+]
+
+{ #category : #private }
+ZathuraGame >> checkIfWon: aShip [
+	(board hasCrossFinishLine: aShip) ifTrue: [ 
+		winner := aShip.
+		finished := true ]
+]
+
 { #category : #state }
 ZathuraGame >> hasFinished [
 
@@ -89,14 +104,18 @@ ZathuraGame >> play [
 
 	self assertZathuraHasNotBeenPlayed.
 
-	[ finished ] whileFalse: [ 
-		ships do: [ :aShip | 
-			finished ifFalse: [ 
-				board move: aShip by: diceCup roll.
-				(board hasCrossFinishLine: aShip) ifTrue:
-					[ 
-	  winner := aShip.
-	  finished := true ] ] ] ]
+	[ finished ] whileFalse: [ self playTurn ]
+]
+
+{ #category : #playing }
+ZathuraGame >> playTurn [
+
+	| aShip |
+	self assertZathuraHasNotBeenPlayed.
+	aShip := ships at: 1.
+	board move: aShip by: diceCup roll.
+	self checkIfWon: aShip.
+	self changeActivePlayer.
 ]
 
 { #category : #positioning }

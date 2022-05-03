@@ -9,7 +9,10 @@ ZathuraFunctionalTest >> testZathuraAfterBeingPlayedHasFinishedReturnsTrue [
 
 	| zathura die ships |
 	die := (RandomDie with: 6).
-	ships := { 'BlueShip'. 'RedShip'. 'GreenShip' }.
+	ships := OrderedCollection new.
+	ships addLast: 'BlueShip'.
+	ships addLast: 'RedShip'.
+	ships addLast: 'GreenShip'.
 	zathura := ZathuraGame
 		           with: ships
 		           movedInBoardOf: 10
@@ -24,7 +27,9 @@ ZathuraFunctionalTest >> testZathuraAfterBeingPlayedHasOnlyOneWinnerOfTheShips [
 
 	| zathura diceCup ships aWinner notWinner |
 	diceCup := RandomDie with: 6.
-	ships := { 'BlueShip'. 'RedShip' }.
+	ships := OrderedCollection new.
+	ships addLast: 'RedShip'.
+	ships addLast: 'BlueShip'.
 	zathura := ZathuraGame
 		           with: ships
 		           movedInBoardOf: 10

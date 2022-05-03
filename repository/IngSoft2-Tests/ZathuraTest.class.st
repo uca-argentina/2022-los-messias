@@ -5,26 +5,15 @@ Class {
 }
 
 { #category : #tests }
-ZathuraTest >> testDidShipCrossFinishLineWithShipPositionLessThanFinishLineIsFalse [
-
-	| aQuantityLockers aBoard aBlueShip aRedShip ships |
-	aQuantityLockers := 3.
-	aBlueShip := 'BlueShip'.
-	aRedShip := 'RedShip'.
-	ships := { 
-		         aRedShip.
-		         aBlueShip }.
-	aBoard := Board of: aQuantityLockers withAll: ships.
-	aBoard move: aRedShip by: 1.
-	self deny: (aBoard hasCrossFinishLine: aRedShip).
-]
-
-{ #category : #tests }
 ZathuraTest >> testZathuraAfterTheGameIsPlayedCanGetThePositionOfEachShip [
 
 	| zathura diceCup ships |
 	diceCup := DiceCup withAll: { (LoadedDie with: 6). (LoadedDie with: 2) }.
-	ships := { 'BlueShip'. 'RedShip'. 'GreenShip' }.
+	"ships := { 'BlueShip'. 'RedShip'. 'GreenShip' }."
+	ships := OrderedCollection new.
+	ships addLast: 'BlueShip'.
+	ships addLast: 'RedShip'.
+	ships addLast: 'GreenShip'.
 	zathura := ZathuraGame
 		           with: ships
 		           movedInBoardOf: 10
@@ -39,14 +28,11 @@ ZathuraTest >> testZathuraAfterTheGameIsPlayedCanGetThePositionOfEachShip [
 { #category : #tests }
 ZathuraTest >> testZathuraCannotBePlayedMoreThanOnceBANANA [
 
-	| aBlueShip aRedShip ships aDie zathura |
+	|ships aDie zathura |
 	aDie := LoadedDie with: 8.
-	aBlueShip := 'BlueShip'.
-	aRedShip := 'RedShip'.
-	ships := { 
-		         aRedShip.
-		         aBlueShip }.
-
+	ships := OrderedCollection new.
+	ships addLast: 'BlueShip'.
+	ships addLast: 'RedShip'.
 	zathura := ZathuraGame
 		           with: ships
 		           movedInBoardOf: 50
@@ -62,13 +48,11 @@ zathura play.
 { #category : #tests }
 ZathuraTest >> testZathuraCreatedWithLessThanTwoLockersThrowsError [
 
-	| aBlueShip aRedShip ships aDie |
+	|ships aDie |
 	aDie := LoadedDie with: 2.
-	aBlueShip := 'BlueShip'.
-	aRedShip := 'RedShip'.
-	ships := { 
-		         aRedShip.
-		         aBlueShip }.
+	ships := OrderedCollection new.
+	ships addLast: 'BlueShip'.
+	ships addLast: 'RedShip'.
 
 	Asserting new
 		should: [ 
@@ -82,11 +66,27 @@ ZathuraTest >> testZathuraCreatedWithLessThanTwoLockersThrowsError [
 ]
 
 { #category : #tests }
+ZathuraTest >> testZathuraGamePlaysATurnAndDoNotFinish [
+
+	| aQuantityLockers ships aDie zathura |
+	aQuantityLockers := 30.
+	aDie := RandomDie with: 5.
+	ships := OrderedCollection new.
+	ships addLast: 'GreenShip'.
+	ships addLast: 'RedShip'.
+	ships addLast: 'BlueShip'.
+	zathura := ZathuraGame with: ships movedInBoardOf: aQuantityLockers  by: aDie.
+	zathura playTurn .
+	self deny: (zathura hasFinished).
+]
+
+{ #category : #tests }
 ZathuraTest >> testZathuraInitializedWithLessThanTwoShipsThrowsError [
 
 	| die ships |
 	die := LoadedDie with: 6.
-	ships := { 'BlueShip' }.
+	ships := OrderedCollection new.
+	ships addLast: 'BlueShip'.
 
 	Asserting new
 		should: [ 
@@ -102,7 +102,9 @@ ZathuraTest >> testZathuraInitializedWithLessThanTwoShipsThrowsError [
 ZathuraTest >> testZathuraIsInitializedWithAllShipsInPositionZero [
 	| die ships zathura |
 	die := LoadedDie with: 6.
-	ships := { 'BlueShip'. 'RedShip' }.
+	ships := OrderedCollection new.
+	ships addLast: 'BlueShip'.
+	ships addLast: 'RedShip'.
 	zathura := ZathuraGame
 		           with: ships
 		           movedInBoardOf: 10
@@ -116,7 +118,10 @@ ZathuraTest >> testZathuraIsPlayedAndTheWinnerIsTheGreenShip [
 
 	| zathura die ships |
 	die := (LoadedDie with: 5).
-	ships := { 'GreenShip'. 'RedShip'. 'BlueShip' }.
+	ships := OrderedCollection new.
+	ships addLast: 'GreenShip'.
+	ships addLast: 'RedShip'.
+	ships addLast: 'BlueShip'.
 	zathura := ZathuraGame
 		           with: ships
 		           movedInBoardOf: 10
@@ -131,7 +136,9 @@ ZathuraTest >> testZathuraWhileItHasNotFinishedAsksWinnerThrowsError [
 
 	| die ships zathura |
 	die := LoadedDie with: 6.
-	ships := { 'BlueShip'. 'GreenShip' }.
+	ships := OrderedCollection new.
+	ships addLast: 'GreenShip'.
+	ships addLast: 'BlueShip'.
 
 	zathura := ZathuraGame with: ships movedInBoardOf: 10 by: die.
 

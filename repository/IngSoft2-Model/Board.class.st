@@ -61,14 +61,7 @@ Board >> initializeWith: aNumberOfLockers andWithAGroupOf: aCollectionOfShips [
 
 	numberOfLockers := aNumberOfLockers.
 	positionOfShips := Dictionary new.
-	aCollectionOfShips do:
-		self initializingPositionOfShipsAtPositionZero
-]
-
-{ #category : #initialization }
-Board >> initializingPositionOfShipsAtPositionZero [
-
-	^ [ :aShip | positionOfShips at: aShip put: 0 ]
+	aCollectionOfShips do: [ :aShip | positionOfShips at: aShip put: 0 ]
 ]
 
 { #category : #moving }

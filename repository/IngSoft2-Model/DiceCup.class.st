@@ -53,8 +53,5 @@ DiceCup >> initializeWithAll: aDice [
 { #category : #rolling }
 DiceCup >> roll [
 
-	| result |
-	result := 0.""dice do: [ :aDie | result := result + aDie roll ].
-	"result := dice do: [ :aDie | aDie roll sum: #yourself ]."
-	^ result
+	^ dice sum: [ :aDie | aDie roll ]
 ]
