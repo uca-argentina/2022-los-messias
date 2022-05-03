@@ -34,10 +34,12 @@ Class {
 
 { #category : #asserting }
 DiceCup class >> assertValid: aDice [
-	aDice size >= 1 ifFalse:  [ Error signal:  'Dice Cup should be initialized with at least one die'] 
+
+	aDice ifEmpty: [ 
+		Error signal: 'Dice Cup should be initialized with at least one die' ]
 ]
 
-{ #category : #initialization }
+{ #category : #'instance creation' }
 DiceCup class >> withAll: dice [
 	self assertValid: dice.
 	^ self new initializeWithAll: dice
@@ -50,9 +52,9 @@ DiceCup >> initializeWithAll: aDice [
 
 { #category : #rolling }
 DiceCup >> roll [
+
 	| result |
-	
-	result := 0.
-	dice do: [ :aDie  | result := result  + aDie roll].
-	^ result.
+	result := 0.""dice do: [ :aDie | result := result + aDie roll ].
+	"result := dice do: [ :aDie | aDie roll sum: #yourself ]."
+	^ result
 ]

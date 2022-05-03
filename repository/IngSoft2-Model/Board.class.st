@@ -44,14 +44,14 @@ Board class >> assertValid: numberOfLockers [
 		Error signal: 'Board cannot be created with less than two lockers' ]
 ]
 
-{ #category : #initialization }
+{ #category : #'instance creation' }
 Board class >> of: aNumberOfLockers withAll: aCollectionOfShips [
 	self assertValid: aNumberOfLockers.
 	^self new initializeWith: aNumberOfLockers andWithAGroupOf: aCollectionOfShips  .
 ]
 
 { #category : #initialization }
-Board >> didShipCrossFinishLine: aShip [
+Board >> hasCrossFinishLine: aShip [
 
 	^ (positionOfShips at: aShip) >= numberOfLockers 
 ]

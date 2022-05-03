@@ -46,7 +46,7 @@ ZathuraGame class >> assertNumberOfShipsIsValid: aCollectionOfShips [
 	aCollectionOfShips size >= 2 ifFalse: [ Error signal: 'Zathura cannot be played with less than two ships' ]
 ]
 
-{ #category : #initialization }
+{ #category : #'instance creation' }
 ZathuraGame class >> with: aNumberOfShips movedInBoardOf: aNumberOfLockers by: aDiceCup [
 
 	self assertNumberOfShipsIsValid: aNumberOfShips.
@@ -93,7 +93,7 @@ ZathuraGame >> play [
 		ships do: [ :aShip | 
 			finished ifFalse: [ 
 				board move: aShip by: diceCup roll.
-				(board didShipCrossFinishLine: aShip) ifTrue:
+				(board hasCrossFinishLine: aShip) ifTrue:
 					[ 
 	  winner := aShip.
 	  finished := true ] ] ] ]

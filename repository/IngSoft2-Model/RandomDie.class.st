@@ -39,7 +39,7 @@ RandomDie class >> assertValid: aNumberOfFaces [
 		Error signal: 'Die cannot be created with a number of faces smaller than 3' ]
 ]
 
-{ #category : #initialization }
+{ #category : #'instance creation' }
 RandomDie class >> with: aNumberOfFaces [
 	self assertValid: aNumberOfFaces.
 	^ self new initializeWith: aNumberOfFaces

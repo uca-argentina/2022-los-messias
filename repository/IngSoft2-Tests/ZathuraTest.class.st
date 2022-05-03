@@ -16,7 +16,7 @@ ZathuraTest >> testDidShipCrossFinishLineWithShipPositionLessThanFinishLineIsFal
 		         aBlueShip }.
 	aBoard := Board of: aQuantityLockers withAll: ships.
 	aBoard move: aRedShip by: 1.
-	self deny: (aBoard didShipCrossFinishLine: aRedShip).
+	self deny: (aBoard hasCrossFinishLine: aRedShip).
 ]
 
 { #category : #tests }
