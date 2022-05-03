@@ -47,26 +47,26 @@ ZathuraGame class >> assertNumberOfShipsIsValid: aCollectionOfShips [
 ]
 
 { #category : #initialization }
-ZathuraGame class >> withShips: aNumberOfShips withNumberOfLockers: aNumberOfLockers withDiceCup: aDiceCup [
+ZathuraGame class >> with: aNumberOfShips movedInBoardOf: aNumberOfLockers by: aDiceCup [
 
 	self assertNumberOfShipsIsValid: aNumberOfShips.
 	^ self new
-		  initializeWithShips: aNumberOfShips
-		  withNumberOfLockers: aNumberOfLockers
-		  withDiceCup: aDiceCup
+		  initializeWith: aNumberOfShips
+		  movedInBoardOf: aNumberOfLockers
+		  by: aDiceCup
 ]
 
-{ #category : #ending }
-ZathuraGame >> end [
-	finished := true.
+{ #category : #asserting }
+ZathuraGame >> assertZathuraHasFinished [
+
+	finished ifFalse: [ Error signal: 'Zathura has not finished yet' ]
 ]
 
-{ #category : #playing }
-ZathuraGame >> finishingTheGame: aShip [
+{ #category : #asserting }
+ZathuraGame >> assertZathuraHasNotBeenPlayed [
 
-	^ [ 
-	  winner := aShip.
-	  self end ]
+	finished ifTrue: [ 
+		Error signal: 'Zathura cannot be played more than once' ]
 ]
 
 { #category : #state }
@@ -76,25 +76,27 @@ ZathuraGame >> hasFinished [
 ]
 
 { #category : #initialization }
-ZathuraGame >> initializeWithShips: aCollectionOfShips withNumberOfLockers: aNumberOfLockers withDiceCup: aDiceCup [
+ZathuraGame >> initializeWith: aCollectionOfShips movedInBoardOf: aNumberOfLockers by: aDiceCup [
 
 	diceCup := aDiceCup.
-	board := Board of: aNumberOfLockers withAll:aCollectionOfShips.
-	ships := aCollectionOfShips
+	board := Board of: aNumberOfLockers withAll: aCollectionOfShips.
+	ships := aCollectionOfShips.
+	finished := false.
 ]
 
 { #category : #playing }
 ZathuraGame >> play [
 
-finished := false.
+	self assertZathuraHasNotBeenPlayed.
 
 	[ finished ] whileFalse: [ 
 		ships do: [ :aShip | 
 			finished ifFalse: [ 
 				board move: aShip by: diceCup roll.
 				(board didShipCrossFinishLine: aShip) ifTrue:
-					(self finishingTheGame: aShip) ] ] ]
-
+					[ 
+	  winner := aShip.
+	  finished := true ] ] ] ]
 ]
 
 { #category : #positioning }
@@ -104,5 +106,6 @@ ZathuraGame >> positionOfShip: aShip [
 
 { #category : #ending }
 ZathuraGame >> winner [
-	^ winner.
+	self assertZathuraHasFinished.
+	^ winner
 ]

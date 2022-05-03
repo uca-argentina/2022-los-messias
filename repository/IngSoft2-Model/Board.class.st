@@ -41,7 +41,7 @@ Class {
 Board class >> assertValid: numberOfLockers [
 
 	numberOfLockers >= 2 ifFalse: [ 
-		Error signal: 'Zathura cannot be played with a board with less than two lockers' ]
+		Error signal: 'Board cannot be created with less than two lockers' ]
 ]
 
 { #category : #initialization }
@@ -53,12 +53,7 @@ Board class >> of: aNumberOfLockers withAll: aCollectionOfShips [
 { #category : #initialization }
 Board >> didShipCrossFinishLine: aShip [
 
-	| shipCrossFinishLine |
-	shipCrossFinishLine := false.
-	(positionOfShips at: aShip) >= numberOfLockers ifTrue: [ 
-		positionOfShips at: aShip put: numberOfLockers.
-		shipCrossFinishLine := true ].
-	^ shipCrossFinishLine
+	^ (positionOfShips at: aShip) >= numberOfLockers 
 ]
 
 { #category : #initialization }
@@ -67,11 +62,11 @@ Board >> initializeWith: aNumberOfLockers andWithAGroupOf: aCollectionOfShips [
 	numberOfLockers := aNumberOfLockers.
 	positionOfShips := Dictionary new.
 	aCollectionOfShips do:
-		self initializingPositionOfShipsWithAllShipsAtPositionZero
+		self initializingPositionOfShipsAtPositionZero
 ]
 
 { #category : #initialization }
-Board >> initializingPositionOfShipsWithAllShipsAtPositionZero [
+Board >> initializingPositionOfShipsAtPositionZero [
 
 	^ [ :aShip | positionOfShips at: aShip put: 0 ]
 ]
@@ -79,11 +74,11 @@ Board >> initializingPositionOfShipsWithAllShipsAtPositionZero [
 { #category : #moving }
 Board >> move: aShip by: aNumberOfLockers [
 
-	| actualPosition|
-	actualPosition := positionOfShips at: aShip.
-	positionOfShips at: aShip put: actualPosition + aNumberOfLockers.
-	( self didShipCrossFinishLine: aShip ) ifTrue: [ 
-		positionOfShips at: aShip put: numberOfLockers]
+	| actualPosition |
+	actualPosition := self positionOfShip: aShip.
+	positionOfShips
+		at: aShip
+		put: (actualPosition + aNumberOfLockers min: numberOfLockers)
 ]
 
 { #category : #'accessing - attributes' }
