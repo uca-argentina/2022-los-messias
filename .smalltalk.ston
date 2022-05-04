@@ -8,7 +8,6 @@ SmalltalkCISpec {
     }
   ],
   #testing : {
-    #format : #coveralls,
     #coverage : {
        #packages : [ 'IngSoft2-Model' ]
     },
