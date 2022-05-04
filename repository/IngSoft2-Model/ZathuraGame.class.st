@@ -47,13 +47,10 @@ ZathuraGame class >> assertNumberOfShipsIsValid: aCollectionOfShips [
 ]
 
 { #category : #'instance creation' }
-ZathuraGame class >> with: aNumberOfShips movedInBoardOf: aNumberOfLockers by: aDiceCup [
+ZathuraGame class >> playBy: ships movedInBoardOf: lockers and: laps rolling: die [
 
-	self assertNumberOfShipsIsValid: aNumberOfShips.
-	^ self new
-		  initializeWith: aNumberOfShips
-		  movedInBoardOf: aNumberOfLockers
-		  by: aDiceCup
+	self assertNumberOfShipsIsValid: ships.
+	^ self new initializePlayingBy: ships movedInBoardOf: lockers and: laps rolling: die
 ]
 
 { #category : #asserting }
@@ -91,12 +88,17 @@ ZathuraGame >> hasFinished [
 ]
 
 { #category : #initialization }
-ZathuraGame >> initializeWith: aCollectionOfShips movedInBoardOf: aNumberOfLockers by: aDiceCup [
-
+ZathuraGame >> initializePlayingBy: aCollectionOfShips movedInBoardOf: aNumberOfLockers and: aNumberOfLaps rolling: aDiceCup [
 	diceCup := aDiceCup.
-	board := Board of: aNumberOfLockers withAll: aCollectionOfShips.
+	board := Board of: aNumberOfLockers and: aNumberOfLaps withAll: aCollectionOfShips.
 	ships := aCollectionOfShips.
-	finished := false.
+	finished := false
+]
+
+{ #category : #positioning }
+ZathuraGame >> numberOfLapsOf: aShip [
+
+	^ board numberOfLapsOf:  aShip
 ]
 
 { #category : #playing }
@@ -119,8 +121,9 @@ ZathuraGame >> playTurn [
 ]
 
 { #category : #positioning }
-ZathuraGame >> positionOfShip: aShip [ 
-	^board positionOfShip: aShip
+ZathuraGame >> positionOfShipOnBoard: aShip [
+
+	^ board numberOfLockersOf: aShip
 ]
 
 { #category : #ending }

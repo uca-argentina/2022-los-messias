@@ -29,7 +29,8 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'numberOfLockers',
-		'positionOfShips'
+		'positionOfShips',
+		'numberOfLaps'
 	],
 	#classInstVars : [
 		'ships'
@@ -45,9 +46,13 @@ Board class >> assertValid: numberOfLockers [
 ]
 
 { #category : #'instance creation' }
-Board class >> of: aNumberOfLockers withAll: aCollectionOfShips [
-	self assertValid: aNumberOfLockers.
-	^self new initializeWith: aNumberOfLockers andWithAGroupOf: aCollectionOfShips  .
+Board class >> of: lockers and: laps withAll: aCollectionOfShips [
+
+	self assertValid: lockers.
+	^ self new
+		  initializeWith: lockers
+		  and: laps
+		  withAGroupOf: aCollectionOfShips
 ]
 
 { #category : #initialization }
@@ -57,9 +62,10 @@ Board >> hasCrossFinishLine: aShip [
 ]
 
 { #category : #initialization }
-Board >> initializeWith: aNumberOfLockers andWithAGroupOf: aCollectionOfShips [
+Board >> initializeWith: lockers and: laps withAGroupOf: aCollectionOfShips [
 
-	numberOfLockers := aNumberOfLockers.
+	numberOfLockers := lockers.
+	numberOfLaps := laps.
 	positionOfShips := Dictionary new.
 	aCollectionOfShips do: [ :aShip | positionOfShips at: aShip put: 0 ]
 ]
@@ -68,14 +74,31 @@ Board >> initializeWith: aNumberOfLockers andWithAGroupOf: aCollectionOfShips [
 Board >> move: aShip by: aNumberOfLockers [
 
 	| actualPosition |
-	actualPosition := self positionOfShip: aShip.
+	actualPosition := self positionOfShipOnBoard: aShip.
 	positionOfShips
 		at: aShip
-		put: (actualPosition + aNumberOfLockers min: numberOfLockers)
+		put: (actualPosition + aNumberOfLockers min: numberOfLockers*numberOfLaps )
 ]
 
 { #category : #'accessing - attributes' }
-Board >> positionOfShip: aShip [
+Board >> numberOfLapsOf: aShip [
+	
+	^ (self positionOfShipOnBoard: aShip) // numberOfLockers
+]
 
-	^ positionOfShips at: aShip 
+{ #category : #'accessing - attributes' }
+Board >> numberOfLockersOf: aShip [
+
+	| result shipPosition |
+	shipPosition := self positionOfShipOnBoard: aShip.
+	result := shipPosition % numberOfLockers.
+	shipPosition % numberOfLockers == 0 & (shipPosition ~= 0) ifTrue: [ 
+		result := numberOfLockers ].
+	^ result
+]
+
+{ #category : #'accessing - attributes' }
+Board >> positionOfShipOnBoard: aShip [
+
+	^ (positionOfShips at: aShip)
 ]

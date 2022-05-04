@@ -8,15 +8,16 @@ Class {
 ZathuraFunctionalTest >> testZathuraAfterBeingPlayedHasFinishedReturnsTrue [
 
 	| zathura die ships |
-	die := (RandomDie with: 6).
+	die := RandomDie with: 6.
 	ships := OrderedCollection new.
 	ships addLast: 'BlueShip'.
 	ships addLast: 'RedShip'.
 	ships addLast: 'GreenShip'.
 	zathura := ZathuraGame
-		           with: ships
+		           playBy: ships
 		           movedInBoardOf: 10
-		           by: die.
+		           and: 1
+		           rolling: die.
 
 	zathura play.
 	self assert: zathura hasFinished
@@ -31,9 +32,10 @@ ZathuraFunctionalTest >> testZathuraAfterBeingPlayedHasOnlyOneWinnerOfTheShips [
 	ships addLast: 'RedShip'.
 	ships addLast: 'BlueShip'.
 	zathura := ZathuraGame
-		           with: ships
+		           playBy: ships
 		           movedInBoardOf: 10
-		           by: diceCup.
+		           and: 1
+		           rolling: diceCup.
 
 	zathura play.
 	aWinner := ships select: [ :aShip | aShip == zathura winner ].
