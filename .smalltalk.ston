@@ -13,6 +13,7 @@ SmalltalkCISpec {
     },
     #include : {
        #packages : [ 'IngSoft2-Tests' ]
-    }
+    },
+    #format : #lcov
   }
 }
