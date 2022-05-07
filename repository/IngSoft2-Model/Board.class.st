@@ -74,31 +74,27 @@ Board >> initializeWith: lockers and: laps withAGroupOf: aCollectionOfShips [
 Board >> move: aShip by: aNumberOfLockers [
 
 	| actualPosition |
-	actualPosition := self positionOfShipOnBoard: aShip.
+	actualPosition := positionOfShips at: aShip.
 	positionOfShips
 		at: aShip
-		put: (actualPosition + aNumberOfLockers min: numberOfLockers*numberOfLaps )
+		put:
+		(actualPosition + aNumberOfLockers min:
+			 numberOfLockers * numberOfLaps)
 ]
 
 { #category : #'accessing - attributes' }
 Board >> numberOfLapsOf: aShip [
-	
-	^ (self positionOfShipOnBoard: aShip) // numberOfLockers
+
+	^ (positionOfShips at: aShip) // numberOfLockers
 ]
 
 { #category : #'accessing - attributes' }
 Board >> numberOfLockersOf: aShip [
 
-	| result shipPosition |
-	shipPosition := self positionOfShipOnBoard: aShip.
-	result := shipPosition % numberOfLockers.
-	shipPosition % numberOfLockers == 0 & (shipPosition ~= 0) ifTrue: [ 
-		result := numberOfLockers ].
-	^ result
+	^ (positionOfShips at: aShip) % numberOfLockers
 ]
 
 { #category : #'accessing - attributes' }
-Board >> positionOfShipOnBoard: aShip [
-
-	^ (positionOfShips at: aShip)
+Board >> rankingOf: aString [ 
+	self shouldBeImplemented.
 ]

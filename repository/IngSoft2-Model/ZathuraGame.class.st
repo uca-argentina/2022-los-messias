@@ -126,6 +126,11 @@ ZathuraGame >> positionOfShipOnBoard: aShip [
 	^ board numberOfLockersOf: aShip
 ]
 
+{ #category : #positioning }
+ZathuraGame >> rankingOf: aShip [ 
+	^board rankingOf: aShip
+]
+
 { #category : #ending }
 ZathuraGame >> winner [
 	self assertZathuraHasFinished.

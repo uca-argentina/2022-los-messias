@@ -45,8 +45,9 @@ LoadedDie class >> with: aLoadedFace [
 ]
 
 { #category : #initialization }
-LoadedDie >> initializeWith: aLoadedFace [ 
-	loadedFace := aLoadedFace.
+LoadedDie >> initializeWith: aLoadedFace [
+
+	loadedFace := aLoadedFace
 ]
 
 { #category : #rolling }

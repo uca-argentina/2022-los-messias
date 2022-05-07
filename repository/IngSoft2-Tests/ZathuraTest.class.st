@@ -23,7 +23,7 @@ ZathuraTest >> testZathuraAfterTheGameIsPlayedCanGetThePositionOfEachShip [
 		           rolling: diceCup.
 
 	zathura play.
-	self assert: (zathura positionOfShipOnBoard: 'BlueShip') equals: 10.
+	self assert: (zathura positionOfShipOnBoard: 'BlueShip') equals: 0.
 	self assert: (zathura positionOfShipOnBoard: 'RedShip') equals: 8.
 	self assert: (zathura positionOfShipOnBoard: 'GreenShip') equals: 8
 ]
@@ -143,6 +143,37 @@ ZathuraTest >> testZathuraIsPlayedAndTheWinnerIsTheGreenShip [
 	self assert: zathura winner equals: 'GreenShip'
 ]
 
+{ #category : #tests }
+ZathuraTest >> testZathuraKnowsTheRankingOfAShip [
+"
+	| die ships zathura faces |
+	faces := OrderedCollection new.
+	faces addLast: 5.
+	faces addLast: 8.
+	faces addLast: 9.
+	die := SequencialDie with: faces.
+	ships := OrderedCollection new.
+	ships addLast: 'GreenShip'.
+	ships addLast: 'BlueShip'.
+	ships addLast: 'RedShip'.
+	zathura := ZathuraGame
+		           playBy: ships
+		           movedInBoardOf: 10
+		           and: 5
+		           rolling: die.
+
+	zathura playTurn.
+	zathura playTurn.
+	self assert: (zathura rankingOf: 'GreenShip') equals: 2.
+	self assert: (zathura rankingOf: 'BlueShip') equals: 1.
+	self assert: (zathura rankingOf: 'RedShip') equals: 3.
+	zathura playTurn.
+
+	self assert: (zathura rankingOf: 'GreenShip') equals: 3.
+	self assert: (zathura rankingOf: 'BlueShip') equals: 2.
+	self assert: (zathura rankingOf: 'RedShip') equals: 1"
+]
+
 { #category : #boardTests }
 ZathuraTest >> testZathuraWhenCrossingTheLastLockerTheShipsStartsAnotherLap [
 
@@ -160,7 +191,11 @@ ZathuraTest >> testZathuraWhenCrossingTheLastLockerTheShipsStartsAnotherLap [
 	zathura playTurn.
 	zathura playTurn.
 	self assert: (zathura positionOfShipOnBoard: 'BlueShip') equals: 2.
-	self assert: (zathura positionOfShipOnBoard: 'RedShip') equals: 6
+	self assert: (zathura positionOfShipOnBoard: 'RedShip') equals: 6.
+	self assert: (zathura numberOfLapsOf:  'BlueShip') equals: 1.
+	self assert: (zathura numberOfLapsOf: 'RedShip') equals: 0.
+
+
 ]
 
 { #category : #tests }
