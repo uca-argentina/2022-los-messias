@@ -1,10 +1,10 @@
 Class {
-	#name : #Locker,
+	#name : #LockerNoEffect,
 	#superclass : #Object,
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #action }
-Locker >> action [
+LockerNoEffect >> action [
 	^1.
 ]

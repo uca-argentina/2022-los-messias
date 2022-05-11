@@ -74,7 +74,7 @@ Board >> hasCrossFinishLine: aShip [
 Board >> initializeWith: lockers and: laps withAGroupOf: aCollectionOfShips [
 
 	lockersGame := OrderedCollection new.
-	1 to: lockers do: [ :aLocker | lockersGame add: Locker new ].
+	1 to: lockers do: [ :aLocker | lockersGame add: LockerNoEffect new ].
 	numberOfLockers := lockers.
 	numberOfLaps := laps.
 	positionOfShips := Dictionary new.
