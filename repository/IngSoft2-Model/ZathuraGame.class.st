@@ -127,8 +127,9 @@ ZathuraGame >> positionOfShipOnBoard: aShip [
 ]
 
 { #category : #positioning }
-ZathuraGame >> rankingOf: aShip [ 
-	^board rankingOf: aShip
+ZathuraGame >> rankingOf: aShip [
+
+	^ (board rankingOf: aShip).
 ]
 
 { #category : #ending }

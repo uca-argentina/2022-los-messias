@@ -30,7 +30,9 @@ Class {
 	#instVars : [
 		'numberOfLockers',
 		'positionOfShips',
-		'numberOfLaps'
+		'numberOfLaps',
+		'lockersGame',
+		'ranking'
 	],
 	#classInstVars : [
 		'ships'
@@ -55,6 +57,13 @@ Board class >> of: lockers and: laps withAll: aCollectionOfShips [
 		  withAGroupOf: aCollectionOfShips
 ]
 
+{ #category : #private }
+Board >> allShipPositions [
+
+	^ self withShipLapAndLockerNumberCollect: [ :aShip :aLap :aLockerNumber | 
+		  SpaceshipPosition for: aShip at: aLap and: aLockerNumber ]
+]
+
 { #category : #initialization }
 Board >> hasCrossFinishLine: aShip [
 
@@ -64,10 +73,14 @@ Board >> hasCrossFinishLine: aShip [
 { #category : #initialization }
 Board >> initializeWith: lockers and: laps withAGroupOf: aCollectionOfShips [
 
+	lockersGame := OrderedCollection new.
+	1 to: lockers do: [ :aLocker | lockersGame add: Locker new ].
 	numberOfLockers := lockers.
 	numberOfLaps := laps.
 	positionOfShips := Dictionary new.
-	aCollectionOfShips do: [ :aShip | positionOfShips at: aShip put: 0 ]
+	aCollectionOfShips do: [ :aShip | positionOfShips at: aShip put: 0 ].
+	ranking := OrderedCollection new.
+	ranking := aCollectionOfShips .
 ]
 
 { #category : #moving }
@@ -79,7 +92,8 @@ Board >> move: aShip by: aNumberOfLockers [
 		at: aShip
 		put:
 		(actualPosition + aNumberOfLockers min:
-			 numberOfLockers * numberOfLaps)
+			 numberOfLockers * numberOfLaps).
+	(lockersGame at: (self numberOfLockersOf: aShip) + 1) action.
 ]
 
 { #category : #'accessing - attributes' }
@@ -95,6 +109,30 @@ Board >> numberOfLockersOf: aShip [
 ]
 
 { #category : #'accessing - attributes' }
-Board >> rankingOf: aString [ 
-	self shouldBeImplemented.
+Board >> rankingOf: aShip [
+
+	^ self shipsSortedByPosition indexOf: aShip
+]
+
+{ #category : #'accessing - attributes' }
+Board >> shipsSortedByPosition [
+
+	^ self sortedShipPositions collect: [ :position | position spaceship ]
+]
+
+{ #category : #'accessing - attributes' }
+Board >> sortedShipPositions [
+
+	^ self allShipPositions sort: [ :positionA :positionB | 
+		  positionA > positionB ]
+]
+
+{ #category : #private }
+Board >> withShipLapAndLockerNumberCollect: block [
+
+	| lockerNumber lap |
+	^ positionOfShips keys collect: [ :ship | 
+		  lap := self numberOfLapsOf: ship.
+		  lockerNumber := self numberOfLockersOf: ship.
+		  block value: ship value: lap value: lockerNumber ]
 ]

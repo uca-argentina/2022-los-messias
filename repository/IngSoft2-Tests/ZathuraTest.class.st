@@ -145,7 +145,7 @@ ZathuraTest >> testZathuraIsPlayedAndTheWinnerIsTheGreenShip [
 
 { #category : #tests }
 ZathuraTest >> testZathuraKnowsTheRankingOfAShip [
-"
+
 	| die ships zathura faces |
 	faces := OrderedCollection new.
 	faces addLast: 5.
@@ -153,9 +153,9 @@ ZathuraTest >> testZathuraKnowsTheRankingOfAShip [
 	faces addLast: 9.
 	die := SequencialDie with: faces.
 	ships := OrderedCollection new.
+	ships addLast: 'RedShip'.
 	ships addLast: 'GreenShip'.
 	ships addLast: 'BlueShip'.
-	ships addLast: 'RedShip'.
 	zathura := ZathuraGame
 		           playBy: ships
 		           movedInBoardOf: 10
@@ -164,14 +164,14 @@ ZathuraTest >> testZathuraKnowsTheRankingOfAShip [
 
 	zathura playTurn.
 	zathura playTurn.
+	zathura playTurn.
+	"self assert: (zathura rankingOf: 'BlueShip') equals: 1.
+	self assert: (zathura rankingOf: 'GreenShip') equals: 2.
+	self assert: (zathura rankingOf: 'RedShip') equals: 3."
+
 	self assert: (zathura rankingOf: 'GreenShip') equals: 2.
 	self assert: (zathura rankingOf: 'BlueShip') equals: 1.
 	self assert: (zathura rankingOf: 'RedShip') equals: 3.
-	zathura playTurn.
-
-	self assert: (zathura rankingOf: 'GreenShip') equals: 3.
-	self assert: (zathura rankingOf: 'BlueShip') equals: 2.
-	self assert: (zathura rankingOf: 'RedShip') equals: 1"
 ]
 
 { #category : #boardTests }
