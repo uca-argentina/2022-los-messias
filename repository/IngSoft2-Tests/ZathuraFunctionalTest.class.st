@@ -7,15 +7,21 @@ Class {
 { #category : #tests }
 ZathuraFunctionalTest >> testZathuraAfterBeingPlayedHasFinishedReturnsTrue [
 
-	| zathura die ships |
+	| zathura die ships lockers |
 	die := RandomDie with: 6.
 	ships := OrderedCollection new.
 	ships addLast: 'BlueShip'.
 	ships addLast: 'RedShip'.
 	ships addLast: 'GreenShip'.
+	lockers := { 
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.}.
 	zathura := ZathuraGame
 		           playBy: ships
-		           movedInBoardOf: 10
+		           movedInBoardOf: lockers
 		           and: 1
 		           rolling: die.
 
@@ -26,14 +32,24 @@ ZathuraFunctionalTest >> testZathuraAfterBeingPlayedHasFinishedReturnsTrue [
 { #category : #tests }
 ZathuraFunctionalTest >> testZathuraAfterBeingPlayedHasOnlyOneWinnerOfTheShips [
 
-	| zathura diceCup ships aWinner notWinner |
+	| zathura diceCup ships aWinner notWinner lockers |
 	diceCup := RandomDie with: 6.
 	ships := OrderedCollection new.
 	ships addLast: 'RedShip'.
 	ships addLast: 'BlueShip'.
+	lockers := { 
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new }.
 	zathura := ZathuraGame
 		           playBy: ships
-		           movedInBoardOf: 10
+		           movedInBoardOf: lockers
 		           and: 1
 		           rolling: diceCup.
 

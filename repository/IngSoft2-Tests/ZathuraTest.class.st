@@ -122,7 +122,7 @@ ZathuraTest >> testZathuraGamePlaysATurnAndDoNotFinish [
 		           LockerNoEffect new.
 		           LockerNoEffect new.
 		           LockerNoEffect new }.
-	aDie := RandomDie with: 2.
+	aDie := RandomDie with: 3.
 	ships := OrderedCollection new.
 	ships addLast: 'GreenShip'.
 	ships addLast: 'RedShip'.
@@ -158,14 +158,20 @@ ZathuraTest >> testZathuraInitializedWithLessThanTwoShipsThrowsError [
 { #category : #tests }
 ZathuraTest >> testZathuraIsInitializedWithAllShipsInPositionZero [
 
-	| die ships zathura |
+	| die ships zathura lockers |
 	die := LoadedDie with: 6.
 	ships := OrderedCollection new.
+	lockers := { 
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new }.
 	ships addLast: 'BlueShip'.
 	ships addLast: 'RedShip'.
 	zathura := ZathuraGame
 		           playBy: ships
-		           movedInBoardOf: 10
+		           movedInBoardOf: lockers 
 		           and: 1
 		           rolling: die.
 	self assert: (zathura positionOfShipOnBoard: 'BlueShip') equals: 0.
@@ -175,15 +181,26 @@ ZathuraTest >> testZathuraIsInitializedWithAllShipsInPositionZero [
 { #category : #tests }
 ZathuraTest >> testZathuraIsPlayedAndTheWinnerIsTheGreenShip [
 
-	| zathura die ships |
+	| zathura die ships lockers |
 	die := LoadedDie with: 5.
 	ships := OrderedCollection new.
 	ships addLast: 'GreenShip'.
 	ships addLast: 'RedShip'.
 	ships addLast: 'BlueShip'.
+	lockers := { 
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new }.
 	zathura := ZathuraGame
 		           playBy: ships
-		           movedInBoardOf: 10
+		           movedInBoardOf: lockers
 		           and: 1
 		           rolling: die.
 
@@ -194,11 +211,22 @@ ZathuraTest >> testZathuraIsPlayedAndTheWinnerIsTheGreenShip [
 { #category : #tests }
 ZathuraTest >> testZathuraKnowsTheRankingOfAShip [
 
-	| die ships zathura faces |
+	| die ships zathura faces lockers |
 	faces := OrderedCollection new.
 	faces addLast: 5.
 	faces addLast: 8.
 	faces addLast: 9.
+	lockers := { 
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new }.
 	die := SequencialDie with: faces.
 	ships := OrderedCollection new.
 	ships addLast: 'RedShip'.
@@ -206,7 +234,7 @@ ZathuraTest >> testZathuraKnowsTheRankingOfAShip [
 	ships addLast: 'BlueShip'.
 	zathura := ZathuraGame
 		           playBy: ships
-		           movedInBoardOf: 10
+		           movedInBoardOf: lockers
 		           and: 5
 		           rolling: die.
 
@@ -219,20 +247,31 @@ ZathuraTest >> testZathuraKnowsTheRankingOfAShip [
 
 	self assert: (zathura rankingOf: 'GreenShip') equals: 2.
 	self assert: (zathura rankingOf: 'BlueShip') equals: 1.
-	self assert: (zathura rankingOf: 'RedShip') equals: 3.
+	self assert: (zathura rankingOf: 'RedShip') equals: 3
 ]
 
 { #category : #boardTests }
 ZathuraTest >> testZathuraWhenCrossingTheLastLockerTheShipsStartsAnotherLap [
 
-	| die ships zathura |
+	| die ships zathura lockers |
 	die := LoadedDie with: 6.
 	ships := OrderedCollection new.
 	ships addLast: 'BlueShip'.
 	ships addLast: 'RedShip'.
+	lockers := { 
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new }.
 	zathura := ZathuraGame
 		           playBy: ships
-		           movedInBoardOf: 10
+		           movedInBoardOf: lockers
 		           and: 5
 		           rolling: die.
 	zathura playTurn.
@@ -240,24 +279,25 @@ ZathuraTest >> testZathuraWhenCrossingTheLastLockerTheShipsStartsAnotherLap [
 	zathura playTurn.
 	self assert: (zathura positionOfShipOnBoard: 'BlueShip') equals: 2.
 	self assert: (zathura positionOfShipOnBoard: 'RedShip') equals: 6.
-	self assert: (zathura numberOfLapsOf:  'BlueShip') equals: 1.
-	self assert: (zathura numberOfLapsOf: 'RedShip') equals: 0.
-
-
+	self assert: (zathura numberOfLapsOf: 'BlueShip') equals: 1.
+	self assert: (zathura numberOfLapsOf: 'RedShip') equals: 0
 ]
 
 { #category : #tests }
 ZathuraTest >> testZathuraWhileItHasNotFinishedAsksWinnerThrowsError [
 
-	| die ships zathura |
+	| die ships zathura lockers |
 	die := LoadedDie with: 6.
 	ships := OrderedCollection new.
 	ships addLast: 'GreenShip'.
 	ships addLast: 'BlueShip'.
-
+	lockers := { 
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new. }.
 	zathura := ZathuraGame
 		           playBy: ships
-		           movedInBoardOf: 10
+		           movedInBoardOf: lockers
 		           and: 1
 		           rolling: die.
 
