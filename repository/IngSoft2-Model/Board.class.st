@@ -28,11 +28,11 @@ Class {
 	#name : #Board,
 	#superclass : #Object,
 	#instVars : [
-		'numberOfLockers',
 		'positionOfShips',
 		'numberOfLaps',
 		'lockersGame',
-		'ranking'
+		'ranking',
+		'lockers'
 	],
 	#classInstVars : [
 		'ships'
@@ -41,9 +41,9 @@ Class {
 }
 
 { #category : #'instance creation' }
-Board class >> assertValid: numberOfLockers [
+Board class >> assertValid: lockers [
 
-	numberOfLockers >= 2 ifFalse: [ 
+	lockers size >= 2 ifFalse: [ 
 		Error signal: 'Board cannot be created with less than two lockers' ]
 ]
 
@@ -67,20 +67,20 @@ Board >> allShipPositions [
 { #category : #initialization }
 Board >> hasCrossFinishLine: aShip [
 
-	^ (positionOfShips at: aShip) >= numberOfLockers 
+	^ (positionOfShips at: aShip) >= lockers 
 ]
 
 { #category : #initialization }
-Board >> initializeWith: lockers and: laps withAGroupOf: aCollectionOfShips [
+Board >> initializeWith: theLockers and: laps withAGroupOf: aCollectionOfShips [
 
-	lockersGame := OrderedCollection new.
-	1 to: lockers do: [ :aLocker | lockersGame add: LockerNoEffect new ].
-	numberOfLockers := lockers.
+	lockersGame := theLockers.
+	lockers := theLockers size.
+	"1 to: lockers do: [ :aLocker | lockersGame add: LockerNoEffect new ]."
 	numberOfLaps := laps.
 	positionOfShips := Dictionary new.
 	aCollectionOfShips do: [ :aShip | positionOfShips at: aShip put: 0 ].
 	ranking := OrderedCollection new.
-	ranking := aCollectionOfShips .
+	ranking := aCollectionOfShips
 ]
 
 { #category : #moving }
@@ -90,22 +90,22 @@ Board >> move: aShip by: aNumberOfLockers [
 	actualPosition := positionOfShips at: aShip.
 	positionOfShips
 		at: aShip
-		put:
-		(actualPosition + aNumberOfLockers min:
-			 numberOfLockers * numberOfLaps).
-	(lockersGame at: (self numberOfLockersOf: aShip) + 1) action.
+		put: (actualPosition + aNumberOfLockers min: lockers * numberOfLaps).
+	(lockersGame at: (self numberOfLockersOf: aShip) + 1)
+		action: aShip
+		on: self
 ]
 
 { #category : #'accessing - attributes' }
 Board >> numberOfLapsOf: aShip [
 
-	^ (positionOfShips at: aShip) // numberOfLockers
+	^ (positionOfShips at: aShip) // lockers
 ]
 
 { #category : #'accessing - attributes' }
 Board >> numberOfLockersOf: aShip [
 
-	^ (positionOfShips at: aShip) % numberOfLockers
+	^ (positionOfShips at: aShip) % lockers
 ]
 
 { #category : #'accessing - attributes' }
@@ -125,6 +125,12 @@ Board >> sortedShipPositions [
 
 	^ self allShipPositions sort: [ :positionA :positionB | 
 		  positionA > positionB ]
+]
+
+{ #category : #'accessing - attributes' }
+Board >> speedUp: aShip [
+
+	positionOfShips at: aShip put: ((positionOfShips at: aShip) + 4)
 ]
 
 { #category : #private }

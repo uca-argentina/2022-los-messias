@@ -88,9 +88,13 @@ ZathuraGame >> hasFinished [
 ]
 
 { #category : #initialization }
-ZathuraGame >> initializePlayingBy: aCollectionOfShips movedInBoardOf: aNumberOfLockers and: aNumberOfLaps rolling: aDiceCup [
+ZathuraGame >> initializePlayingBy: aCollectionOfShips movedInBoardOf: lockers and: aNumberOfLaps rolling: aDiceCup [
+
 	diceCup := aDiceCup.
-	board := Board of: aNumberOfLockers and: aNumberOfLaps withAll: aCollectionOfShips.
+	board := Board
+		         of: lockers
+		         and: aNumberOfLaps
+		         withAll: aCollectionOfShips.
 	ships := aCollectionOfShips.
 	finished := false
 ]

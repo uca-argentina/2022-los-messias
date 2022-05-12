@@ -7,10 +7,21 @@ Class {
 { #category : #tests }
 ZathuraTest >> testZathuraAfterTheGameIsPlayedCanGetThePositionOfEachShip [
 
-	| zathura diceCup ships |
+	| zathura diceCup ships lockers |
 	diceCup := DiceCup withAll: { 
 			           (LoadedDie with: 6).
 			           (LoadedDie with: 2) }.
+	lockers := { 
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new }.
 	"ships := { 'BlueShip'. 'RedShip'. 'GreenShip' }."
 	ships := OrderedCollection new.
 	ships addLast: 'BlueShip'.
@@ -18,7 +29,7 @@ ZathuraTest >> testZathuraAfterTheGameIsPlayedCanGetThePositionOfEachShip [
 	ships addLast: 'GreenShip'.
 	zathura := ZathuraGame
 		           playBy: ships
-		           movedInBoardOf: 10
+		           movedInBoardOf: lockers
 		           and: 1
 		           rolling: diceCup.
 
@@ -28,17 +39,49 @@ ZathuraTest >> testZathuraAfterTheGameIsPlayedCanGetThePositionOfEachShip [
 	self assert: (zathura positionOfShipOnBoard: 'GreenShip') equals: 8
 ]
 
+{ #category : #boardTests }
+ZathuraTest >> testZathuraBlueShipFallsIntoASpeedUpLockerAndTheResultIsItAdvancesFourLockersMore [
+
+	| die ships zathura lockers |
+	die := LoadedDie with: 3.
+	ships := OrderedCollection new.
+	ships addLast: 'BlueShip'.
+	ships addLast: 'RedShip'.
+	lockers := { 
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           SpeedUp new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new }.
+	zathura := ZathuraGame
+		           playBy: ships
+		           movedInBoardOf: lockers
+		           and: 5
+		           rolling: die.
+	zathura playTurn.
+	self assert: (zathura positionOfShipOnBoard: 'BlueShip') equals: 7
+]
+
 { #category : #tests }
 ZathuraTest >> testZathuraCannotBePlayedMoreThanOnceBANANA [
 
-	| ships aDie zathura |
+	| ships aDie zathura lockers |
 	aDie := LoadedDie with: 8.
 	ships := OrderedCollection new.
+		lockers := { 
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new }.
 	ships addLast: 'BlueShip'.
 	ships addLast: 'RedShip'.
 	zathura := ZathuraGame
 		           playBy: ships
-		           movedInBoardOf: 50
+		           movedInBoardOf: lockers
 		           and: 1
 		           rolling: aDie.
 	zathura play.
@@ -62,7 +105,7 @@ ZathuraTest >> testZathuraCreatedWithLessThanTwoLockersThrowsError [
 		should: [ 
 			ZathuraGame
 				playBy: ships
-				movedInBoardOf: 1
+				movedInBoardOf: { LockerNoEffect new }
 				and: 1
 				rolling: aDie ]
 		raise: Error
@@ -72,16 +115,21 @@ ZathuraTest >> testZathuraCreatedWithLessThanTwoLockersThrowsError [
 { #category : #tests }
 ZathuraTest >> testZathuraGamePlaysATurnAndDoNotFinish [
 
-	| aQuantityLockers ships aDie zathura |
-	aQuantityLockers := 30.
-	aDie := RandomDie with: 5.
+	| ships aDie zathura lockers |
+	lockers := { 
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new }.
+	aDie := RandomDie with: 2.
 	ships := OrderedCollection new.
 	ships addLast: 'GreenShip'.
 	ships addLast: 'RedShip'.
 	ships addLast: 'BlueShip'.
 	zathura := ZathuraGame
 		           playBy: ships
-		           movedInBoardOf: aQuantityLockers
+		           movedInBoardOf: lockers
 		           and: 1
 		           rolling: aDie.
 	zathura playTurn.

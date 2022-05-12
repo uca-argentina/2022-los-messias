@@ -5,6 +5,7 @@ Class {
 }
 
 { #category : #action }
-LockerNoEffect >> action [
-	^1.
+LockerNoEffect >> action: aShip on: aBoard [
+
+	^ 1
 ]
