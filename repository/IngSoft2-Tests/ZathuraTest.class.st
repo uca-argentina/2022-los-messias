@@ -40,6 +40,37 @@ ZathuraTest >> testZathuraAfterTheGameIsPlayedCanGetThePositionOfEachShip [
 ]
 
 { #category : #boardTests }
+ZathuraTest >> testZathuraBlueShipFallsIntoAMoonWalkLockerAndTheResultIsItMovesAllShipsBackwards [
+
+	"| die ships zathura lockers |
+	die := LoadedDie with: 3.
+	ships := OrderedCollection new.
+	ships addLast: 'BlueShip'.
+	ships addLast: 'RedShip'.
+	lockers := { 
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           (MoonWalk with: 2).
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new }.
+	zathura := ZathuraGame
+		           playBy: ships
+		           movedInBoardOf: lockers
+		           and: 5
+		           rolling: die.
+	zathura playTurn.
+	zathura playTurn.
+	zathura playTurn.
+	self assert: (zathura positionOfShipOnBoard: 'BlueShip') equals: 6.
+	self assert: (zathura positionOfShipOnBoard: 'RedShip') equals: 1"
+]
+
+{ #category : #boardTests }
 ZathuraTest >> testZathuraBlueShipFallsIntoASpeedUpLockerAndTheResultIsItAdvancesFourLockersMore [
 
 	| die ships zathura lockers |
@@ -63,6 +94,33 @@ ZathuraTest >> testZathuraBlueShipFallsIntoASpeedUpLockerAndTheResultIsItAdvance
 		           rolling: die.
 	zathura playTurn.
 	self assert: (zathura positionOfShipOnBoard: 'BlueShip') equals: 7
+]
+
+{ #category : #boardTests }
+ZathuraTest >> testZathuraBlueShipFallsIntoAWormHoleLockerAndTheResultIsItAdvancesFourLockersBackwards [
+
+	| die ships zathura lockers |
+	die := LoadedDie with: 5.
+	ships := OrderedCollection new.
+	ships addLast: 'BlueShip'.
+	ships addLast: 'RedShip'.
+	lockers := { 
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           WormHole new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new }.
+	zathura := ZathuraGame
+		           playBy: ships
+		           movedInBoardOf: lockers
+		           and: 5
+		           rolling: die.
+	zathura playTurn.
+	self assert: (zathura positionOfShipOnBoard: 'BlueShip') equals: 1
 ]
 
 { #category : #assertionTests }
@@ -249,6 +307,36 @@ ZathuraTest >> testZathuraKnowsTheRankingOfAShip [
 	self assert: (zathura rankingOf: 'GreenShip') equals: 2.
 	self assert: (zathura rankingOf: 'BlueShip') equals: 1.
 	self assert: (zathura rankingOf: 'RedShip') equals: 3
+]
+
+{ #category : #tests }
+ZathuraTest >> testZathuraShipFallsIntoASpeedUpAndStaysThere [
+
+	| die ships zathura lockers |
+	die := LoadedDie with: 1.
+	ships := OrderedCollection new.
+	ships addLast: 'BlueShip'.
+	ships addLast: 'RedShip'.
+	lockers := { 
+		           LockerNoEffect new.
+		           SpeedUp new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           WormHole new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new }.
+	zathura := ZathuraGame
+		           playBy: ships
+		           movedInBoardOf: lockers
+		           and: 3
+		           rolling: die.
+	zathura playTurn.
+	zathura playTurn.
+	zathura playTurn.
+	self assert: (zathura positionOfShipOnBoard: 'BlueShip') equals: 6
 ]
 
 { #category : #boardTests }

@@ -107,11 +107,11 @@ Board >> numberOfLockerOf: aShip [
 
 { #category : #moving }
 Board >> playTurnOnBoard: aShip by: aNumberOfLockers [
+
 	self move: aShip by: aNumberOfLockers.
 	(lockersGame at: (self numberOfLockerOf: aShip) + 1)
 		action: aShip
 		on: self
-
 ]
 
 { #category : #ranking }
