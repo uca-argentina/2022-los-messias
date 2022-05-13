@@ -150,8 +150,3 @@ Board >> spaceshipPositionOf: aShip [
 
 	^ positionOfShip at: 1
 ]
-
-{ #category : #action }
-Board >> speedUp: aShip [
-	self move: aShip by: 4
-]
