@@ -6,5 +6,6 @@ Class {
 
 { #category : #'instance creation' }
 SpeedUp >> action: aShip on: aBoard [
-	aBoard speedUp: aShip
+
+	aBoard move: aShip by: 4.
 ]

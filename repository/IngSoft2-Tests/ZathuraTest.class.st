@@ -65,8 +65,8 @@ ZathuraTest >> testZathuraBlueShipFallsIntoASpeedUpLockerAndTheResultIsItAdvance
 	self assert: (zathura positionOfShipOnBoard: 'BlueShip') equals: 7
 ]
 
-{ #category : #tests }
-ZathuraTest >> testZathuraCannotBePlayedMoreThanOnceBANANA [
+{ #category : #assertionTests }
+ZathuraTest >> testZathuraCannotBePlayedMoreThanOnce [
 
 	| ships aDie zathura lockers |
 	aDie := LoadedDie with: 8.
@@ -92,7 +92,7 @@ ZathuraTest >> testZathuraCannotBePlayedMoreThanOnceBANANA [
 		withMessage: 'Zathura cannot be played more than once'
 ]
 
-{ #category : #tests }
+{ #category : #assertionTests }
 ZathuraTest >> testZathuraCreatedWithLessThanTwoLockersThrowsError [
 
 	| ships aDie |
@@ -136,7 +136,7 @@ ZathuraTest >> testZathuraGamePlaysATurnAndDoNotFinish [
 	self deny: zathura hasFinished
 ]
 
-{ #category : #tests }
+{ #category : #assertionTests }
 ZathuraTest >> testZathuraInitializedWithLessThanTwoShipsThrowsError [
 
 	| die ships |
@@ -240,11 +240,12 @@ ZathuraTest >> testZathuraKnowsTheRankingOfAShip [
 
 	zathura playTurn.
 	zathura playTurn.
-	zathura playTurn.
-	"self assert: (zathura rankingOf: 'BlueShip') equals: 1.
-	self assert: (zathura rankingOf: 'GreenShip') equals: 2.
-	self assert: (zathura rankingOf: 'RedShip') equals: 3."
+	
+	self assert: (zathura rankingOf: 'BlueShip') equals: 3.
+	self assert: (zathura rankingOf: 'GreenShip') equals: 1.
+	self assert: (zathura rankingOf: 'RedShip') equals: 2.
 
+	zathura playTurn.
 	self assert: (zathura rankingOf: 'GreenShip') equals: 2.
 	self assert: (zathura rankingOf: 'BlueShip') equals: 1.
 	self assert: (zathura rankingOf: 'RedShip') equals: 3
@@ -279,11 +280,11 @@ ZathuraTest >> testZathuraWhenCrossingTheLastLockerTheShipsStartsAnotherLap [
 	zathura playTurn.
 	self assert: (zathura positionOfShipOnBoard: 'BlueShip') equals: 2.
 	self assert: (zathura positionOfShipOnBoard: 'RedShip') equals: 6.
-	self assert: (zathura numberOfLapsOf: 'BlueShip') equals: 1.
-	self assert: (zathura numberOfLapsOf: 'RedShip') equals: 0
+	self assert: (zathura numberOfLapOf: 'BlueShip') equals: 1.
+	self assert: (zathura numberOfLapOf: 'RedShip') equals: 0
 ]
 
-{ #category : #tests }
+{ #category : #assertionTests }
 ZathuraTest >> testZathuraWhileItHasNotFinishedAsksWinnerThrowsError [
 
 	| die ships zathura lockers |

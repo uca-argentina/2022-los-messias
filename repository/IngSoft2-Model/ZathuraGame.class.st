@@ -100,9 +100,9 @@ ZathuraGame >> initializePlayingBy: aCollectionOfShips movedInBoardOf: lockers a
 ]
 
 { #category : #positioning }
-ZathuraGame >> numberOfLapsOf: aShip [
+ZathuraGame >> numberOfLapOf: aShip [
 
-	^ board numberOfLapsOf:  aShip
+	^ board numberOfLapOf:  aShip
 ]
 
 { #category : #playing }
@@ -119,15 +119,15 @@ ZathuraGame >> playTurn [
 	| aShip |
 	self assertZathuraHasNotBeenPlayed.
 	aShip := ships at: 1.
-	board move: aShip by: diceCup roll.
+	board playTurnOnBoard: aShip by: diceCup roll.
 	self checkIfWon: aShip.
-	self changeActivePlayer.
+	self changeActivePlayer
 ]
 
 { #category : #positioning }
 ZathuraGame >> positionOfShipOnBoard: aShip [
 
-	^ board numberOfLockersOf: aShip
+	^ board numberOfLockerOf: aShip
 ]
 
 { #category : #positioning }
