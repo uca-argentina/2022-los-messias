@@ -43,13 +43,6 @@ SpaceshipPosition >> numberOfLocker [
 ]
 
 { #category : #accessing }
-SpaceshipPosition >> spaceship [
+SpaceshipPosition >> ship [
 	^ship
-]
-
-{ #category : #accessing }
-SpaceshipPosition >> updateLap: lap andLocker: locker [
-	numberOfLap := lap.
-	numberOfLocker := locker 
-	
 ]

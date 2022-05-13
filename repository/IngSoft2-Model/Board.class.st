@@ -31,9 +31,9 @@ Class {
 		'positionOfShips',
 		'numberOfLaps',
 		'lockersGame',
-		'ranking',
 		'lockers',
-		'finalPosition'
+		'finalPosition',
+		'positionHandler'
 	],
 	#classInstVars : [
 		'ships'
@@ -58,14 +58,7 @@ Board class >> of: lockers and: laps withAll: aCollectionOfShips [
 		  withAGroupOf: aCollectionOfShips
 ]
 
-{ #category : #private }
-Board >> allShipPositions [
-
-	^ self withShipLapAndLockerNumberCollect: [ :aShip :aLap :aLockerNumber | 
-		  SpaceshipPosition for: aShip at: aLap and: aLockerNumber ]
-]
-
-{ #category : #initialization }
+{ #category : #moving }
 Board >> hasCrossFinishLine: aShip [
 
 	| positionOfShip |
@@ -78,30 +71,26 @@ Board >> initializeWith: theLockers and: laps withAGroupOf: aCollectionOfShips [
 
 	lockersGame := theLockers.
 	lockers := theLockers size.
-	"1 to: lockers do: [ :aLocker | lockersGame add: LockerNoEffect new ]."
+	positionHandler := PositionHandler with: lockers.
 	numberOfLaps := laps.
 	positionOfShips := OrderedCollection new.
 	aCollectionOfShips do: [ :aShip | 
-		positionOfShips add: (SpaceshipPosition for: aShip at: 0 and: 0) ].
-	finalPosition := SpaceshipPosition
-		                 for: 'AnImaginaryShip'
-		                 at: numberOfLaps
-		                 and: 0.
-	ranking := OrderedCollection new.
-	ranking := aCollectionOfShips
+		positionOfShips add: (SpaceshipPosition for: aShip at: 0 and: 0) ]
 ]
 
 { #category : #moving }
 Board >> move: aShip by: aNumberOfLockers [
 
-	| positionOfShip newPosition |
-	positionOfShip := self spaceshipPositionOf: aShip.
-	newPosition := positionOfShip numberOfLocker + aNumberOfLockers.
-	positionOfShip
-		updateLap: positionOfShip numberOfLap + (newPosition // lockers)
-		andLocker: newPosition % lockers.
-	positionOfShip > finalPosition ifTrue: [ 
-		positionOfShip updateLap: numberOfLaps andLocker: 0 ]
+	| oldPosition newPosition |
+	oldPosition := self spaceshipPositionOf: aShip.
+	newPosition := positionHandler
+		               createNewPositionOf: oldPosition
+		               by: aNumberOfLockers.
+	self remove: oldPosition add: newPosition.
+	(self hasCrossFinishLine: aShip) ifTrue: [ 
+		self
+			remove: newPosition
+			add: (positionHandler moveToFinalPosition: newPosition) ]
 ]
 
 { #category : #'accessing - attributes' }
@@ -131,40 +120,38 @@ Board >> rankingOf: aShip [
 	^ self shipsSortedByPosition indexOf: aShip
 ]
 
+{ #category : #moving }
+Board >> remove: positionOfShip add: newPosition [
+
+	positionOfShips removeAllSuchThat: [ :shipPosition | 
+		shipPosition == positionOfShip ].
+	positionOfShips add: newPosition
+]
+
 { #category : #ranking }
 Board >> shipsSortedByPosition [
 
-	^ self sortedShipPositions collect: [ :position | position spaceship ]
+	^ self sortedShipPositions collect: [ :position | position ship ]
 ]
 
 { #category : #ranking }
 Board >> sortedShipPositions [
 
-	^ self allShipPositions sort: [ :positionA :positionB | 
+	^positionOfShips  sort: [ :positionA :positionB | 
 		  positionA > positionB ]
 ]
 
 { #category : #'accessing - attributes' }
 Board >> spaceshipPositionOf: aShip [
 
-	| result |
-	result := positionOfShips select: [ :aPositionOfShip | 
-		          aPositionOfShip spaceship == aShip ].
+	| positionOfShip |
+	positionOfShip := positionOfShips select: [ :aPositionOfShip | 
+		          aPositionOfShip ship == aShip ].
 
-	^ result at: 1
+	^ positionOfShip at: 1
 ]
 
 { #category : #action }
 Board >> speedUp: aShip [
 	self move: aShip by: 4
-]
-
-{ #category : #private }
-Board >> withShipLapAndLockerNumberCollect: block [
-
-	| lockerNumber lap |
-	^ positionOfShips keys collect: [ :ship | 
-		  lap := self numberOfLapOf: ship.
-		  lockerNumber := self numberOfLockerOf: ship.
-		  block value: ship value: lap value: lockerNumber ]
 ]
