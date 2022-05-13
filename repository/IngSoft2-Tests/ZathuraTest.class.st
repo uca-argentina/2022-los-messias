@@ -279,8 +279,8 @@ ZathuraTest >> testZathuraWhenCrossingTheLastLockerTheShipsStartsAnotherLap [
 	zathura playTurn.
 	self assert: (zathura positionOfShipOnBoard: 'BlueShip') equals: 2.
 	self assert: (zathura positionOfShipOnBoard: 'RedShip') equals: 6.
-	self assert: (zathura numberOfLapsOf: 'BlueShip') equals: 1.
-	self assert: (zathura numberOfLapsOf: 'RedShip') equals: 0
+	self assert: (zathura numberOfLapOf: 'BlueShip') equals: 1.
+	self assert: (zathura numberOfLapOf: 'RedShip') equals: 0
 ]
 
 { #category : #tests }

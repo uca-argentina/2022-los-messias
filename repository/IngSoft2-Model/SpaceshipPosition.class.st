@@ -3,8 +3,8 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'ship',
-		'numberOfLaps',
-		'numberOfLockers'
+		'numberOfLap',
+		'numberOfLocker'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -15,23 +15,41 @@ SpaceshipPosition class >> for: aShip at: lap and: locker [
 ]
 
 { #category : #'logical operations' }
-SpaceshipPosition >> > aSpaceshipPosition [ 
-	^(numberOfLockers > aSpaceshipPosition numberOfLockers).
+SpaceshipPosition >> > aSpaceshipPosition [
+
+	| condition |
+	condition := numberOfLap > aSpaceshipPosition numberOfLap.
+	(numberOfLap == aSpaceshipPosition numberOfLap) ifTrue: [ 
+		condition := numberOfLocker > aSpaceshipPosition numberOfLocker ].
+	^ condition
 ]
 
 { #category : #initialization }
 SpaceshipPosition >> initializeFor: aShip at: aLap and: aLockerNumber [
 	ship := aShip.
-	numberOfLaps := aLap.
-	numberOfLockers := aLockerNumber .
+	numberOfLap := aLap.
+	numberOfLocker := aLockerNumber .
 ]
 
 { #category : #accessing }
-SpaceshipPosition >> numberOfLockers [
-	^ numberOfLockers
+SpaceshipPosition >> numberOfLap [
+
+	^ numberOfLap 
+]
+
+{ #category : #accessing }
+SpaceshipPosition >> numberOfLocker [
+	^ numberOfLocker
 ]
 
 { #category : #accessing }
 SpaceshipPosition >> spaceship [
 	^ship
+]
+
+{ #category : #accessing }
+SpaceshipPosition >> updateLap: lap andLocker: locker [
+	numberOfLap := lap.
+	numberOfLocker := locker 
+	
 ]
