@@ -71,6 +71,38 @@ ZathuraTest >> testZathuraBlueShipFallsIntoAAtomicBombAndAllShipsGoToFirstLocker
 ]
 
 { #category : #boardTests }
+ZathuraTest >> testZathuraBlueShipFallsIntoAHyperJumpLockerAndMovesMParsecs [
+
+	| die ships zathura lockers parsecs |
+	die := LoadedDie with: 1.
+	ships := OrderedCollection new.
+	ships addLast: 'BlueShip'.
+	ships addLast: 'RedShip'.
+	parsecs := OrderedCollection new.
+	parsecs add: 31.
+	parsecs add: 25.
+	parsecs add: 11.
+	lockers := { 
+		           LockerNoEffect new.
+		           (HyperJump with: parsecs).
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new }.
+	zathura := ZathuraGame
+		           playBy: ships
+		           movedInBoardOf: lockers
+		           and: 5
+		           rolling: die.
+	zathura playTurn.
+	self assert: (zathura positionOfShipOnBoard: 'BlueShip') equals: 4.
+]
+
+{ #category : #boardTests }
 ZathuraTest >> testZathuraBlueShipFallsIntoAMoonWalkLockerAndTheResultIsItMovesAllShipsBackwards [
 
 	| die ships zathura lockers |

@@ -143,6 +143,12 @@ Board >> shipsSortedByPosition [
 	^ self sortedShipPositions collect: [ :position | position ship ]
 ]
 
+{ #category : #initialization }
+Board >> size [
+
+	^lockers
+]
+
 { #category : #ranking }
 Board >> sortedShipPositions [
 
