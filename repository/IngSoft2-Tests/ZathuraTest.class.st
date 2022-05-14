@@ -123,33 +123,6 @@ ZathuraTest >> testZathuraBlueShipFallsIntoAWormHoleLockerAndTheResultIsItAdvanc
 	self assert: (zathura positionOfShipOnBoard: 'BlueShip') equals: 1
 ]
 
-{ #category : #boardTests }
-ZathuraTest >> testZathuraBlueShipFallsIntoAWormHoleLockerAndTheResultIsItAdvancesFourLockersBackwardsPRUEBA [
-
-	| die ships zathura lockers |
-	die := LoadedDie with: 1.
-	ships := OrderedCollection new.
-	ships addLast: 'BlueShip'.
-	ships addLast: 'RedShip'.
-	lockers := { 
-		           LockerNoEffect new.
-		           WormHole new.
-		           LockerNoEffect new.
-		           LockerNoEffect new.
-		           LockerNoEffect new.
-		           LockerNoEffect new.
-		           LockerNoEffect new.
-		           LockerNoEffect new.
-		           LockerNoEffect new }.
-	zathura := ZathuraGame
-		           playBy: ships
-		           movedInBoardOf: lockers
-		           and: 5
-		           rolling: die.
-	zathura playTurn.
-	self assert: (zathura positionOfShipOnBoard: 'BlueShip') equals: 0
-]
-
 { #category : #assertionTests }
 ZathuraTest >> testZathuraCannotBePlayedMoreThanOnce [
 
