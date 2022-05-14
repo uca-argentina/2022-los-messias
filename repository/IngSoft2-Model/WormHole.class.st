@@ -5,7 +5,7 @@ Class {
 }
 
 { #category : #actions }
-WormHole >> action: aShip on: aBoard [
+WormHole >> action: aCollectionOfShips triggeredBy: aShip on: aBoard [
 
 	aBoard move: aShip by: -4
 ]

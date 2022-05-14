@@ -27,6 +27,7 @@ Class {
 }
 
 { #category : #action }
-LockerNoEffect >> action: aShip on: aBoard [
+LockerNoEffect >> action: aCollectionOfShips triggeredBy: aShip on: aBoard [
 
+	
 ]

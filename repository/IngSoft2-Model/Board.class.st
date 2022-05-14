@@ -32,7 +32,6 @@ Class {
 		'numberOfLaps',
 		'lockersGame',
 		'lockers',
-		'finalPosition',
 		'positionHandler'
 	],
 	#classInstVars : [
@@ -110,7 +109,8 @@ Board >> playTurnOnBoard: aShip by: aNumberOfLockers [
 
 	self move: aShip by: aNumberOfLockers.
 	(lockersGame at: (self numberOfLockerOf: aShip) + 1)
-		action: aShip
+		action: positionOfShips
+		triggeredBy: aShip
 		on: self
 ]
 

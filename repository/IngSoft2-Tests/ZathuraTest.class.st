@@ -42,7 +42,7 @@ ZathuraTest >> testZathuraAfterTheGameIsPlayedCanGetThePositionOfEachShip [
 { #category : #boardTests }
 ZathuraTest >> testZathuraBlueShipFallsIntoAMoonWalkLockerAndTheResultIsItMovesAllShipsBackwards [
 
-	"| die ships zathura lockers |
+	| die ships zathura lockers |
 	die := LoadedDie with: 3.
 	ships := OrderedCollection new.
 	ships addLast: 'BlueShip'.
@@ -67,7 +67,9 @@ ZathuraTest >> testZathuraBlueShipFallsIntoAMoonWalkLockerAndTheResultIsItMovesA
 	zathura playTurn.
 	zathura playTurn.
 	self assert: (zathura positionOfShipOnBoard: 'BlueShip') equals: 6.
-	self assert: (zathura positionOfShipOnBoard: 'RedShip') equals: 1"
+	self assert: (zathura positionOfShipOnBoard: 'RedShip') equals: 1
+
+	
 ]
 
 { #category : #boardTests }

@@ -5,7 +5,7 @@ Class {
 }
 
 { #category : #'instance creation' }
-SpeedUp >> action: aShip on: aBoard [
+SpeedUp >> action: aCollectionOfShips triggeredBy: aShip on: aBoard [
 
-	aBoard move: aShip by: 4.
+	aBoard move: aShip by: 4
 ]

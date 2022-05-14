@@ -35,15 +35,18 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #action }
-MoonWalk class >> action: aShip on: aBoard [ 
-	self shouldBeImplemented.
-]
-
 { #category : #'instance creation' }
 MoonWalk class >> with: aNumberOfLockers [
 
 	^ self new intializeWith: aNumberOfLockers
+]
+
+{ #category : #'instance creation' }
+MoonWalk >> action: aCollectionOfShips triggeredBy: aShip on: aBoard [
+
+	| shipsToMove |
+	shipsToMove := aCollectionOfShips select: [ :ship | ship ship ~= aShip ].
+	shipsToMove do: [ :ship | aBoard move: ship ship by: (0 - lockers) ]
 ]
 
 { #category : #'class initialization' }
