@@ -58,6 +58,15 @@ Board class >> of: lockers and: laps withAll: aCollectionOfShips [
 		  withAGroupOf: aCollectionOfShips
 ]
 
+{ #category : #'accessing - attributes' }
+Board >> getAllShips [
+
+	| ships |
+	ships := OrderedCollection new.
+	positionOfShips do: [ :aShip | ships add: aShip ship ].
+	^ ships
+]
+
 { #category : #moving }
 Board >> hasCrossFinishLine: aShip [
 

@@ -59,3 +59,23 @@ ZathuraFunctionalTest >> testZathuraAfterBeingPlayedHasOnlyOneWinnerOfTheShips [
 	self assert: (aWinner at: 1) equals: zathura winner.
 	self deny: (notWinner at: 1) equals: zathura winner
 ]
+
+{ #category : #tests }
+ZathuraFunctionalTest >> testZathuraIsPlayedWithGeneratedLockers [
+
+	| zathura die ships lockers |
+	die := RandomDie with: 6.
+	ships := OrderedCollection new.
+	ships addLast: 'BlueShip'.
+	ships addLast: 'RedShip'.
+	ships addLast: 'GreenShip'.
+	lockers := LockerFactory new generates: 10.
+	zathura := ZathuraGame
+		           playBy: ships
+		           movedInBoardOf: lockers
+		           and: 1
+		           rolling: die.
+
+	zathura play.
+	self assert: zathura hasFinished
+]
