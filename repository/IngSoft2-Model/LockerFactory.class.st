@@ -28,3 +28,8 @@ LockerFactory >> generates: numberOfLockers [
 	lockers add: (self generateLocker: 100 atRandom) ].
 ^lockers
 ]
+
+{ #category : #generating }
+LockerFactory >> generatesWith: aNumberOfLockers and: aNumberOfParsecs played: aNumberOfLaps [ 
+	^ BoardStructure with: (self generates: aNumberOfLockers) and: aNumberOfParsecs played: aNumberOfLaps
+]
