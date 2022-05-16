@@ -17,8 +17,8 @@ HyperJump >> action: aShip on: aBoard [
 
 	| result |
 	result := sequenceParsecs at: 1.
+	aBoard move: aShip by: (result // (aBoard boardStructure parsecs // aBoard boardStructure lockers size) ).
 	self changeNextParsec.
-	aBoard move: aShip by: (result // aBoard size ).
 ]
 
 { #category : #sequencing }

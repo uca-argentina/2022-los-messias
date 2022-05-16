@@ -7,7 +7,7 @@ Class {
 { #category : #tests }
 ZathuraFunctionalTest >> testZathuraAfterBeingPlayedHasFinishedReturnsTrue [
 
-	| zathura die ships lockers |
+	| zathura die ships lockers boardStructure |
 	die := RandomDie with: 6.
 	ships := OrderedCollection new.
 	ships addLast: 'BlueShip'.
@@ -18,11 +18,11 @@ ZathuraFunctionalTest >> testZathuraAfterBeingPlayedHasFinishedReturnsTrue [
 		           LockerNoEffect new.
 		           LockerNoEffect new.
 		           LockerNoEffect new.
-		           LockerNoEffect new.}.
+		           LockerNoEffect new }.
+		boardStructure := BoardStructure with: lockers and: 100 played: 3.
 	zathura := ZathuraGame
 		           playBy: ships
-		           movedInBoardOf: lockers
-		           and: 1
+		           movedInBoardOf: boardStructure
 		           rolling: die.
 
 	zathura play.
@@ -32,7 +32,7 @@ ZathuraFunctionalTest >> testZathuraAfterBeingPlayedHasFinishedReturnsTrue [
 { #category : #tests }
 ZathuraFunctionalTest >> testZathuraAfterBeingPlayedHasOnlyOneWinnerOfTheShips [
 
-	| zathura diceCup ships aWinner notWinner lockers |
+	| zathura diceCup ships aWinner notWinner lockers boardStructure |
 	diceCup := RandomDie with: 6.
 	ships := OrderedCollection new.
 	ships addLast: 'RedShip'.
@@ -47,10 +47,10 @@ ZathuraFunctionalTest >> testZathuraAfterBeingPlayedHasOnlyOneWinnerOfTheShips [
 		           LockerNoEffect new.
 		           LockerNoEffect new.
 		           LockerNoEffect new }.
+		boardStructure := BoardStructure with: lockers and: 100 played: 3.
 	zathura := ZathuraGame
 		           playBy: ships
-		           movedInBoardOf: lockers
-		           and: 1
+		           movedInBoardOf: boardStructure
 		           rolling: diceCup.
 
 	zathura play.
@@ -63,17 +63,17 @@ ZathuraFunctionalTest >> testZathuraAfterBeingPlayedHasOnlyOneWinnerOfTheShips [
 { #category : #tests }
 ZathuraFunctionalTest >> testZathuraIsPlayedWithGeneratedLockers [
 
-	| zathura die ships lockers |
+	| zathura die ships lockers boardStructure |
 	die := RandomDie with: 6.
 	ships := OrderedCollection new.
 	ships addLast: 'BlueShip'.
 	ships addLast: 'RedShip'.
 	ships addLast: 'GreenShip'.
 	lockers := LockerFactory new generates: 10.
+	boardStructure := BoardStructure with: lockers and: 100 played: 3.
 	zathura := ZathuraGame
 		           playBy: ships
-		           movedInBoardOf: lockers
-		           and: 1
+		           movedInBoardOf: boardStructure
 		           rolling: die.
 
 	zathura play.

@@ -47,10 +47,13 @@ ZathuraGame class >> assertNumberOfShipsIsValid: aCollectionOfShips [
 ]
 
 { #category : #'instance creation' }
-ZathuraGame class >> playBy: ships movedInBoardOf: lockers and: laps rolling: die [
+ZathuraGame class >> playBy: ships movedInBoardOf: boardStructure rolling: die [
 
 	self assertNumberOfShipsIsValid: ships.
-	^ self new initializePlayingBy: ships movedInBoardOf: lockers and: laps rolling: die
+	^ self new
+		  initializePlayingBy: ships
+		  movedInBoardOf: boardStructure
+		  rolling: die
 ]
 
 { #category : #asserting }
@@ -88,13 +91,10 @@ ZathuraGame >> hasFinished [
 ]
 
 { #category : #initialization }
-ZathuraGame >> initializePlayingBy: aCollectionOfShips movedInBoardOf: lockers and: aNumberOfLaps rolling: aDiceCup [
+ZathuraGame >> initializePlayingBy: aCollectionOfShips movedInBoardOf: boardStructure rolling: aDiceCup [
 
 	diceCup := aDiceCup.
-	board := Board
-		         of: lockers
-		         and: aNumberOfLaps
-		         withAll: aCollectionOfShips.
+	board := Board of: boardStructure withAll: aCollectionOfShips.
 	ships := aCollectionOfShips.
 	finished := false
 ]

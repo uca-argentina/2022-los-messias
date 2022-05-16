@@ -5,6 +5,17 @@ Class {
 }
 
 { #category : #tests }
+LockerFactoryTest >> testLockerFactoryGeneratesABoardStructure [
+
+	| boardStructure |
+	boardStructure := LockerFactory new generatesWith: 10 and: 100 played: 3.
+
+	self assert: boardStructure lockers size equals: 10.
+	self assert: boardStructure laps equals: 3.
+	self assert: boardStructure parsecs equals: 100.
+]
+
+{ #category : #tests }
 LockerFactoryTest >> testLockerFactoryGeneratesACollectionOfDifferentLockers [
 
 	| lockers |

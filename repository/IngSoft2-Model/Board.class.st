@@ -29,11 +29,8 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'positionOfShips',
-		'numberOfLaps',
-		'lockersGame',
-		'lockers',
-		'finalPosition',
-		'positionHandler'
+		'positionHandler',
+		'boardStructure'
 	],
 	#classInstVars : [
 		'ships'
@@ -49,13 +46,17 @@ Board class >> assertValid: lockers [
 ]
 
 { #category : #'instance creation' }
-Board class >> of: lockers and: laps withAll: aCollectionOfShips [
+Board class >> of: boardStructure withAll: aCollectionOfShips [
 
-	self assertValid: lockers.
+	self assertValid: boardStructure lockers.
 	^ self new
-		  initializeWith: lockers
-		  and: laps
+		  initializeWith: boardStructure
 		  withAGroupOf: aCollectionOfShips
+]
+
+{ #category : #accesing }
+Board >> boardStructure [
+	^ boardStructure
 ]
 
 { #category : #'accessing - attributes' }
@@ -72,16 +73,14 @@ Board >> hasCrossFinishLine: aShip [
 
 	| positionOfShip |
 	positionOfShip := self spaceshipPositionOf: aShip.
-	^ positionOfShip numberOfLap >= numberOfLaps
+	^ positionOfShip numberOfLap >= boardStructure laps
 ]
 
 { #category : #initialization }
-Board >> initializeWith: theLockers and: laps withAGroupOf: aCollectionOfShips [
+Board >> initializeWith: aBoardStructure withAGroupOf: aCollectionOfShips [
 
-	lockersGame := theLockers.
-	lockers := theLockers size.
-	positionHandler := PositionHandler with: lockers.
-	numberOfLaps := laps.
+	boardStructure := aBoardStructure.
+	positionHandler := PositionHandler with: boardStructure lockers size.
 	positionOfShips := OrderedCollection new.
 	aCollectionOfShips do: [ :aShip | 
 		positionOfShips add: (SpaceshipPosition for: aShip at: 0 and: 0) ]
@@ -118,7 +117,7 @@ Board >> numberOfLockerOf: aShip [
 Board >> playTurnOnBoard: aShip by: aNumberOfLockers [
 
 	self move: aShip by: aNumberOfLockers.
-	(lockersGame at: (self numberOfLockerOf: aShip) + 1)
+	(boardStructure lockers at: (self numberOfLockerOf: aShip) + 1)
 		action: aShip
 		on: self
 ]
@@ -141,12 +140,6 @@ Board >> remove: positionOfShip add: newPosition [
 Board >> shipsSortedByPosition [
 
 	^ self sortedShipPositions collect: [ :position | position ship ]
-]
-
-{ #category : #initialization }
-Board >> size [
-
-	^lockers
 ]
 
 { #category : #ranking }
