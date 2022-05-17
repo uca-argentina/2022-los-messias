@@ -5,6 +5,39 @@ Class {
 }
 
 { #category : #tests }
+ZathuraTest >> testWhenShipGoesBackwardsInTheFirstLapItStayesAtTheLapZero [
+
+	| zathura diceCup ships lockers boardStructure |
+	diceCup := LoadedDie with: 1.
+	lockers := { 
+		           LockerNoEffect new.
+		           MoonWalk new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new }.
+	boardStructure := BoardStructure with: lockers and: 100 played: 1.
+	ships := OrderedCollection new.
+	ships addLast: 'BlueShip'.
+	ships addLast: 'RedShip'.
+	ships addLast: 'GreenShip'.
+	zathura := ZathuraGame
+		           playBy: ships
+		           movedInBoardOf: boardStructure
+		           rolling: diceCup.
+
+	zathura playTurn.
+	zathura playTurn.
+	
+	self assert: (zathura positionOfShipOnBoard: 'BlueShip') equals: 0.
+	self assert: (zathura numberOfLapOf: 'BlueShip') equals: 0
+]
+
+{ #category : #tests }
 ZathuraTest >> testZathuraAfterTheGameIsPlayedCanGetThePositionOfEachShip [
 
 	| zathura diceCup ships lockers boardStructure |
@@ -129,7 +162,7 @@ ZathuraTest >> testZathuraBlueShipFallsIntoAMoonWalkLockerAndTheResultIsItMovesA
 	zathura playTurn.
 	zathura playTurn.
 	self assert: (zathura positionOfShipOnBoard: 'BlueShip') equals: 6.
-	self assert: (zathura positionOfShipOnBoard: 'RedShip') equals: 1
+	self assert: (zathura positionOfShipOnBoard: 'RedShip') equals: 0
 ]
 
 { #category : #boardTests }

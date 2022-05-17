@@ -54,18 +54,18 @@ Board class >> of: boardStructure withAll: aCollectionOfShips [
 		  withAGroupOf: aCollectionOfShips
 ]
 
-{ #category : #accesing }
-Board >> boardStructure [
-	^ boardStructure
-]
-
 { #category : #'accessing - attributes' }
-Board >> getAllShips [
+Board >> AllNameOfShips [
 
 	| ships |
 	ships := OrderedCollection new.
 	positionOfShips do: [ :aShip | ships add: aShip ship ].
 	^ ships
+]
+
+{ #category : #accesing }
+Board >> boardStructure [
+	^ boardStructure
 ]
 
 { #category : #moving }
@@ -80,7 +80,7 @@ Board >> hasCrossFinishLine: aShip [
 Board >> initializeWith: aBoardStructure withAGroupOf: aCollectionOfShips [
 
 	boardStructure := aBoardStructure.
-	positionHandler := PositionHandler with: boardStructure lockers size.
+	positionHandler := PositionHandler with: self totalQuantityOfLoackers.
 	positionOfShips := OrderedCollection new.
 	aCollectionOfShips do: [ :aShip | 
 		positionOfShips add: (SpaceshipPosition for: aShip at: 0 and: 0) ]
@@ -157,4 +157,10 @@ Board >> spaceshipPositionOf: aShip [
 		          aPositionOfShip ship == aShip ].
 
 	^ positionOfShip at: 1
+]
+
+{ #category : #'accessing - attributes' }
+Board >> totalQuantityOfLoackers [
+
+	^ boardStructure lockers size
 ]

@@ -8,6 +8,6 @@ Class {
 AtomicBomb >> action: aShip on: aBoard [
 
 	| allShips |
-	allShips := aBoard getAllShips.
+	allShips := aBoard AllNameOfShips.
 	allShips do: [ :ship | aBoard move: ship by: ((aBoard numberOfLockerOf: ship) * -1) ]
 ]

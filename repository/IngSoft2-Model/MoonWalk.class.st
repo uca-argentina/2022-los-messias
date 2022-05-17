@@ -50,9 +50,10 @@ MoonWalk class >> with: aNumberOfLockers [
 MoonWalk >> action: aShip on: aBoard [
 
 	| allShips |
-	allShips := aBoard getAllShips.
+	allShips := aBoard AllNameOfShips.
 	allShips do: [ :ship | 
-		ship = aShip ifFalse: [ aBoard move: ship by: (lockers * -1)  ] ]
+		ship == aShip ifFalse: [ 
+			aBoard move: ship by: ((aBoard numberOfLockerOf: ship) * -1) ] ]
 ]
 
 { #category : #'class initialization' }
