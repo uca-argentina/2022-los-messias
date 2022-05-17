@@ -14,7 +14,10 @@ HyperJump class >> with: aCollectionOfNumbers [
 
 { #category : #'instance creation' }
 HyperJump >> action: aShip on: aBoard [
-	self move: aShip in: aBoard by: (sequenceParsecs at: 1).
+
+	aBoard
+		move: aShip
+		by: (self totalLockersFrom: (sequenceParsecs at: 1) In: aBoard).
 	self changeNextParsec
 ]
 
@@ -31,12 +34,6 @@ HyperJump >> initializeWith: aCollectionOfNumbers [
 	sequenceParsecs := OrderedCollection new.
 	aCollectionOfNumbers do: [ :aNumber | 
 		sequenceParsecs add: aNumber ]
-]
-
-{ #category : #'instance creation' }
-HyperJump >> move: aShip in: aBoard by: result [
-
-	aBoard move: aShip by: (self totalLockersFrom: result In: aBoard)
 ]
 
 { #category : #'instance creation' }

@@ -102,7 +102,7 @@ diceCup := aDiceCup.
 { #category : #positioning }
 ZathuraGame >> numberOfLapOf: aShip [
 
-	^ board numberOfLapOf:  aShip
+	^ (board spaceshipPositionOf: aShip) numberOfLap 
 ]
 
 { #category : #playing }

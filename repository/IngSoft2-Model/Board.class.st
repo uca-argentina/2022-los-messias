@@ -69,7 +69,7 @@ Board >> boardStructure [
 ]
 
 { #category : #moving }
-Board >> checkIfWinner: aShip [
+Board >> correctPositionIfShipWon: aShip [
 
 	(self hasCrossFinishLine: aShip) ifTrue: [ 
 		self
@@ -90,7 +90,7 @@ Board >> hasCrossFinishLine: aShip [
 Board >> initializeWith: aBoardStructure withAGroupOf: aCollectionOfShips [
 
 	boardStructure := aBoardStructure.
-	positionHandler := PositionHandler with: self totalQuantityOfLoackers.
+	positionHandler := PositionHandler with: aBoardStructure lockers size.
 	self load: aCollectionOfShips
 ]
 
@@ -106,7 +106,7 @@ Board >> load: aCollectionOfShips [
 Board >> move: aShip by: aNumberOfLockers [
 
 	self moving: aShip lockers: aNumberOfLockers.
-	self checkIfWinner: aShip
+	self correctPositionIfShipWon: aShip
 ]
 
 { #category : #private }
@@ -118,12 +118,6 @@ Board >> moving: aShip lockers: aNumberOfLockers [
 		               createNewPositionOf: oldPosition
 		               by: aNumberOfLockers.
 	self remove: oldPosition add: newPosition.
-]
-
-{ #category : #'accessing - attributes' }
-Board >> numberOfLapOf: aShip [
-
-	^ (self spaceshipPositionOf: aShip) numberOfLap 
 ]
 
 { #category : #'accessing - attributes' }
@@ -176,10 +170,4 @@ Board >> spaceshipPositionOf: aShip [
 		          aPositionOfShip ship == aShip ].
 
 	^ positionOfShip at: 1
-]
-
-{ #category : #'accessing - attributes' }
-Board >> totalQuantityOfLoackers [
-
-	^ boardStructure lockers size
 ]

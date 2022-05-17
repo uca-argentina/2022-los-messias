@@ -51,34 +51,27 @@ LockerFactory >> createMoonWalk [
 ]
 
 { #category : #generating }
-LockerFactory >> generateLocker: aProbability [
-
-	^self createLockerWith: aProbability.
-]
-
-{ #category : #generating }
 LockerFactory >> generateRandomLockersWith: numberOfLockers [
 
 	| lockers |
 	lockers := OrderedCollection new.
 	lockers add: LockerNoEffect new.
 	2 to: numberOfLockers do: [ :number | 
-	lockers add: (self generateLocker: 100 atRandom) ].
-	^lockers 
+	lockers add: (self createLockerWith: 100 atRandom) ].
+	^ lockers
 ]
 
 { #category : #generating }
 LockerFactory >> generates: numberOfLockers [
 
-	parsecsBoard = 0 ifFalse: [ parsecsBoard := numberOfLockers * 10 ].
-	^self generateRandomLockersWith: numberOfLockers.
-	
+	"parsecsBoard = 0 ifFalse: [ parsecsBoard := numberOfLockers * 10 ]."
+	^ self generateRandomLockersWith: numberOfLockers
 ]
 
 { #category : #generating }
 LockerFactory >> generatesWith: aNumberOfLockers and: parsecs played: laps [
 
-parsecsBoard := parsecs.
+	parsecsBoard := parsecs.
 	^ BoardStructure
 		  with: (self generates: aNumberOfLockers)
 		  and: parsecs

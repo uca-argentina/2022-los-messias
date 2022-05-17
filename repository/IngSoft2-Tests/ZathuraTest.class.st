@@ -7,10 +7,13 @@ Class {
 { #category : #assertionTests }
 ZathuraTest >> testBoardStructureCannotHaveLessParsecsThanNumberOfLockers [
 
-	| lockers |
-	lockers := LockerFactory initializeFactory generates: 50.
+	| boardStructure |
 	Asserting new
-		should: [ BoardStructure with: lockers and: 20 played: 3 ]
+		should: [ 
+			boardStructure := LockerFactory new
+				                  generatesWith: 50
+				                  and: 20
+				                  played: 3 ]
 		raise: Error
 		withMessage: 'Board Structure cannot have less parsecs than lockers'
 ]
@@ -207,7 +210,7 @@ ZathuraTest >> testZathuraBlueShipFallsIntoAMoonWalkLockerAndTheResultIsItMovesA
 	zathura playTurn.
 	zathura playTurn.
 	self assert: (zathura positionOfShipOnBoard: 'BlueShip') equals: 6.
-	self assert: (zathura positionOfShipOnBoard: 'RedShip') equals: 0
+	self assert: (zathura positionOfShipOnBoard: 'RedShip') equals: 1
 ]
 
 { #category : #boardTests }
@@ -415,10 +418,7 @@ ZathuraTest >> testZathuraKnowsTheRankingOfAShip [
 		           LockerNoEffect new.
 		           LockerNoEffect new.
 		           LockerNoEffect new.
-		           LockerNoEffect new.
-		           LockerNoEffect new.
-		           LockerNoEffect new.
-		           LockerNoEffect new }.
+		           LockerNoEffect new.}.
 	die := SequencialDie with: faces.
 	ships := OrderedCollection new.
 	ships addLast: 'RedShip'.

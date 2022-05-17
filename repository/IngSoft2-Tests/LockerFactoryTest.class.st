@@ -18,8 +18,12 @@ LockerFactoryTest >> testLockerFactoryGeneratesABoardStructure [
 { #category : #tests }
 LockerFactoryTest >> testLockerFactoryGeneratesACollectionOfDifferentLockers [
 
-	| lockers |
-	lockers := LockerFactory initializeFactory generates: 100.
+	| lockers boardStructure |
+	boardStructure := LockerFactory new
+		                  generatesWith: 1000
+		                  and: 10000
+		                  played: 3.
+	lockers := boardStructure lockers.
 
 	self assert:
 		(lockers anySatisfy: [ :aLocker | aLocker isMemberOf: AtomicBomb ]).
@@ -43,8 +47,12 @@ LockerFactoryTest >> testLockerFactoryGeneratesACollectionOfDifferentLockers [
 { #category : #tests }
 LockerFactoryTest >> testLockerFactoryGeneratesACollectionOfSizeTen [
 
-	| lockers |
-	lockers := LockerFactory initializeFactory generates: 10.
+	| lockers boardStructure |
+	boardStructure := LockerFactory new
+		                  generatesWith: 10
+		                  and: 100
+		                  played: 3.
+	lockers := boardStructure lockers.
 
 	self assert: lockers size equals: 10
 ]

@@ -67,5 +67,5 @@ MoonWalk >> intializeWith: aNumberOfLockers [
 MoonWalk >> moveAll: ships In: aBoard [
 
 	ships do: [ :ship | 
-		aBoard move: ship by: (aBoard numberOfLockerOf: ship) * -1 ]
+		aBoard move: ship by: lockers * -1 ]
 ]
