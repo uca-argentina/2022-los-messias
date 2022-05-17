@@ -79,9 +79,10 @@ ZathuraGame >> changeActivePlayer [
 
 { #category : #private }
 ZathuraGame >> checkIfWon: aShip [
-	(board hasCrossFinishLine: aShip) ifTrue: [ 
-		winner := aShip.
-		finished := true ]
+
+	(board hasCrossFinishLine: aShip) ifFalse: [^self].
+	winner := aShip.
+	finished := true.
 ]
 
 { #category : #state }
@@ -92,11 +93,10 @@ ZathuraGame >> hasFinished [
 
 { #category : #initialization }
 ZathuraGame >> initializePlayingBy: aCollectionOfShips movedInBoardOf: boardStructure rolling: aDiceCup [
-
-	diceCup := aDiceCup.
+diceCup := aDiceCup.
 	board := Board of: boardStructure withAll: aCollectionOfShips.
 	ships := aCollectionOfShips.
-	finished := false
+	finished := false.
 ]
 
 { #category : #positioning }

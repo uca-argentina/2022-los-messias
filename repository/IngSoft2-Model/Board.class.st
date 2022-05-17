@@ -69,6 +69,16 @@ Board >> boardStructure [
 ]
 
 { #category : #moving }
+Board >> checkIfWinner: aShip [
+
+	(self hasCrossFinishLine: aShip) ifTrue: [ 
+		self
+			remove: (self spaceshipPositionOf: aShip)
+			add: (positionHandler moveToFinalPosition:
+					 (self spaceshipPositionOf: aShip)) ]
+]
+
+{ #category : #moving }
 Board >> hasCrossFinishLine: aShip [
 
 	| positionOfShip |
@@ -81,6 +91,12 @@ Board >> initializeWith: aBoardStructure withAGroupOf: aCollectionOfShips [
 
 	boardStructure := aBoardStructure.
 	positionHandler := PositionHandler with: self totalQuantityOfLoackers.
+	self load: aCollectionOfShips
+]
+
+{ #category : #private }
+Board >> load: aCollectionOfShips [
+
 	positionOfShips := OrderedCollection new.
 	aCollectionOfShips do: [ :aShip | 
 		positionOfShips add: (SpaceshipPosition for: aShip at: 0 and: 0) ]
@@ -89,16 +105,19 @@ Board >> initializeWith: aBoardStructure withAGroupOf: aCollectionOfShips [
 { #category : #moving }
 Board >> move: aShip by: aNumberOfLockers [
 
+	self moving: aShip lockers: aNumberOfLockers.
+	self checkIfWinner: aShip
+]
+
+{ #category : #private }
+Board >> moving: aShip lockers: aNumberOfLockers [
+
 	| oldPosition newPosition |
 	oldPosition := self spaceshipPositionOf: aShip.
 	newPosition := positionHandler
 		               createNewPositionOf: oldPosition
 		               by: aNumberOfLockers.
 	self remove: oldPosition add: newPosition.
-	(self hasCrossFinishLine: aShip) ifTrue: [ 
-		self
-			remove: newPosition
-			add: (positionHandler moveToFinalPosition: newPosition) ]
 ]
 
 { #category : #'accessing - attributes' }
@@ -113,7 +132,7 @@ Board >> numberOfLockerOf: aShip [
 	^ (self spaceshipPositionOf: aShip) numberOfLocker 
 ]
 
-{ #category : #moving }
+{ #category : #private }
 Board >> playTurnOnBoard: aShip by: aNumberOfLockers [
 
 	self move: aShip by: aNumberOfLockers.
@@ -128,7 +147,7 @@ Board >> rankingOf: aShip [
 	^ self shipsSortedByPosition indexOf: aShip
 ]
 
-{ #category : #moving }
+{ #category : #private }
 Board >> remove: positionOfShip add: newPosition [
 
 	positionOfShips removeAllSuchThat: [ :shipPosition | 

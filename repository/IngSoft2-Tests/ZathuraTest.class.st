@@ -8,7 +8,7 @@ Class {
 ZathuraTest >> testBoardStructureCannotHaveLessParsecsThanNumberOfLockers [
 
 	| lockers |
-	lockers := LockerFactory new generates: 50.
+	lockers := LockerFactory initializeFactory generates: 50.
 	Asserting new
 		should: [ BoardStructure with: lockers and: 20 played: 3 ]
 		raise: Error

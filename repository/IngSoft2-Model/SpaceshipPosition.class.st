@@ -18,8 +18,16 @@ SpaceshipPosition class >> for: aShip at: lap and: locker [
 SpaceshipPosition >> > aSpaceshipPosition [
 
 	| condition |
+	condition := self compareTo: aSpaceshipPosition.
+	^ condition
+]
+
+{ #category : #'logical operations' }
+SpaceshipPosition >> compareTo: aSpaceshipPosition [
+
+	| condition |
 	condition := numberOfLap > aSpaceshipPosition numberOfLap.
-	(numberOfLap == aSpaceshipPosition numberOfLap) ifTrue: [ 
+	numberOfLap == aSpaceshipPosition numberOfLap ifTrue: [ 
 		condition := numberOfLocker > aSpaceshipPosition numberOfLocker ].
 	^ condition
 ]

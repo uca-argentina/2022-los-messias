@@ -2,20 +2,39 @@ Class {
 	#name : #LockerFactory,
 	#superclass : #Object,
 	#instVars : [
-		'lockers'
+		'parsecsBoard'
+	],
+	#classInstVars : [
+		'parsecsBoard'
 	],
 	#category : #'IngSoft2-Model'
 }
 
+{ #category : #initialization }
+LockerFactory class >> initializeFactory [
+
+	parsecsBoard := 0.
+	^ self new
+]
+
 { #category : #generating }
-LockerFactory >> generateLocker: aProbability [
+LockerFactory >> createHyperJump [
+
+	^ HyperJump with: { 
+			  (parsecsBoard // 4 to: parsecsBoard // 2) atRandom.
+			  (parsecsBoard // 6 to: parsecsBoard // 4) atRandom.
+			  (1 to: parsecsBoard // 6) atRandom }
+]
+
+{ #category : #generating }
+LockerFactory >> createLockerWith: aProbability [
 
 	| locker |
 	aProbability <= 2 ifTrue: [ locker := AtomicBomb new ].
 	(aProbability > 2 and: [ aProbability <= 10 ]) ifTrue: [ 
-		locker := HyperJump with: { 15. 20. 35 } ].
+		locker := self createHyperJump ].
 	(aProbability > 10 and: [ aProbability <= 20 ]) ifTrue: [ 
-		locker := MoonWalk with: 10 atRandom ].
+		locker := self createMoonWalk ].
 	(aProbability > 20 and: [ aProbability <= 40 ]) ifTrue: [ 
 		locker := SpeedUp new ].
 	(aProbability > 40 and: [ aProbability <= 60 ]) ifTrue: [ 
@@ -26,16 +45,42 @@ LockerFactory >> generateLocker: aProbability [
 ]
 
 { #category : #generating }
-LockerFactory >> generates: numberOfLockers [
+LockerFactory >> createMoonWalk [
 
-	lockers := OrderedCollection new.
-	lockers add: LockerNoEffect new.
-	2 to: numberOfLockers  do: [ :number | 
-	lockers add: (self generateLocker: 100 atRandom) ].
-	^ lockers
+	^ MoonWalk with: 10 atRandom
 ]
 
 { #category : #generating }
-LockerFactory >> generatesWith: aNumberOfLockers and: parsecs played: laps [ 
-	^ BoardStructure with: (self generates: aNumberOfLockers) and: parsecs played: laps
+LockerFactory >> generateLocker: aProbability [
+
+	^self createLockerWith: aProbability.
+]
+
+{ #category : #generating }
+LockerFactory >> generateRandomLockersWith: numberOfLockers [
+
+	| lockers |
+	lockers := OrderedCollection new.
+	lockers add: LockerNoEffect new.
+	2 to: numberOfLockers do: [ :number | 
+	lockers add: (self generateLocker: 100 atRandom) ].
+	^lockers 
+]
+
+{ #category : #generating }
+LockerFactory >> generates: numberOfLockers [
+
+	parsecsBoard = 0 ifFalse: [ parsecsBoard := numberOfLockers * 10 ].
+	^self generateRandomLockersWith: numberOfLockers.
+	
+]
+
+{ #category : #generating }
+LockerFactory >> generatesWith: aNumberOfLockers and: parsecs played: laps [
+
+parsecsBoard := parsecs.
+	^ BoardStructure
+		  with: (self generates: aNumberOfLockers)
+		  and: parsecs
+		  played: laps
 ]

@@ -19,7 +19,7 @@ LockerFactoryTest >> testLockerFactoryGeneratesABoardStructure [
 LockerFactoryTest >> testLockerFactoryGeneratesACollectionOfDifferentLockers [
 
 	| lockers |
-	lockers := LockerFactory new generates: 100.
+	lockers := LockerFactory initializeFactory generates: 100.
 
 	self assert:
 		(lockers anySatisfy: [ :aLocker | aLocker isMemberOf: AtomicBomb ]).
@@ -44,7 +44,7 @@ LockerFactoryTest >> testLockerFactoryGeneratesACollectionOfDifferentLockers [
 LockerFactoryTest >> testLockerFactoryGeneratesACollectionOfSizeTen [
 
 	| lockers |
-	lockers := LockerFactory new generates: 10.
+	lockers := LockerFactory initializeFactory generates: 10.
 
-self assert: lockers size equals: 10
+	self assert: lockers size equals: 10
 ]

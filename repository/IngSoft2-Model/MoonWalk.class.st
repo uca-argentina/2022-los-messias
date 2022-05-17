@@ -45,12 +45,27 @@ MoonWalk class >> with: aNumberOfLockers [
 MoonWalk >> action: aShip on: aBoard [
 
 	| ships |
+	ships := self getAllShipsIn: aBoard except: aShip.
+	self moveAll: ships In: aBoard
+]
+
+{ #category : #'class initialization' }
+MoonWalk >> getAllShipsIn: aBoard except: aShip [
+
+	| ships |
 	ships := aBoard AllNameOfShips select: [ :ship | ship ~= aShip ].
-	ships do: [ :ship | aBoard move: ship by: (aBoard numberOfLockerOf: ship) * -1 ]
+	^ ships
 ]
 
 { #category : #'class initialization' }
 MoonWalk >> intializeWith: aNumberOfLockers [
 
 	lockers := aNumberOfLockers
+]
+
+{ #category : #private }
+MoonWalk >> moveAll: ships In: aBoard [
+
+	ships do: [ :ship | 
+		aBoard move: ship by: (aBoard numberOfLockerOf: ship) * -1 ]
 ]
