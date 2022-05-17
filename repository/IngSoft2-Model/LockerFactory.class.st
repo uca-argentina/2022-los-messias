@@ -2,8 +2,7 @@ Class {
 	#name : #LockerFactory,
 	#superclass : #Object,
 	#instVars : [
-		'lockers',
-		'size'
+		'lockers'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -16,7 +15,7 @@ LockerFactory >> generateLocker: aProbability [
 	(aProbability > 2 and: [ aProbability <= 10 ]) ifTrue: [ 
 		locker := HyperJump with: { 15. 20. 35 } ].
 	(aProbability > 10 and: [ aProbability <= 20 ]) ifTrue: [ 
-		locker := MoonWalk with: size atRandom ].
+		locker := MoonWalk with: 10 atRandom ].
 	(aProbability > 20 and: [ aProbability <= 40 ]) ifTrue: [ 
 		locker := SpeedUp new ].
 	(aProbability > 40 and: [ aProbability <= 60 ]) ifTrue: [ 
@@ -30,8 +29,8 @@ LockerFactory >> generateLocker: aProbability [
 LockerFactory >> generates: numberOfLockers [
 
 	lockers := OrderedCollection new.
-	size := numberOfLockers.
-	1 to: size do: [ :number | 
+	lockers add: LockerNoEffect new.
+	2 to: numberOfLockers  do: [ :number | 
 	lockers add: (self generateLocker: 100 atRandom) ].
 	^ lockers
 ]

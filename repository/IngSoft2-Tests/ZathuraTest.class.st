@@ -4,6 +4,17 @@ Class {
 	#category : #'IngSoft2-Tests'
 }
 
+{ #category : #assertionTests }
+ZathuraTest >> testBoardStructureCannotHaveLessParsecsThanNumberOfLockers [
+
+	| lockers |
+	lockers := LockerFactory new generates: 50.
+	Asserting new
+		should: [ BoardStructure with: lockers and: 20 played: 3 ]
+		raise: Error
+		withMessage: 'Board Structure cannot have less parsecs than lockers'
+]
+
 { #category : #tests }
 ZathuraTest >> testWhenShipGoesBackwardsInTheFirstLapItStayesAtTheLapZero [
 
@@ -11,7 +22,7 @@ ZathuraTest >> testWhenShipGoesBackwardsInTheFirstLapItStayesAtTheLapZero [
 	diceCup := LoadedDie with: 1.
 	lockers := { 
 		           LockerNoEffect new.
-		           MoonWalk new.
+		           (WormHole new).
 		           LockerNoEffect new.
 		           LockerNoEffect new.
 		           LockerNoEffect new.
@@ -32,9 +43,43 @@ ZathuraTest >> testWhenShipGoesBackwardsInTheFirstLapItStayesAtTheLapZero [
 
 	zathura playTurn.
 	zathura playTurn.
-	
+
 	self assert: (zathura positionOfShipOnBoard: 'BlueShip') equals: 0.
 	self assert: (zathura numberOfLapOf: 'BlueShip') equals: 0
+]
+
+{ #category : #tests }
+ZathuraTest >> testWhenShipGoesOneLapBackwardsTheNumberOfLapsIsReduced [
+
+	| zathura sequencialDie ships lockers boardStructure |
+	sequencialDie := SequencialDie with: { 11. 11. 1 }.
+	lockers := { 
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           WormHole new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new.
+		           LockerNoEffect new }.
+	boardStructure := BoardStructure with: lockers and: 100 played: 3.
+	ships := OrderedCollection new.
+	ships addLast: 'BlueShip'.
+	ships addLast: 'RedShip'.
+	zathura := ZathuraGame
+		           playBy: ships
+		           movedInBoardOf: boardStructure
+		           rolling: sequencialDie.
+
+	zathura playTurn.
+	zathura playTurn.
+	zathura playTurn.
+	self assert: (zathura positionOfShipOnBoard: 'BlueShip') equals: 8.
+	self assert: (zathura numberOfLapOf: 'BlueShip') equals: 0.
+	self assert: (zathura positionOfShipOnBoard: 'RedShip') equals: 1.
+	self assert: (zathura numberOfLapOf: 'RedShip') equals: 1
 ]
 
 { #category : #tests }

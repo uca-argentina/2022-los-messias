@@ -64,13 +64,18 @@ ZathuraFunctionalTest >> testZathuraAfterBeingPlayedHasOnlyOneWinnerOfTheShips [
 ZathuraFunctionalTest >> testZathuraIsPlayedWithGeneratedLockers [
 
 	| zathura die ships lockers boardStructure |
-	die := RandomDie with: 6.
+	die := DiceCup withAll: { 
+			       (RandomDie with: 6).
+			       (RandomDie with: 8).
+			       (RandomDie with: 3) }.
 	ships := OrderedCollection new.
 	ships addLast: 'BlueShip'.
 	ships addLast: 'RedShip'.
 	ships addLast: 'GreenShip'.
-	lockers := LockerFactory new generates: 10.
-	boardStructure := BoardStructure with: lockers and: 100 played: 3.
+	boardStructure := LockerFactory new
+		                  generatesWith: 100
+		                  and: 1000
+		                  played: 3.
 	zathura := ZathuraGame
 		           playBy: ships
 		           movedInBoardOf: boardStructure

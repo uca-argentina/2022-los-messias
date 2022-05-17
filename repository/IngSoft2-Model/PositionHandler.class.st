@@ -44,10 +44,11 @@ PositionHandler >> createNewPositionOf: positionOfShip by: aNumberOfLockers [
 	newPosition := positionOfShip numberOfLocker + aNumberOfLockers.
 	aLap := positionOfShip numberOfLap + (newPosition // numberOfLockers).
 	aLocker := newPosition % numberOfLockers.
-	aLap == -1 ifTrue: [ 
+	(newPosition < 0 and: [ aLap > 0 ]) ifTrue: [ aLap := aLap - 1 ].
+	aLap < 0 ifTrue: [ 
 		aLap := 0.
 		aLocker := 0 ].
-	
+
 	^ SpaceshipPosition for: positionOfShip ship at: aLap and: aLocker
 ]
 

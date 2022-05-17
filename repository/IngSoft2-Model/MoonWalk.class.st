@@ -35,11 +35,6 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #action }
-MoonWalk class >> action: aShip on: aBoard [ 
-	self shouldBeImplemented.
-]
-
 { #category : #'instance creation' }
 MoonWalk class >> with: aNumberOfLockers [
 
@@ -49,11 +44,9 @@ MoonWalk class >> with: aNumberOfLockers [
 { #category : #'class initialization' }
 MoonWalk >> action: aShip on: aBoard [
 
-	| allShips |
-	allShips := aBoard AllNameOfShips.
-	allShips do: [ :ship | 
-		ship == aShip ifFalse: [ 
-			aBoard move: ship by: ((aBoard numberOfLockerOf: ship) * -1) ] ]
+	| ships |
+	ships := aBoard AllNameOfShips select: [ :ship | ship ~= aShip ].
+	ships do: [ :ship | aBoard move: ship by: (aBoard numberOfLockerOf: ship) * -1 ]
 ]
 
 { #category : #'class initialization' }
