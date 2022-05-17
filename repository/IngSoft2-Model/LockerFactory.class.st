@@ -10,13 +10,6 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #initialization }
-LockerFactory class >> initializeFactory [
-
-	parsecsBoard := 0.
-	^ self new
-]
-
 { #category : #generating }
 LockerFactory >> createHyperJump [
 
