@@ -47,13 +47,13 @@ ZathuraGame class >> assertNumberOfShipsIsValid: aCollectionOfShips [
 ]
 
 { #category : #'instance creation' }
-ZathuraGame class >> with: aNumberOfShips movedInBoardOf: aNumberOfLockers by: aDiceCup [
+ZathuraGame class >> playBy: ships movedInBoardOf: boardStructure rolling: die [
 
-	self assertNumberOfShipsIsValid: aNumberOfShips.
+	self assertNumberOfShipsIsValid: ships.
 	^ self new
-		  initializeWith: aNumberOfShips
-		  movedInBoardOf: aNumberOfLockers
-		  by: aDiceCup
+		  initializePlayingBy: ships
+		  movedInBoardOf: boardStructure
+		  rolling: die
 ]
 
 { #category : #asserting }
@@ -79,9 +79,10 @@ ZathuraGame >> changeActivePlayer [
 
 { #category : #private }
 ZathuraGame >> checkIfWon: aShip [
-	(board hasCrossFinishLine: aShip) ifTrue: [ 
-		winner := aShip.
-		finished := true ]
+
+	(board hasCrossFinishLine: aShip) ifFalse: [^self].
+	winner := aShip.
+	finished := true.
 ]
 
 { #category : #state }
@@ -91,12 +92,17 @@ ZathuraGame >> hasFinished [
 ]
 
 { #category : #initialization }
-ZathuraGame >> initializeWith: aCollectionOfShips movedInBoardOf: aNumberOfLockers by: aDiceCup [
-
-	diceCup := aDiceCup.
-	board := Board of: aNumberOfLockers withAll: aCollectionOfShips.
+ZathuraGame >> initializePlayingBy: aCollectionOfShips movedInBoardOf: boardStructure rolling: aDiceCup [
+diceCup := aDiceCup.
+	board := Board of: boardStructure withAll: aCollectionOfShips.
 	ships := aCollectionOfShips.
 	finished := false.
+]
+
+{ #category : #positioning }
+ZathuraGame >> numberOfLapOf: aShip [
+
+	^ (board spaceshipPositionOf: aShip) numberOfLap 
 ]
 
 { #category : #playing }
@@ -113,14 +119,21 @@ ZathuraGame >> playTurn [
 	| aShip |
 	self assertZathuraHasNotBeenPlayed.
 	aShip := ships at: 1.
-	board move: aShip by: diceCup roll.
+	board playTurnOnBoard: aShip by: diceCup roll.
 	self checkIfWon: aShip.
-	self changeActivePlayer.
+	self changeActivePlayer
 ]
 
 { #category : #positioning }
-ZathuraGame >> positionOfShip: aShip [ 
-	^board positionOfShip: aShip
+ZathuraGame >> positionOfShipOnBoard: aShip [
+
+	^ board numberOfLockerOf: aShip
+]
+
+{ #category : #positioning }
+ZathuraGame >> rankingOf: aShip [
+
+	^ (board rankingOf: aShip).
 ]
 
 { #category : #ending }

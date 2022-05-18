@@ -63,3 +63,14 @@ DiceTest >> testRandomDieRollsAndTheResultIsANumberBetweenOneAndNumberOfDieFaces
 
 	self assert: (aRollResutl between: 1 and: aNumberOfFaces)
 ]
+
+{ #category : #'tests - SequencialDie' }
+DiceTest >> testSequencialDieRollsFiveAndThenEigth [
+
+	| sequencialDie |
+	sequencialDie := SequencialDie with: #(5 8).
+
+	self assert: sequencialDie roll equals: 5.
+	self assert: sequencialDie roll equals: 8.
+	self assert: sequencialDie roll equals: 5
+]

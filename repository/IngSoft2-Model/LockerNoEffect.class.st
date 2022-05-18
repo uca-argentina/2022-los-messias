@@ -17,40 +17,16 @@ Public API and Key Messages
  
 Internal Representation and Key Implementation Points.
 
-    Instance Variables
-	loadedFace:		<Object>
-
 
     Implementation Points
 "
 Class {
-	#name : #LoadedDie,
+	#name : #LockerNoEffect,
 	#superclass : #Object,
-	#instVars : [
-		'loadedFace'
-	],
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #asserting }
-LoadedDie class >> assertValid: aLoadedFace [
-	aLoadedFace > 0 ifFalse: [ Error signal: 'Die should be loaded with number greater than 0' ] 
-]
+{ #category : #action }
+LockerNoEffect >> action: aShip on: aBoard [
 
-{ #category : #'instance creation' }
-LoadedDie class >> with: aLoadedFace [
-
-	self assertValid: aLoadedFace.
-	^ self new initializeWith: aLoadedFace
-]
-
-{ #category : #initialization }
-LoadedDie >> initializeWith: aLoadedFace [
-
-	loadedFace := aLoadedFace
-]
-
-{ #category : #rolling }
-LoadedDie >> roll [
-	^ loadedFace .
 ]

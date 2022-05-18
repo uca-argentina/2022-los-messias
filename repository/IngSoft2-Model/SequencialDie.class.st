@@ -18,39 +18,46 @@ Public API and Key Messages
 Internal Representation and Key Implementation Points.
 
     Instance Variables
-	loadedFace:		<Object>
+	numbers:		<Object>
 
 
     Implementation Points
 "
 Class {
-	#name : #LoadedDie,
+	#name : #SequencialDie,
 	#superclass : #Object,
 	#instVars : [
-		'loadedFace'
+		'numbers'
 	],
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #asserting }
-LoadedDie class >> assertValid: aLoadedFace [
-	aLoadedFace > 0 ifFalse: [ Error signal: 'Die should be loaded with number greater than 0' ] 
-]
-
 { #category : #'instance creation' }
-LoadedDie class >> with: aLoadedFace [
+SequencialDie class >> with: anArrayOfNumbers [
 
-	self assertValid: aLoadedFace.
-	^ self new initializeWith: aLoadedFace
-]
-
-{ #category : #initialization }
-LoadedDie >> initializeWith: aLoadedFace [
-
-	loadedFace := aLoadedFace
+	^ self new initializeWith: anArrayOfNumbers
 ]
 
 { #category : #rolling }
-LoadedDie >> roll [
-	^ loadedFace .
+SequencialDie >> changeNextRoll [
+
+| aNumber |
+aNumber := numbers removeFirst.
+	numbers addLast: aNumber.
+]
+
+{ #category : #initialization }
+SequencialDie >> initializeWith: aCollectionOfNumbers [
+
+	numbers := OrderedCollection new.
+	aCollectionOfNumbers do: [ :number | numbers add: number ]
+]
+
+{ #category : #rolling }
+SequencialDie >> roll [
+
+	| result |
+	result := numbers at: 1.
+	self changeNextRoll.
+	^ result
 ]
