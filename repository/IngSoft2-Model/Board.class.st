@@ -47,7 +47,7 @@ Board class >> of: boardStructure withAll: aCollectionOfShips [
 ]
 
 { #category : #'accessing - attributes' }
-Board >> AllNameOfShips [
+Board >> allNameOfShips [
 
 	| ships |
 	ships := OrderedCollection new.

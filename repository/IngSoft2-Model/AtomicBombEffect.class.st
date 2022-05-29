@@ -8,6 +8,6 @@ Class {
 AtomicBombEffect >> applyFor: aShip on: aBoard [
 
 	| allShips |
-	allShips := aBoard AllNameOfShips.
+	allShips := aBoard allNameOfShips.
 	allShips do: [ :ship | aBoard move: ship by: ((aBoard numberOfLockerOf: ship) * -1) ]
 ]

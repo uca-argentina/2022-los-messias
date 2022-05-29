@@ -60,7 +60,7 @@ MoonWalkEffect >> applyFor: aShip on: aBoard [
 MoonWalkEffect >> getAllShipsIn: aBoard except: aShip [
 
 	| ships |
-	ships := aBoard AllNameOfShips select: [ :ship | ship ~= aShip ].
+	ships := aBoard allNameOfShips select: [ :ship | ship ~= aShip ].
 	^ ships
 ]
 

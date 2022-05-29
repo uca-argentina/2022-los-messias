@@ -24,16 +24,22 @@ LockerFactory >> createLockerWith: aProbability [
 
 	| locker |
 	aProbability <= 2 ifTrue: [ locker := AtomicBombEffect new ].
+	
 	(aProbability > 2 and: [ aProbability <= 10 ]) ifTrue: [ 
 		locker := self createHyperJump ].
+	
 	(aProbability > 10 and: [ aProbability <= 20 ]) ifTrue: [ 
 		locker := self createMoonWalk ].
+	
 	(aProbability > 20 and: [ aProbability <= 40 ]) ifTrue: [ 
 		locker := SpeedUpEffect new ].
+	
 	(aProbability > 40 and: [ aProbability <= 60 ]) ifTrue: [ 
 		locker := WormHoleEffect new ].
+	
 	(aProbability > 60 and: [ aProbability <= 100 ]) ifTrue: [ 
 		locker := LockerNoEffect new ].
+	
 	^ locker
 ]
 
@@ -57,7 +63,6 @@ LockerFactory >> generateRandomLockersWith: numberOfLockers [
 { #category : #generating }
 LockerFactory >> generates: numberOfLockers [
 
-	"parsecsBoard = 0 ifFalse: [ parsecsBoard := numberOfLockers * 10 ]."
 	^ self generateRandomLockersWith: numberOfLockers
 ]
 
