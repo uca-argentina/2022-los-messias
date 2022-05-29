@@ -42,6 +42,12 @@ BoardDefinition class >> with: aCollectionOfLockers and: parsecs played: laps [
 		  played: laps
 ]
 
+{ #category : #'as yet unclassified' }
+BoardDefinition >> doEffectTo: aShip inPosition: position of: aBoard [
+
+	(lockers at: (position +1)) applyFor: aShip  on: aBoard 
+]
+
 { #category : #initialization }
 BoardDefinition >> intializeWith: aCollectionOfLockers and: aNumberParsecs played: aNumberLaps [ 
 	lockers := aCollectionOfLockers.
@@ -60,6 +66,7 @@ BoardDefinition >> lockers [
 ]
 
 { #category : #accesing }
-BoardDefinition >> parsecs [
-	^ parsecs
+BoardDefinition >> parsecsPerLocker [ 
+
+^(lockers size / parsecs) asFloat
 ]

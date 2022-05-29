@@ -30,7 +30,8 @@ Class {
 	#instVars : [
 		'positionOfShips',
 		'positionHandler',
-		'boardStructure'
+		'boardStructure',
+		'parsecsPerLocker'
 	],
 	#classInstVars : [
 		'ships'
@@ -53,11 +54,6 @@ Board >> allNameOfShips [
 	ships := OrderedCollection new.
 	positionOfShips do: [ :aShip | ships add: aShip ship ].
 	^ ships
-]
-
-{ #category : #accesing }
-Board >> boardStructure [
-	^ boardStructure
 ]
 
 { #category : #moving }
@@ -83,6 +79,7 @@ Board >> initializeWith: aBoardStructure withAGroupOf: aCollectionOfShips [
 
 	boardStructure := aBoardStructure.
 	positionHandler := PositionHandler with: aBoardStructure lockers size.
+	parsecsPerLocker := boardStructure parsecsPerLocker.
 	self load: aCollectionOfShips
 ]
 
@@ -94,7 +91,7 @@ Board >> load: aCollectionOfShips [
 		positionOfShips add: (SpaceshipPosition for: aShip at: 0 and: 0) ]
 ]
 
-{ #category : #moving }
+{ #category : #private }
 Board >> move: aShip by: aNumberOfLockers [
 
 	self moving: aShip lockers: aNumberOfLockers.
@@ -118,13 +115,16 @@ Board >> numberOfLockerOf: aShip [
 	^ (self spaceshipPositionOf: aShip) numberOfLocker 
 ]
 
+{ #category : #attributes }
+Board >> parsecsPerLocker [
+	^ parsecsPerLocker
+]
+
 { #category : #private }
 Board >> playTurnOnBoard: aShip by: aNumberOfLockers [
 
 	self move: aShip by: aNumberOfLockers.
-	(boardStructure lockers at: (self numberOfLockerOf: aShip) + 1)
-		applyFor: aShip
-		on: self
+	boardStructure doEffectTo: aShip inPosition: (self numberOfLockerOf:aShip) of: self  
 ]
 
 { #category : #ranking }

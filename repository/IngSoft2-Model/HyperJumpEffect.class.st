@@ -33,7 +33,7 @@ HyperJumpEffect >> applyFor: aShip on: aBoard [
 	self changeNextParsec
 ]
 
-{ #category : #sequencing }
+{ #category : #private }
 HyperJumpEffect >> changeNextParsec [
 	| aNumberOfParsecs  |
 	aNumberOfParsecs  := sequenceParsecs removeFirst.
@@ -51,8 +51,5 @@ HyperJumpEffect >> initializeWith: aCollectionOfNumbers [
 { #category : #'instance creation' }
 HyperJumpEffect >> totalLockersFrom: result in: aBoard [
 
-	^ result
-	  //
-	  (aBoard boardStructure parsecs
-	   / aBoard boardStructure lockers size)
+	^ (result * aBoard parsecsPerLocker) asInteger 
 ]
