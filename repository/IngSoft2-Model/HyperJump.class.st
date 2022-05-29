@@ -42,5 +42,5 @@ HyperJump >> totalLockersFrom: result In: aBoard [
 	^ result
 	  //
 	  (aBoard boardStructure parsecs
-	   // aBoard boardStructure lockers size)
+	   / aBoard boardStructure lockers size)
 ]

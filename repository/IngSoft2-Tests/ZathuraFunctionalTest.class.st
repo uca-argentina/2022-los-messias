@@ -74,7 +74,7 @@ ZathuraFunctionalTest >> testZathuraIsPlayedWithGeneratedLockers [
 	ships addLast: 'GreenShip'.
 	boardStructure := LockerFactory new
 		                  generatesWith: 100
-		                  and: 1000
+		                  and: 50
 		                  played: 3.
 	zathura := ZathuraGame
 		           playBy: ships

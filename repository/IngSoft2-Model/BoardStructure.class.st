@@ -9,15 +9,8 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #asserting }
-BoardStructure class >> assertIsValid: parsecs with: numberOfLockers [
-
-	parsecs > numberOfLockers ifFalse: [ Error signal: 'Board Structure cannot have less parsecs than lockers' ]
-]
-
 { #category : #'instance creation' }
 BoardStructure class >> with: aCollectionOfLockers and: parsecs played: laps [ 
-	self assertIsValid: parsecs with: aCollectionOfLockers size.
 	^self new intializeWith: aCollectionOfLockers and: parsecs played: laps
 ]
 

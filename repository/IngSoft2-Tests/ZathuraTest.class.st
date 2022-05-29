@@ -4,20 +4,6 @@ Class {
 	#category : #'IngSoft2-Tests'
 }
 
-{ #category : #assertionTests }
-ZathuraTest >> testBoardStructureCannotHaveLessParsecsThanNumberOfLockers [
-
-	| boardStructure |
-	Asserting new
-		should: [ 
-			boardStructure := LockerFactory new
-				                  generatesWith: 50
-				                  and: 20
-				                  played: 3 ]
-		raise: Error
-		withMessage: 'Board Structure cannot have less parsecs than lockers'
-]
-
 { #category : #tests }
 ZathuraTest >> testWhenShipGoesBackwardsInTheFirstLapItStayesAtTheLapZero [
 
