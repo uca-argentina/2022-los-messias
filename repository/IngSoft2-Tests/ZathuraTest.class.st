@@ -4,6 +4,12 @@ Class {
 	#category : #'IngSoft2-Tests'
 }
 
+{ #category : #accessing }
+ZathuraTest >> assert: aShip isAt: locker in: aGame [
+
+self assert: (aGame  positionOfShipOnBoard: aShip) equals: locker.
+]
+
 { #category : #boardStructureAssertionTests }
 ZathuraTest >> testBoardStructureCannotHaveLessThanTwoLockers [
 
@@ -141,9 +147,9 @@ ZathuraTest >> testWhenShipGoesOneLapBackwardsTheNumberOfLapsIsReduced [
 	zathura playTurn.
 	zathura playTurn.
 	zathura playTurn.
-	self assert: (zathura positionOfShipOnBoard: 'BlueShip') equals: 8.
+	self assert: 'BlueShip' isAt: 8 in: zathura.
 	self assert: (zathura numberOfLapOf: 'BlueShip') equals: 0.
-	self assert: (zathura positionOfShipOnBoard: 'RedShip') equals: 1.
+		self assert: 'RedShip' isAt: 1 in: zathura.
 	self assert: (zathura numberOfLapOf: 'RedShip') equals: 1
 ]
 
@@ -176,9 +182,9 @@ ZathuraTest >> testZathuraAfterTheGameIsPlayedCanGetThePositionOfEachShip [
 		           rolling: diceCup.
 
 	zathura play.
-	self assert: (zathura positionOfShipOnBoard: 'BlueShip') equals: 0.
-	self assert: (zathura positionOfShipOnBoard: 'RedShip') equals: 8.
-	self assert: (zathura positionOfShipOnBoard: 'GreenShip') equals: 8
+		self assert: 'BlueShip' isAt: 0 in: zathura.
+			self assert: 'RedShip' isAt: 8 in: zathura.
+				self assert: 'GreenShip' isAt: 8 in: zathura.
 ]
 
 { #category : #boardTests }
@@ -186,11 +192,8 @@ ZathuraTest >> testZathuraBlueShipFallsIntoAAtomicBombAndAllShipsGoToFirstLocker
 
 	| die ships zathura lockers boardStructure |
 	die := LoadedDie with: 3.
-	ships := OrderedCollection
-		         with: 'BlueShip'
-		         with: 'RedShip'
-		         .
-	
+	ships := OrderedCollection with: 'BlueShip' with: 'RedShip'.
+
 	lockers := { 
 		           LockerNoEffect new.
 		           LockerNoEffect new.
@@ -210,8 +213,8 @@ ZathuraTest >> testZathuraBlueShipFallsIntoAAtomicBombAndAllShipsGoToFirstLocker
 	zathura playTurn.
 	zathura playTurn.
 	zathura playTurn.
-	self assert: (zathura positionOfShipOnBoard: 'BlueShip') equals: 0.
-	self assert: (zathura positionOfShipOnBoard: 'RedShip') equals: 0
+	self assert: 'BlueShip' isAt: 0 in: zathura.
+	self assert: 'RedShip' isAt: 0 in: zathura.
 ]
 
 { #category : #boardTests }
@@ -240,7 +243,8 @@ ZathuraTest >> testZathuraBlueShipFallsIntoAHyperJumpLockerAndMovesMParsecs [
 		           movedInBoardOf: boardStructure
 		           rolling: die.
 	zathura playTurn.
-	self assert: (zathura positionOfShipOnBoard: 'BlueShip') equals: 4
+		self assert: 'BlueShip' isAt: 4 in: zathura.
+
 ]
 
 { #category : #boardTests }
@@ -248,10 +252,7 @@ ZathuraTest >> testZathuraBlueShipFallsIntoAMoonWalkLockerAndTheResultIsItMovesA
 
 	| die ships zathura lockers boardStructure |
 	die := LoadedDie with: 3.
-	ships := OrderedCollection
-		         with: 'BlueShip'
-		         with: 'RedShip'
-		   .
+	ships := OrderedCollection with: 'BlueShip' with: 'RedShip'.
 	lockers := { 
 		           LockerNoEffect new.
 		           LockerNoEffect new.
@@ -271,8 +272,8 @@ ZathuraTest >> testZathuraBlueShipFallsIntoAMoonWalkLockerAndTheResultIsItMovesA
 	zathura playTurn.
 	zathura playTurn.
 	zathura playTurn.
-	self assert: (zathura positionOfShipOnBoard: 'BlueShip') equals: 6.
-	self assert: (zathura positionOfShipOnBoard: 'RedShip') equals: 1
+	self assert: 'BlueShip' isAt: 6 in: zathura.
+	self assert: 'RedShip' isAt: 1 in: zathura.
 ]
 
 { #category : #boardTests }
@@ -280,11 +281,8 @@ ZathuraTest >> testZathuraBlueShipFallsIntoASpeedUpLockerAndTheResultIsItAdvance
 
 	| die ships zathura lockers boardStructure |
 	die := LoadedDie with: 3.
-	ships := OrderedCollection
-		         with: 'BlueShip'
-		         with: 'RedShip'
-		.
-	
+	ships := OrderedCollection with: 'BlueShip' with: 'RedShip'.
+
 	lockers := { 
 		           LockerNoEffect new.
 		           LockerNoEffect new.
@@ -300,7 +298,7 @@ ZathuraTest >> testZathuraBlueShipFallsIntoASpeedUpLockerAndTheResultIsItAdvance
 		           movedInBoardOf: boardStructure
 		           rolling: die.
 	zathura playTurn.
-	self assert: (zathura positionOfShipOnBoard: 'BlueShip') equals: 7
+	self assert: 'BlueShip' isAt: 7 in: zathura.
 ]
 
 { #category : #boardTests }
@@ -308,10 +306,7 @@ ZathuraTest >> testZathuraBlueShipFallsIntoAWormHoleLockerAndTheResultIsItAdvanc
 
 	| die ships zathura lockers boardStructure |
 	die := LoadedDie with: 5.
-	ships := OrderedCollection
-		         with: 'BlueShip'
-		         with: 'RedShip'
-		       .
+	ships := OrderedCollection with: 'BlueShip' with: 'RedShip'.
 
 	lockers := { 
 		           LockerNoEffect new.
@@ -329,7 +324,7 @@ ZathuraTest >> testZathuraBlueShipFallsIntoAWormHoleLockerAndTheResultIsItAdvanc
 		           movedInBoardOf: boardStructure
 		           rolling: die.
 	zathura playTurn.
-	self assert: (zathura positionOfShipOnBoard: 'BlueShip') equals: 1
+		self assert: 'BlueShip' isAt: 1 in: zathura.
 ]
 
 { #category : #zathuraAssertionTests }
@@ -405,25 +400,22 @@ ZathuraTest >> testZathuraIsInitializedWithAllShipsInPositionZero [
 
 	| die ships zathura lockers boardStructure |
 	die := LoadedDie with: 6.
-	ships := OrderedCollection
-		         with: 'BlueShip'
-		         with: 'RedShip'
-		 .
-	
+	ships := OrderedCollection with: 'BlueShip' with: 'RedShip'.
+
 	lockers := { 
 		           LockerNoEffect new.
 		           LockerNoEffect new.
 		           LockerNoEffect new.
 		           LockerNoEffect new.
 		           LockerNoEffect new }.
-	
+
 	boardStructure := BoardDefinition with: lockers and: 100 played: 3.
 	zathura := ZathuraGame
 		           playBy: ships
 		           movedInBoardOf: boardStructure
 		           rolling: die.
-	self assert: (zathura positionOfShipOnBoard: 'BlueShip') equals: 0.
-	self assert: (zathura positionOfShipOnBoard: 'RedShip') equals: 0
+	self assert: 'BlueShip' isAt: 0 in: zathura.
+	self assert: 'RedShip' isAt: 0 in: zathura
 ]
 
 { #category : #tests }
@@ -503,10 +495,7 @@ ZathuraTest >> testZathuraShipFallsIntoASpeedUpAndStaysThere [
 
 	| die ships zathura lockers boardStructure |
 	die := LoadedDie with: 1.
-	ships := OrderedCollection
-		         with: 'BlueShip'
-		         with: 'RedShip'
-		 .
+	ships := OrderedCollection with: 'BlueShip' with: 'RedShip'.
 
 	lockers := { 
 		           LockerNoEffect new.
@@ -527,7 +516,7 @@ ZathuraTest >> testZathuraShipFallsIntoASpeedUpAndStaysThere [
 	zathura playTurn.
 	zathura playTurn.
 	zathura playTurn.
-	self assert: (zathura positionOfShipOnBoard: 'BlueShip') equals: 6
+	self assert: 'BlueShip' isAt: 6 in: zathura.
 ]
 
 { #category : #boardTests }
@@ -536,7 +525,7 @@ ZathuraTest >> testZathuraWhenCrossingTheLastLockerTheShipsStartsAnotherLap [
 	| die ships zathura lockers boardStructure |
 	die := LoadedDie with: 6.
 	ships := OrderedCollection with: 'BlueShip' with: 'RedShip'.
-	
+
 	lockers := { 
 		           LockerNoEffect new.
 		           LockerNoEffect new.
@@ -556,8 +545,8 @@ ZathuraTest >> testZathuraWhenCrossingTheLastLockerTheShipsStartsAnotherLap [
 	zathura playTurn.
 	zathura playTurn.
 	zathura playTurn.
-	self assert: (zathura positionOfShipOnBoard: 'BlueShip') equals: 2.
-	self assert: (zathura positionOfShipOnBoard: 'RedShip') equals: 6.
+		self assert: 'RedShip' isAt: 6 in: zathura.
+			self assert: 'BlueShip' isAt: 2 in: zathura.
 	self assert: (zathura numberOfLapOf: 'BlueShip') equals: 1.
 	self assert: (zathura numberOfLapOf: 'RedShip') equals: 0
 ]

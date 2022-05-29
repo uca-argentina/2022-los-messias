@@ -42,7 +42,7 @@ BoardDefinition class >> with: aCollectionOfLockers and: parsecs played: laps [
 		  played: laps
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #action }
 BoardDefinition >> doEffectTo: aShip inPosition: position of: aBoard [
 
 	(lockers at: (position +1)) applyFor: aShip  on: aBoard 

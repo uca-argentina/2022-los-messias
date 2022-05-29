@@ -38,14 +38,6 @@ SequencialDie class >> with: anArrayOfNumbers [
 	^ self new initializeWith: anArrayOfNumbers
 ]
 
-{ #category : #rolling }
-SequencialDie >> changeNextRoll [
-
-| aNumber |
-aNumber := numbers removeFirst.
-	numbers addLast: aNumber.
-]
-
 { #category : #initialization }
 SequencialDie >> initializeWith: aCollectionOfNumbers [
 
@@ -57,7 +49,7 @@ SequencialDie >> initializeWith: aCollectionOfNumbers [
 SequencialDie >> roll [
 
 	| result |
-	result := numbers at: 1.
-	self changeNextRoll.
+	result  := numbers removeFirst.
+	numbers addLast: result .
 	^ result
 ]

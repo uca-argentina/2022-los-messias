@@ -52,16 +52,8 @@ MoonWalkEffect class >> with: aNumberOfLockers [
 MoonWalkEffect >> applyFor: aShip on: aBoard [
 
 	| ships |
-	ships := self getAllShipsIn: aBoard except: aShip.
+	ships := aBoard shipsInGame copyWithout: aShip.
 	self moveAll: ships In: aBoard
-]
-
-{ #category : #'class initialization' }
-MoonWalkEffect >> getAllShipsIn: aBoard except: aShip [
-
-	| ships |
-	ships := aBoard allNameOfShips select: [ :ship | ship ~= aShip ].
-	^ ships
 ]
 
 { #category : #'class initialization' }

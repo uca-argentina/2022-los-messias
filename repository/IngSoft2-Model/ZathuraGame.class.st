@@ -70,14 +70,6 @@ ZathuraGame >> assertZathuraHasNotBeenPlayed [
 ]
 
 { #category : #private }
-ZathuraGame >> changeActivePlayer [
-
-	| aShip |
-	aShip := ships removeFirst.
-	ships addLast: aShip
-]
-
-{ #category : #private }
 ZathuraGame >> checkIfWon: aShip [
 
 	(board hasCrossFinishLine: aShip) ifFalse: [^self].
@@ -102,7 +94,7 @@ diceCup := aDiceCup.
 { #category : #positioning }
 ZathuraGame >> numberOfLapOf: aShip [
 
-	^ (board spaceshipPositionOf: aShip) numberOfLap 
+	^ (board positionOf: aShip) numberOfLap 
 ]
 
 { #category : #playing }
@@ -118,10 +110,10 @@ ZathuraGame >> playTurn [
 
 	| aShip |
 	self assertZathuraHasNotBeenPlayed.
-	aShip := ships at: 1.
-	board playTurnOnBoard: aShip by: diceCup roll.
+	aShip := ships removeFirst.
+	board changePositionOf: aShip by: diceCup roll.
 	self checkIfWon: aShip.
-	self changeActivePlayer
+	ships addLast: aShip
 ]
 
 { #category : #positioning }

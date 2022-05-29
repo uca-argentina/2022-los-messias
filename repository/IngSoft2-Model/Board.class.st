@@ -47,30 +47,28 @@ Board class >> of: boardStructure withAll: aCollectionOfShips [
 		  withAGroupOf: aCollectionOfShips
 ]
 
-{ #category : #'accessing - attributes' }
-Board >> allNameOfShips [
+{ #category : #moving }
+Board >> changePositionOf: aShip by: aNumberOfLockers [
 
-	| ships |
-	ships := OrderedCollection new.
-	positionOfShips do: [ :aShip | ships add: aShip ship ].
-	^ ships
+	self move: aShip by: aNumberOfLockers.
+	boardStructure doEffectTo: aShip inPosition: (self numberOfLockerOf:aShip) of: self  
 ]
 
-{ #category : #moving }
-Board >> correctPositionIfShipWon: aShip [
+{ #category : #private }
+Board >> correctPositionIfShipCrossFinishLine: aShip [
 
 	(self hasCrossFinishLine: aShip) ifTrue: [ 
 		self
-			remove: (self spaceshipPositionOf: aShip)
+			remove: (self positionOf: aShip)
 			add: (positionHandler moveToFinalPosition:
-					 (self spaceshipPositionOf: aShip)) ]
+					 (self positionOf: aShip)) ]
 ]
 
 { #category : #moving }
 Board >> hasCrossFinishLine: aShip [
 
 	| positionOfShip |
-	positionOfShip := self spaceshipPositionOf: aShip.
+	positionOfShip := self positionOf: aShip.
 	^ positionOfShip numberOfLap >= boardStructure laps
 ]
 
@@ -95,16 +93,16 @@ Board >> load: aCollectionOfShips [
 Board >> move: aShip by: aNumberOfLockers [
 
 	self moving: aShip lockers: aNumberOfLockers.
-	self correctPositionIfShipWon: aShip
+	self correctPositionIfShipCrossFinishLine: aShip
 ]
 
 { #category : #private }
 Board >> moving: aShip lockers: aNumberOfLockers [
 
 	| oldPosition newPosition |
-	oldPosition := self spaceshipPositionOf: aShip.
+	oldPosition := self positionOf: aShip.
 	newPosition := positionHandler
-		               createNewPositionOf: oldPosition
+		               newPositionOf: oldPosition
 		               by: aNumberOfLockers.
 	self remove: oldPosition add: newPosition.
 ]
@@ -112,7 +110,7 @@ Board >> moving: aShip lockers: aNumberOfLockers [
 { #category : #'accessing - attributes' }
 Board >> numberOfLockerOf: aShip [
 
-	^ (self spaceshipPositionOf: aShip) numberOfLocker 
+	^ (self positionOf: aShip) numberOfLocker 
 ]
 
 { #category : #attributes }
@@ -120,11 +118,14 @@ Board >> parsecsPerLocker [
 	^ parsecsPerLocker
 ]
 
-{ #category : #private }
-Board >> playTurnOnBoard: aShip by: aNumberOfLockers [
+{ #category : #'accessing - attributes' }
+Board >> positionOf: aShip [
 
-	self move: aShip by: aNumberOfLockers.
-	boardStructure doEffectTo: aShip inPosition: (self numberOfLockerOf:aShip) of: self  
+	| positionOfShip |
+	positionOfShip := positionOfShips select: [ :aPositionOfShip | 
+		                  aPositionOfShip ship == aShip ].
+
+	^ positionOfShip removeFirst
 ]
 
 { #category : #ranking }
@@ -141,6 +142,15 @@ Board >> remove: positionOfShip add: newPosition [
 	positionOfShips add: newPosition
 ]
 
+{ #category : #'accessing - attributes' }
+Board >> shipsInGame [
+
+	| ships |
+	ships := OrderedCollection new.
+	positionOfShips do: [ :aShip | ships add: aShip ship ].
+	^ ships
+]
+
 { #category : #ranking }
 Board >> shipsSortedByPosition [
 
@@ -152,14 +162,4 @@ Board >> sortedShipPositions [
 
 	^positionOfShips  sort: [ :positionA :positionB | 
 		  positionA > positionB ]
-]
-
-{ #category : #'accessing - attributes' }
-Board >> spaceshipPositionOf: aShip [
-
-	| positionOfShip |
-	positionOfShip := positionOfShips select: [ :aPositionOfShip | 
-		          aPositionOfShip ship == aShip ].
-
-	^ positionOfShip at: 1
 ]
