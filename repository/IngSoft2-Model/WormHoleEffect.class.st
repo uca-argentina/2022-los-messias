@@ -1,11 +1,11 @@
 Class {
-	#name : #WormHole,
-	#superclass : #Object,
+	#name : #WormHoleEffect,
+	#superclass : #Locker,
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #actions }
-WormHole >> action: aShip on: aBoard [
+WormHoleEffect >> applyFor: aShip on: aBoard [
 
 	aBoard move: aShip by: -4
 ]

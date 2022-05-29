@@ -22,11 +22,11 @@ Internal Representation and Key Implementation Points.
 "
 Class {
 	#name : #LockerNoEffect,
-	#superclass : #Object,
+	#superclass : #Locker,
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #action }
-LockerNoEffect >> action: aShip on: aBoard [
+LockerNoEffect >> applyFor: aShip on: aBoard [
 
 ]

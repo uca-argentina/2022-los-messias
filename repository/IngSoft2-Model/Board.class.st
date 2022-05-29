@@ -39,16 +39,8 @@ Class {
 }
 
 { #category : #'instance creation' }
-Board class >> assertValid: lockers [
-
-	lockers size >= 2 ifFalse: [ 
-		Error signal: 'Board cannot be created with less than two lockers' ]
-]
-
-{ #category : #'instance creation' }
 Board class >> of: boardStructure withAll: aCollectionOfShips [
 
-	self assertValid: boardStructure lockers.
 	^ self new
 		  initializeWith: boardStructure
 		  withAGroupOf: aCollectionOfShips
@@ -131,7 +123,7 @@ Board >> playTurnOnBoard: aShip by: aNumberOfLockers [
 
 	self move: aShip by: aNumberOfLockers.
 	(boardStructure lockers at: (self numberOfLockerOf: aShip) + 1)
-		action: aShip
+		applyFor: aShip
 		on: self
 ]
 

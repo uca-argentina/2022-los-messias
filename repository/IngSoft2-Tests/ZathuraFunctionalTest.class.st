@@ -9,17 +9,14 @@ ZathuraFunctionalTest >> testZathuraAfterBeingPlayedHasFinishedReturnsTrue [
 
 	| zathura die ships lockers boardStructure |
 	die := RandomDie with: 6.
-	ships := OrderedCollection new.
-	ships addLast: 'BlueShip'.
-	ships addLast: 'RedShip'.
-	ships addLast: 'GreenShip'.
+	ships := OrderedCollection with: 'BlueShip' with: 'RedShip' with: 'GreenShip'.
 	lockers := { 
 		           LockerNoEffect new.
 		           LockerNoEffect new.
 		           LockerNoEffect new.
 		           LockerNoEffect new.
 		           LockerNoEffect new }.
-		boardStructure := BoardStructure with: lockers and: 100 played: 3.
+	boardStructure := BoardDefinition with: lockers and: 100 played: 3.
 	zathura := ZathuraGame
 		           playBy: ships
 		           movedInBoardOf: boardStructure
@@ -34,9 +31,7 @@ ZathuraFunctionalTest >> testZathuraAfterBeingPlayedHasOnlyOneWinnerOfTheShips [
 
 	| zathura diceCup ships aWinner notWinner lockers boardStructure |
 	diceCup := RandomDie with: 6.
-	ships := OrderedCollection new.
-	ships addLast: 'RedShip'.
-	ships addLast: 'BlueShip'.
+	ships := OrderedCollection with: 'RedShip' with: 'BlueShip'.
 	lockers := { 
 		           LockerNoEffect new.
 		           LockerNoEffect new.
@@ -47,7 +42,7 @@ ZathuraFunctionalTest >> testZathuraAfterBeingPlayedHasOnlyOneWinnerOfTheShips [
 		           LockerNoEffect new.
 		           LockerNoEffect new.
 		           LockerNoEffect new }.
-		boardStructure := BoardStructure with: lockers and: 100 played: 3.
+	boardStructure := BoardDefinition with: lockers and: 100 played: 3.
 	zathura := ZathuraGame
 		           playBy: ships
 		           movedInBoardOf: boardStructure
@@ -68,10 +63,10 @@ ZathuraFunctionalTest >> testZathuraIsPlayedWithGeneratedLockers [
 			       (RandomDie with: 6).
 			       (RandomDie with: 8).
 			       (RandomDie with: 3) }.
-	ships := OrderedCollection new.
-	ships addLast: 'BlueShip'.
-	ships addLast: 'RedShip'.
-	ships addLast: 'GreenShip'.
+	ships := OrderedCollection
+		         with: 'BlueShip'
+		         with: 'RedShip'
+		         with: 'GreenShip'.
 	boardStructure := LockerFactory new
 		                  generatesWith: 100
 		                  and: 50

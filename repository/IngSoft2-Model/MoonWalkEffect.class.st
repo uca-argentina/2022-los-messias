@@ -24,8 +24,8 @@ Internal Representation and Key Implementation Points.
     Implementation Points
 "
 Class {
-	#name : #MoonWalk,
-	#superclass : #Object,
+	#name : #MoonWalkEffect,
+	#superclass : #Locker,
 	#instVars : [
 		'lockers'
 	],
@@ -35,14 +35,21 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #'instance creation' }
-MoonWalk class >> with: aNumberOfLockers [
+{ #category : #asserting }
+MoonWalkEffect class >> assertIsValid: aNumberOfLockers [
 
+	aNumberOfLockers > 0 ifFalse: [ Error signal: 'MoonWalk cannot be created with less than zero lockers' ]
+]
+
+{ #category : #'instance creation' }
+MoonWalkEffect class >> with: aNumberOfLockers [
+
+	self assertIsValid: aNumberOfLockers.
 	^ self new intializeWith: aNumberOfLockers
 ]
 
 { #category : #'class initialization' }
-MoonWalk >> action: aShip on: aBoard [
+MoonWalkEffect >> applyFor: aShip on: aBoard [
 
 	| ships |
 	ships := self getAllShipsIn: aBoard except: aShip.
@@ -50,7 +57,7 @@ MoonWalk >> action: aShip on: aBoard [
 ]
 
 { #category : #'class initialization' }
-MoonWalk >> getAllShipsIn: aBoard except: aShip [
+MoonWalkEffect >> getAllShipsIn: aBoard except: aShip [
 
 	| ships |
 	ships := aBoard AllNameOfShips select: [ :ship | ship ~= aShip ].
@@ -58,13 +65,13 @@ MoonWalk >> getAllShipsIn: aBoard except: aShip [
 ]
 
 { #category : #'class initialization' }
-MoonWalk >> intializeWith: aNumberOfLockers [
+MoonWalkEffect >> intializeWith: aNumberOfLockers [
 
 	lockers := aNumberOfLockers
 ]
 
 { #category : #private }
-MoonWalk >> moveAll: ships In: aBoard [
+MoonWalkEffect >> moveAll: ships In: aBoard [
 
 	ships do: [ :ship | 
 		aBoard move: ship by: lockers * -1 ]

@@ -1,11 +1,11 @@
 Class {
-	#name : #AtomicBomb,
-	#superclass : #Object,
+	#name : #AtomicBombEffect,
+	#superclass : #Locker,
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #'instance creation' }
-AtomicBomb >> action: aShip on: aBoard [
+AtomicBombEffect >> applyFor: aShip on: aBoard [
 
 	| allShips |
 	allShips := aBoard AllNameOfShips.

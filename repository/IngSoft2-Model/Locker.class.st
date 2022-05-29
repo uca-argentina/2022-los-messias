@@ -1,11 +1,11 @@
 Class {
-	#name : #SpeedUp,
+	#name : #Locker,
 	#superclass : #Object,
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #'instance creation' }
-SpeedUp >> action: aShip on: aBoard [
+Locker >> applyFor: aShip on: aBoard [
 
-	aBoard move: aShip by: 4.
+	self subclassResponsibility
 ]

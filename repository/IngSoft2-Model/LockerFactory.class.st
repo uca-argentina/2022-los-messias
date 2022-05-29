@@ -13,7 +13,7 @@ Class {
 { #category : #generating }
 LockerFactory >> createHyperJump [
 
-	^ HyperJump with: { 
+	^ HyperJumpEffect with: { 
 			  (parsecsBoard // 4 to: parsecsBoard // 2) atRandom.
 			  (parsecsBoard // 6 to: parsecsBoard // 4) atRandom.
 			  (1 to: parsecsBoard // 6) atRandom }
@@ -23,15 +23,15 @@ LockerFactory >> createHyperJump [
 LockerFactory >> createLockerWith: aProbability [
 
 	| locker |
-	aProbability <= 2 ifTrue: [ locker := AtomicBomb new ].
+	aProbability <= 2 ifTrue: [ locker := AtomicBombEffect new ].
 	(aProbability > 2 and: [ aProbability <= 10 ]) ifTrue: [ 
 		locker := self createHyperJump ].
 	(aProbability > 10 and: [ aProbability <= 20 ]) ifTrue: [ 
 		locker := self createMoonWalk ].
 	(aProbability > 20 and: [ aProbability <= 40 ]) ifTrue: [ 
-		locker := SpeedUp new ].
+		locker := SpeedUpEffect new ].
 	(aProbability > 40 and: [ aProbability <= 60 ]) ifTrue: [ 
-		locker := WormHole new ].
+		locker := WormHoleEffect new ].
 	(aProbability > 60 and: [ aProbability <= 100 ]) ifTrue: [ 
 		locker := LockerNoEffect new ].
 	^ locker
@@ -40,7 +40,7 @@ LockerFactory >> createLockerWith: aProbability [
 { #category : #generating }
 LockerFactory >> createMoonWalk [
 
-	^ MoonWalk with: 10 atRandom
+	^ MoonWalkEffect with: 10 atRandom
 ]
 
 { #category : #generating }
@@ -65,7 +65,7 @@ LockerFactory >> generates: numberOfLockers [
 LockerFactory >> generatesWith: aNumberOfLockers and: parsecs played: laps [
 
 	parsecsBoard := parsecs.
-	^ BoardStructure
+	^ BoardDefinition
 		  with: (self generates: aNumberOfLockers)
 		  and: parsecs
 		  played: laps
