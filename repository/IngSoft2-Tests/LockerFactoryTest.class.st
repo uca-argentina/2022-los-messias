@@ -28,23 +28,23 @@ LockerFactoryTest >> testLockerFactoryGeneratesACollectionOfDifferentLockers [
 		                  played: 3.
 	lockers := boardStructure lockers.
 
-	self assert:
-		(lockers anySatisfy: [ :aLocker | aLocker isMemberOf: AtomicBombEffect ]).
+	self assert: (lockers anySatisfy: [ :aLocker | 
+			 aLocker isMemberOf: AtomicBombEffect ]).
 
 	self assert:
-		(lockers anySatisfy: [ :aLocker | aLocker isMemberOf: AtomicBombEffect ]).
+		(lockers anySatisfy: [ :aLocker | 
+			 aLocker isMemberOf: HyperJumpEffect ]).
 
 	self assert:
-		(lockers anySatisfy: [ :aLocker | aLocker isMemberOf: HyperJumpEffect ]).
-
-	self assert:
-		(lockers anySatisfy: [ :aLocker | aLocker isMemberOf: MoonWalkEffect ]).
+		(lockers anySatisfy: [ :aLocker | 
+			 aLocker isMemberOf: MoonWalkEffect ]).
 
 	self assert:
 		(lockers anySatisfy: [ :aLocker | aLocker isMemberOf: SpeedUpEffect ]).
 
 	self assert:
-		(lockers anySatisfy: [ :aLocker | aLocker isMemberOf: WormHoleEffect ])
+		(lockers anySatisfy: [ :aLocker | 
+			 aLocker isMemberOf: WormHoleEffect ])
 ]
 
 { #category : #tests }

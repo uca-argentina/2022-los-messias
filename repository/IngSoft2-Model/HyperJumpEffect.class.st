@@ -2,7 +2,7 @@ Class {
 	#name : #HyperJumpEffect,
 	#superclass : #Locker,
 	#instVars : [
-		'sequenceParsecs'
+		'parsecsSequence'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -27,25 +27,18 @@ HyperJumpEffect class >> with: parsecSequence [
 { #category : #'instance creation' }
 HyperJumpEffect >> applyFor: aShip on: aBoard [
 
-	aBoard
-		move: aShip
-		by: (self totalLockersFrom: (sequenceParsecs at: 1) in: aBoard).
-	self changeNextParsec
-]
-
-{ #category : #private }
-HyperJumpEffect >> changeNextParsec [
-	| aNumberOfParsecs  |
-	aNumberOfParsecs  := sequenceParsecs removeFirst.
-	sequenceParsecs addLast: aNumberOfParsecs.
+	| parsecs |
+	parsecs := parsecsSequence removeFirst.
+	aBoard move: aShip by: (self totalLockersFrom: parsecs in: aBoard).
+	parsecsSequence addLast: parsecs
 ]
 
 { #category : #initialization }
 HyperJumpEffect >> initializeWith: aCollectionOfNumbers [
 
-	sequenceParsecs := OrderedCollection new.
+	parsecsSequence := OrderedCollection new.
 	aCollectionOfNumbers do: [ :aNumber | 
-		sequenceParsecs add: aNumber ]
+		parsecsSequence add: aNumber ]
 ]
 
 { #category : #'instance creation' }

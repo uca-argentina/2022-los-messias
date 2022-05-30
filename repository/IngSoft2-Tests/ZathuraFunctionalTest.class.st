@@ -5,28 +5,6 @@ Class {
 }
 
 { #category : #tests }
-ZathuraFunctionalTest >> testZathuraAfterBeingPlayedHasFinishedReturnsTrue [
-
-	| zathura die ships lockers boardStructure |
-	die := RandomDie with: 6.
-	ships := OrderedCollection with: 'BlueShip' with: 'RedShip' with: 'GreenShip'.
-	lockers := { 
-		           LockerNoEffect new.
-		           LockerNoEffect new.
-		           LockerNoEffect new.
-		           LockerNoEffect new.
-		           LockerNoEffect new }.
-	boardStructure := BoardDefinition with: lockers and: 100 played: 3.
-	zathura := ZathuraGame
-		           playBy: ships
-		           movedInBoardOf: boardStructure
-		           rolling: die.
-
-	zathura play.
-	self assert: zathura hasFinished
-]
-
-{ #category : #tests }
 ZathuraFunctionalTest >> testZathuraAfterBeingPlayedHasOnlyOneWinnerOfTheShips [
 
 	| zathura diceCup ships aWinner notWinner lockers boardStructure |
@@ -71,6 +49,25 @@ ZathuraFunctionalTest >> testZathuraIsPlayedWithGeneratedLockers [
 		                  generatesWith: 100
 		                  and: 50
 		                  played: 3.
+	zathura := ZathuraGame
+		           playBy: ships
+		           movedInBoardOf: boardStructure
+		           rolling: die.
+
+	zathura play.
+	self assert: zathura hasFinished
+]
+
+{ #category : #tests }
+ZathuraFunctionalTest >> testZathuraIsPlayedWithRandomDiceOfSixFacesAndABoardWithRandomEffectDistribution [
+
+	| zathura die ships lockers boardStructure |
+	die := RandomDie with: 6.
+	ships := OrderedCollection
+		         with: 'BlueShip'
+		         with: 'RedShip'
+		         with: 'GreenShip'.
+	boardStructure := (LockerFactory new) generatesWith: 5 and: 100  played: 3.
 	zathura := ZathuraGame
 		           playBy: ships
 		           movedInBoardOf: boardStructure

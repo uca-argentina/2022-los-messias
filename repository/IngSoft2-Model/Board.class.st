@@ -47,6 +47,14 @@ Board class >> of: boardStructure withAll: aCollectionOfShips [
 		  withAGroupOf: aCollectionOfShips
 ]
 
+{ #category : #private }
+Board >> addIntoGame: aCollectionOfShips [
+
+	positionOfShips := OrderedCollection new.
+	aCollectionOfShips do: [ :aShip | 
+		positionOfShips add: (SpaceshipPosition for: aShip at: 0 and: 0) ]
+]
+
 { #category : #moving }
 Board >> changePositionOf: aShip by: aNumberOfLockers [
 
@@ -55,7 +63,7 @@ Board >> changePositionOf: aShip by: aNumberOfLockers [
 ]
 
 { #category : #private }
-Board >> correctPositionIfShipCrossFinishLine: aShip [
+Board >> correctPositionIfFinishLineWasCrossedBy: aShip [
 
 	(self hasCrossFinishLine: aShip) ifTrue: [ 
 		self
@@ -78,22 +86,14 @@ Board >> initializeWith: aBoardStructure withAGroupOf: aCollectionOfShips [
 	boardStructure := aBoardStructure.
 	positionHandler := PositionHandler with: aBoardStructure lockers size.
 	parsecsPerLocker := boardStructure parsecsPerLocker.
-	self load: aCollectionOfShips
-]
-
-{ #category : #private }
-Board >> load: aCollectionOfShips [
-
-	positionOfShips := OrderedCollection new.
-	aCollectionOfShips do: [ :aShip | 
-		positionOfShips add: (SpaceshipPosition for: aShip at: 0 and: 0) ]
+	self addIntoGame: aCollectionOfShips
 ]
 
 { #category : #private }
 Board >> move: aShip by: aNumberOfLockers [
 
 	self moving: aShip lockers: aNumberOfLockers.
-	self correctPositionIfShipCrossFinishLine: aShip
+	self correctPositionIfFinishLineWasCrossedBy: aShip
 ]
 
 { #category : #private }
@@ -135,10 +135,10 @@ Board >> rankingOf: aShip [
 ]
 
 { #category : #private }
-Board >> remove: positionOfShip add: newPosition [
+Board >> remove: oldPosition add: newPosition [
 
 	positionOfShips removeAllSuchThat: [ :shipPosition | 
-		shipPosition == positionOfShip ].
+		shipPosition == oldPosition  ].
 	positionOfShips add: newPosition
 ]
 

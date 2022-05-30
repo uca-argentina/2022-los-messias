@@ -31,13 +31,13 @@ BoardDefinition class >> assertParsecsAreValid: parsecs [
 ]
 
 { #category : #'instance creation' }
-BoardDefinition class >> with: aCollectionOfLockers and: parsecs played: laps [
+BoardDefinition class >> with: lockers and: parsecs played: laps [
 
-	self assertLockersAreValid: aCollectionOfLockers size.
+	self assertLockersAreValid: lockers size.
 	self assertParsecsAreValid: parsecs.
 	self assertLapsAreValid: laps.
 	^ self new
-		  intializeWith: aCollectionOfLockers
+		  intializeWith: lockers
 		  and: parsecs
 		  played: laps
 ]

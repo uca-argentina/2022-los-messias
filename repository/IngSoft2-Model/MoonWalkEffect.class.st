@@ -29,9 +29,6 @@ Class {
 	#instVars : [
 		'lockers'
 	],
-	#classInstVars : [
-		'lockers'
-	],
 	#category : #'IngSoft2-Model'
 }
 
