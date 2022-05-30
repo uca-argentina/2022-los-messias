@@ -97,6 +97,12 @@ ZathuraGame >> numberOfLapOf: aShip [
 	^ (board positionOf: aShip) numberOfLap 
 ]
 
+{ #category : #positioning }
+ZathuraGame >> numberOfLockerOf: aShip [
+
+	^ board numberOfLockerOf: aShip
+]
+
 { #category : #playing }
 ZathuraGame >> play [
 
@@ -114,12 +120,6 @@ ZathuraGame >> playTurn [
 	board changePositionOf: aShip by: diceCup roll.
 	self checkIfWon: aShip.
 	ships addLast: aShip
-]
-
-{ #category : #positioning }
-ZathuraGame >> positionOfShipOnBoard: aShip [
-
-	^ board numberOfLockerOf: aShip
 ]
 
 { #category : #positioning }

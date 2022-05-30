@@ -7,7 +7,7 @@ Class {
 { #category : #accessing }
 ZathuraTest >> assert: aShip isAt: locker with: lap in: aGame [
 
-	self assert: (aGame positionOfShipOnBoard: aShip) equals: locker.
+	self assert: (aGame numberOfLockerOf: aShip) equals: locker.
 	self assert: (aGame numberOfLapOf: aShip) equals: lap.
 ]
 
@@ -469,7 +469,7 @@ ZathuraTest >> testWhenShipGoesBackwardsInTheFirstLapItStayesAtTheLapZero [
 	zathura playTurn.
 	zathura playTurn.
 
-	self assert: (zathura positionOfShipOnBoard: 'BlueShip') equals: 0.
+	self assert: (zathura numberOfLockerOf: 'BlueShip') equals: 0.
 	self assert: (zathura numberOfLapOf: 'BlueShip') equals: 0
 ]
 
