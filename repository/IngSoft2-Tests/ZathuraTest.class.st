@@ -52,7 +52,7 @@ ZathuraTest >> testBlueShipFallsIntoAAtomicBombAndAllShipsGoToFirstLockerOfTheSa
 ]
 
 { #category : #boardTests }
-ZathuraTest >> testBlueShipFallsIntoAHyperJumpLockerAndMovesMParsecs [
+ZathuraTest >> testBlueShipFallsIntoAHyperJumpLockerAndMovesThirtyOneParsecs [
 
 	| die ships zathura lockers parsecs boardStructure |
 	die := LoadedDie with: 1.
@@ -347,7 +347,7 @@ ZathuraTest >> testShipLandsOnAWormholeEffectAndGoesBackOneLap [
 ]
 
 { #category : #boardTests }
-ZathuraTest >> testShipsFallIntoAHyperJumpLockerAndMovesMParsecsInASequence [
+ZathuraTest >> testShipsFallIntoAHyperJumpLockerAndMovesByTheParsecsInASequence [
 
 	| die ships zathura lockers parsecs boardStructure |
 	die := LoadedDie with: 1.
