@@ -66,10 +66,10 @@ Board >> changePositionOf: aShip by: aNumberOfLockers [
 Board >> correctPositionIfFinishLineWasCrossedBy: aShip [
 
 	(self hasCrossFinishLine: aShip) ifTrue: [ 
-		self
-			remove: (self positionOf: aShip)
-			add: (positionHandler moveToFinalPosition:
-					 (self positionOf: aShip)) ]
+		positionOfShips
+			at: (positionOfShips indexOf: (self positionOf: aShip))
+			put:
+			(positionHandler moveToFinalPosition: (self positionOf: aShip))]
 ]
 
 { #category : #moving }
@@ -104,7 +104,9 @@ Board >> moving: aShip lockers: aNumberOfLockers [
 	newPosition := positionHandler
 		               newPositionOf: oldPosition
 		               by: aNumberOfLockers.
-	self remove: oldPosition add: newPosition.
+	positionOfShips
+		at: (positionOfShips indexOf: oldPosition)
+		put: newPosition
 ]
 
 { #category : #'accessing - attributes' }
@@ -132,14 +134,6 @@ Board >> positionOf: aShip [
 Board >> rankingOf: aShip [
 
 	^ self shipsSortedByPosition indexOf: aShip
-]
-
-{ #category : #private }
-Board >> remove: oldPosition add: newPosition [
-
-	positionOfShips removeAllSuchThat: [ :shipPosition | 
-		shipPosition == oldPosition  ].
-	positionOfShips add: newPosition
 ]
 
 { #category : #'accessing - attributes' }
