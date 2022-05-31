@@ -29,7 +29,7 @@ HyperJumpEffect >> applyFor: aShip on: aBoard [
 
 	| parsecs |
 	parsecs := parsecsSequence removeFirst.
-	aBoard move: aShip by: (self totalLockersFrom: parsecs in: aBoard).
+	aBoard move: aShip byParsecs: parsecs.
 	parsecsSequence addLast: parsecs
 ]
 
@@ -39,10 +39,4 @@ HyperJumpEffect >> initializeWith: aCollectionOfNumbers [
 	parsecsSequence := OrderedCollection new.
 	aCollectionOfNumbers do: [ :aNumber | 
 		parsecsSequence add: aNumber ]
-]
-
-{ #category : #'instance creation' }
-HyperJumpEffect >> totalLockersFrom: result in: aBoard [
-
-	^ (result * aBoard parsecsPerLocker) asInteger 
 ]

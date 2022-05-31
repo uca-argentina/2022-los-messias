@@ -97,6 +97,32 @@ Board >> move: aShip by: aNumberOfLockers [
 ]
 
 { #category : #private }
+Board >> move: aShip byParsecs: numberOfParsecs [
+
+	self move: aShip by: (numberOfParsecs * parsecsPerLocker) asInteger
+]
+
+{ #category : #private }
+Board >> moveAllExcept: aShip by: aNumberOfLockers [
+
+	| ships |
+	ships := self shipsInGame copyWithout: aShip.
+	ships do: [ :ship | self move: ship by: aNumberOfLockers * -1 ]
+]
+
+{ #category : #private }
+Board >> moveAllToLockerZero [
+
+	positionOfShips do: [ :aShip | self moveToLockerZero: aShip ship ]
+]
+
+{ #category : #private }
+Board >> moveToLockerZero: aShip [
+
+self move: aShip by: ((self numberOfLockerOf: aShip) * -1 )
+]
+
+{ #category : #private }
 Board >> moving: aShip lockers: aNumberOfLockers [
 
 	| oldPosition newPosition |

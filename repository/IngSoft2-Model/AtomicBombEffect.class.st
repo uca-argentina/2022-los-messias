@@ -6,8 +6,5 @@ Class {
 
 { #category : #'instance creation' }
 AtomicBombEffect >> applyFor: aShip on: aBoard [
-
-	| allShips |
-	allShips := aBoard shipsInGame.
-	allShips do: [ :ship | aBoard move: ship by: ((aBoard numberOfLockerOf: ship) * -1) ]
+aBoard moveAllToLockerZero
 ]
