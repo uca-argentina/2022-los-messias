@@ -19,7 +19,7 @@ DiceTest >> testDiceCupRollResultIsTheSumOfTheResultsOfEachIndividualDie [
 { #category : #'tests  - DiceCup' }
 DiceTest >> testDiceCupThrowsErrorWhenInitializedWithNoDie [
 
-	(Asserting new)
+	self
 		should: [ DiceCup withAll: {  } ]
 		raise: Error
 		withMessage: 'Dice Cup should be initialized with at least one die'
@@ -28,7 +28,7 @@ DiceTest >> testDiceCupThrowsErrorWhenInitializedWithNoDie [
 { #category : #'tests - LoadedDie' }
 DiceTest >> testLoadedDieCannotBeLoadedWithResultLowerThanOne [
 
-	(Asserting new)
+	self
 		should: [ LoadedDie with: 0 ]
 		raise: Error
 		withMessage: 'Die should be loaded with number greater than 0'
@@ -46,7 +46,7 @@ DiceTest >> testLoadedDieRollsFiveWhenLoadedWithFive [
 { #category : #'tests - RandomDie' }
 DiceTest >> testRandomDieCannotBeCreatedWithNumberOfFacesSmallerThanThree [
 
-	(Asserting new)
+	self
 		should: [ RandomDie with: 2 ]
 		raise: Error
 		withMessage:

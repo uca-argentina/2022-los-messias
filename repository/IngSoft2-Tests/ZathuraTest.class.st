@@ -162,13 +162,14 @@ ZathuraTest >> testBlueShipFallsIntoAWormHoleLockerAndTheResultIsItAdvancesFourL
 { #category : #boardStructureAssertionTests }
 ZathuraTest >> testBoardStructureCannotHaveLessThanTwoLockers [
 
-	Asserting new
+	self
 		should: [ BoardDefinition with: {  } and: 20 played: 3 ]
 		raise: Error
 		withMessage: 'Board Structure cannot have less than two lockers'.
 
-	Asserting new
-		should: [ BoardDefinition with: { LockerNoEffect new } and: 20 played: 3 ]
+	self
+		should: [ 
+		BoardDefinition with: { LockerNoEffect new } and: 20 played: 3 ]
 		raise: Error
 		withMessage: 'Board Structure cannot have less than two lockers'
 ]
@@ -176,14 +177,25 @@ ZathuraTest >> testBoardStructureCannotHaveLessThanTwoLockers [
 { #category : #boardStructureAssertionTests }
 ZathuraTest >> testBoardStructureCannotHaveLessThanZeroLaps [
 
-	Asserting new
-		should: [ BoardDefinition with: { LockerNoEffect new. LockerNoEffect new } and: 10 played: 0 ]
+	self
+		should: [ 
+			BoardDefinition
+				with: { 
+						LockerNoEffect new.
+						LockerNoEffect new }
+				and: 10
+				played: 0 ]
 		raise: Error
 		withMessage: 'Board Structure cannot have less than zero laps'.
 
-	Asserting new
+	self
 		should: [ 
-		BoardDefinition with: { LockerNoEffect new. LockerNoEffect new } and: 10 played: -3 ]
+			BoardDefinition
+				with: { 
+						LockerNoEffect new.
+						LockerNoEffect new }
+				and: 10
+				played: -3 ]
 		raise: Error
 		withMessage: 'Board Structure cannot have less than zero laps'
 ]
@@ -191,15 +203,25 @@ ZathuraTest >> testBoardStructureCannotHaveLessThanZeroLaps [
 { #category : #boardStructureAssertionTests }
 ZathuraTest >> testBoardStructureCannotHaveLessThanZeroParsecs [
 
-	Asserting new
+	self
 		should: [ 
-		BoardDefinition with: { LockerNoEffect new. LockerNoEffect new } and: 0 played: 3 ]
+			BoardDefinition
+				with: { 
+						LockerNoEffect new.
+						LockerNoEffect new }
+				and: 0
+				played: 3 ]
 		raise: Error
 		withMessage: 'Board Structure cannot have less than zero parsecs'.
 
-	Asserting new
+	self
 		should: [ 
-		BoardDefinition with: { LockerNoEffect new. LockerNoEffect new } and: -5 played: 3 ]
+			BoardDefinition
+				with: { 
+						LockerNoEffect new.
+						LockerNoEffect new }
+				and: -5
+				played: 3 ]
 		raise: Error
 		withMessage: 'Board Structure cannot have less than zero parsecs'
 ]
@@ -253,34 +275,36 @@ ZathuraTest >> testGreenShipWinsAndFinishesInPositionZeroWithOneLapCompleted [
 { #category : #boardStructureAssertionTests }
 ZathuraTest >> testHyperjumpCannotHaveANullParsecSequence [
 
-	Asserting new
+	self
 		should: [ HyperJumpEffect with: {  } ]
 		raise: Error
-		withMessage:
-		'Hyperjump cannot have a null parsec sequence'
+		withMessage: 'Hyperjump cannot have a null parsec sequence'
 ]
 
 { #category : #boardStructureAssertionTests }
 ZathuraTest >> testHyperjumpCannotHaveLessThanZeroParsecsInTheSequence [
 
-	Asserting new
+	self
 		should: [ HyperJumpEffect with: { 5. -2. 10 } ]
 		raise: Error
-		withMessage: 'Hyperjump cannot have less than zero parsecs in the sequence'
+		withMessage:
+		'Hyperjump cannot have less than zero parsecs in the sequence'
 ]
 
 { #category : #boardStructureAssertionTests }
 ZathuraTest >> testMoonwalkCannotHaveLessThanZeroLockers [
 
-	Asserting new
-		should: [ MoonWalkEffect with: 0]
+	self
+		should: [ MoonWalkEffect with: 0 ]
 		raise: Error
-		withMessage: 'MoonWalk cannot be created with less than zero lockers'.
+		withMessage:
+		'MoonWalk cannot be created with less than zero lockers'.
 
-	Asserting new
-		should: [ MoonWalkEffect with: -3]
+	self
+		should: [ MoonWalkEffect with: -3 ]
 		raise: Error
-		withMessage: 'MoonWalk cannot be created with less than zero lockers'.
+		withMessage:
+		'MoonWalk cannot be created with less than zero lockers'
 ]
 
 { #category : #tests }
@@ -438,7 +462,7 @@ ZathuraTest >> testZathuraCannotBePlayedMoreThanOnce [
 		           rolling: aDie.
 	zathura play.
 
-	Asserting new
+	self
 		should: [ zathura play ]
 		raise: Error
 		withMessage: 'Zathura cannot be played more than once'
@@ -473,7 +497,7 @@ ZathuraTest >> testZathuraInitializedWithLessThanTwoShipsThrowsError [
 	ships := OrderedCollection new.
 	ships addLast: 'BlueShip'.
 
-	Asserting new
+	self
 		should: [ ZathuraGame playBy: ships movedInBoardOf: 10 rolling: die ]
 		raise: Error
 		withMessage: 'Zathura cannot be played with less than two ships'
@@ -661,7 +685,7 @@ ZathuraTest >> testZathuraWhileItHasNotFinishedAsksWinnerThrowsError [
 		           movedInBoardOf: boardStructure
 		           rolling: die.
 
-	Asserting new
+	self
 		should: [ zathura winner ]
 		raise: Error
 		withMessage: 'Zathura has not finished yet'
