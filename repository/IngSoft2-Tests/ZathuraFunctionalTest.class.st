@@ -7,20 +7,13 @@ Class {
 { #category : #tests }
 ZathuraFunctionalTest >> testZathuraAfterBeingPlayedHasOnlyOneWinnerOfTheShips [
 
-	| zathura diceCup ships aWinner notWinner lockers boardStructure |
+	| zathura diceCup ships aWinner notWinner  boardStructure |
 	diceCup := RandomDie with: 6.
 	ships := OrderedCollection with: 'RedShip' with: 'BlueShip'.
-	lockers := { 
-		           LockerNoEffect new.
-		           LockerNoEffect new.
-		           LockerNoEffect new.
-		           LockerNoEffect new.
-		           LockerNoEffect new.
-		           LockerNoEffect new.
-		           LockerNoEffect new.
-		           LockerNoEffect new.
-		           LockerNoEffect new }.
-	boardStructure := BoardDefinition with: lockers and: 100 played: 3.
+	boardStructure := BoardDefinition
+		                  withNoEffectsOf: 9
+		                  and: 100
+		                  played: 3.
 	zathura := ZathuraGame
 		           playBy: ships
 		           movedInBoardOf: boardStructure
@@ -36,7 +29,7 @@ ZathuraFunctionalTest >> testZathuraAfterBeingPlayedHasOnlyOneWinnerOfTheShips [
 { #category : #tests }
 ZathuraFunctionalTest >> testZathuraIsPlayedWithGeneratedLockers [
 
-	| zathura die ships lockers boardStructure |
+	| zathura die ships  boardStructure |
 	die := DiceCup withAll: { 
 			       (RandomDie with: 6).
 			       (RandomDie with: 8).
@@ -61,13 +54,16 @@ ZathuraFunctionalTest >> testZathuraIsPlayedWithGeneratedLockers [
 { #category : #tests }
 ZathuraFunctionalTest >> testZathuraIsPlayedWithRandomDiceOfSixFacesAndABoardWithRandomEffectDistribution [
 
-	| zathura die ships lockers boardStructure |
+	| zathura die ships  boardStructure |
 	die := RandomDie with: 6.
 	ships := OrderedCollection
 		         with: 'BlueShip'
 		         with: 'RedShip'
 		         with: 'GreenShip'.
-	boardStructure := (LockerFactory new) generatesWith: 5 and: 100  played: 3.
+	boardStructure := LockerFactory new
+		                  generatesWith: 5
+		                  and: 100
+		                  played: 3.
 	zathura := ZathuraGame
 		           playBy: ships
 		           movedInBoardOf: boardStructure

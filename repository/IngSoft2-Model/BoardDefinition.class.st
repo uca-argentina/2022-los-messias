@@ -37,9 +37,30 @@ BoardDefinition class >> with: lockers and: parsecs played: laps [
 	self assertParsecsAreValid: parsecs.
 	self assertLapsAreValid: laps.
 	^ self new
-		  intializeWith: lockers
+		  initializeWith: lockers
 		  and: parsecs
 		  played: laps
+]
+
+{ #category : #'instance creation' }
+BoardDefinition class >> withNoEffectsOf: numberOfLockers and: parsecs played: laps [
+
+	| lockers |
+	lockers := OrderedCollection new.
+	1 to: numberOfLockers do: [ :number | 
+	lockers add: LockerNoEffect new ].
+	^ self new initializeWith: lockers and: parsecs played: laps
+]
+
+{ #category : #'instance creation' }
+BoardDefinition class >> withOnly: effect at: effectLockerNumber of: numberOfLockers and: parsecs played: laps [
+
+	| lockers |
+	lockers := OrderedCollection new.
+	1 to: numberOfLockers do: [ :number | 
+	lockers add: LockerNoEffect new ].
+	lockers at: effectLockerNumber put: effect.
+	^ self new initializeWith: lockers and: parsecs played: laps
 ]
 
 { #category : #action }
@@ -49,7 +70,7 @@ BoardDefinition >> doEffectTo: aShip inPosition: position of: aBoard [
 ]
 
 { #category : #initialization }
-BoardDefinition >> intializeWith: aCollectionOfLockers and: aNumberParsecs played: aNumberLaps [ 
+BoardDefinition >> initializeWith: aCollectionOfLockers and: aNumberParsecs played: aNumberLaps [ 
 	lockers := aCollectionOfLockers.
 	parsecs := aNumberParsecs.
 	laps := aNumberLaps

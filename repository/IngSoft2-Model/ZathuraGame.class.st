@@ -35,7 +35,8 @@ Class {
 		'diceCup',
 		'board',
 		'ships',
-		'winner'
+		'winner',
+		'timesPlayed'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -65,16 +66,17 @@ ZathuraGame >> assertZathuraHasFinished [
 { #category : #asserting }
 ZathuraGame >> assertZathuraHasNotBeenPlayed [
 
-	finished ifTrue: [ 
+	timesPlayed = 1 ifTrue: [ 
 		Error signal: 'Zathura cannot be played more than once' ]
 ]
 
 { #category : #private }
 ZathuraGame >> checkIfWon: aShip [
 
-	(board hasCrossFinishLine: aShip) ifFalse: [^self].
+	(board hasCrossFinishLine: aShip) ifFalse: [ ^ self ].
 	winner := aShip.
-	finished := true.
+	timesPlayed := 1.
+	finished := true
 ]
 
 { #category : #state }
@@ -85,10 +87,12 @@ ZathuraGame >> hasFinished [
 
 { #category : #initialization }
 ZathuraGame >> initializePlayingBy: aCollectionOfShips movedInBoardOf: boardStructure rolling: aDiceCup [
-diceCup := aDiceCup.
+
+	diceCup := aDiceCup.
 	board := Board of: boardStructure withAll: aCollectionOfShips.
 	ships := aCollectionOfShips.
 	finished := false.
+	timesPlayed := 0
 ]
 
 { #category : #positioning }
