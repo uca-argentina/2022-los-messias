@@ -141,11 +141,6 @@ Board >> numberOfLockerOf: aShip [
 	^ (self positionOf: aShip) numberOfLocker 
 ]
 
-{ #category : #attributes }
-Board >> parsecsPerLocker [
-	^ parsecsPerLocker
-]
-
 { #category : #'accessing - attributes' }
 Board >> positionOf: aShip [
 
