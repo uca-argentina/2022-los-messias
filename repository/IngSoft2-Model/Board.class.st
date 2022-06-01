@@ -30,8 +30,8 @@ Class {
 	#instVars : [
 		'positionOfShips',
 		'positionHandler',
-		'boardStructure',
-		'parsecsPerLocker'
+		'parsecsPerLocker',
+		'boardDefinition'
 	],
 	#classInstVars : [
 		'ships'
@@ -59,7 +59,7 @@ Board >> addIntoGame: aCollectionOfShips [
 Board >> changePositionOf: aShip by: aNumberOfLockers [
 
 	self move: aShip by: aNumberOfLockers.
-	boardStructure doEffectTo: aShip inPosition: (self numberOfLockerOf:aShip) of: self  
+	boardDefinition doEffectTo: aShip inPosition: (self numberOfLockerOf:aShip) of: self  
 ]
 
 { #category : #private }
@@ -77,15 +77,15 @@ Board >> hasCrossFinishLine: aShip [
 
 	| positionOfShip |
 	positionOfShip := self positionOf: aShip.
-	^ positionOfShip numberOfLap >= boardStructure laps
+	^ positionOfShip numberOfLap >= boardDefinition laps
 ]
 
 { #category : #initialization }
 Board >> initializeWith: aBoardStructure withAGroupOf: aCollectionOfShips [
 
-	boardStructure := aBoardStructure.
+	boardDefinition := aBoardStructure.
 	positionHandler := PositionHandler with: aBoardStructure lockers size.
-	parsecsPerLocker := boardStructure parsecsPerLocker.
+	parsecsPerLocker := boardDefinition parsecsPerLocker.
 	self addIntoGame: aCollectionOfShips
 ]
 
