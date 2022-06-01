@@ -87,6 +87,12 @@ BoardDefinition >> lockers [
 ]
 
 { #category : #accesing }
+BoardDefinition >> numberOfLockers [
+
+^ lockers size
+]
+
+{ #category : #accesing }
 BoardDefinition >> parsecsPerLocker [ 
 
 ^(lockers size / parsecs) asFloat
