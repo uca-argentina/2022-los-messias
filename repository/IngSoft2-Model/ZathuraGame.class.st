@@ -35,7 +35,6 @@ Class {
 		'diceCup',
 		'board',
 		'ships',
-		'winner',
 		'timesPlayed'
 	],
 	#category : #'IngSoft2-Model'
@@ -74,7 +73,6 @@ ZathuraGame >> assertZathuraHasNotBeenPlayed [
 ZathuraGame >> checkIfWon: aShip [
 
 	(board hasCrossFinishLine: aShip) ifFalse: [ ^ self ].
-	winner := aShip.
 	timesPlayed := 1.
 	finished := true
 ]
@@ -134,6 +132,9 @@ ZathuraGame >> rankingOf: aShip [
 
 { #category : #ending }
 ZathuraGame >> winner [
+
+	| winner |
 	self assertZathuraHasFinished.
-	^ winner
+	winner := ships select: [ :ship | (self rankingOf: ship) == 1 ].
+	^ winner at: 1
 ]
