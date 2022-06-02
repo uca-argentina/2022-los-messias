@@ -22,7 +22,7 @@ Internal Representation and Key Implementation Points.
 "
 Class {
 	#name : #LockerNoEffect,
-	#superclass : #Locker,
+	#superclass : #Effect,
 	#category : #'IngSoft2-Model'
 }
 

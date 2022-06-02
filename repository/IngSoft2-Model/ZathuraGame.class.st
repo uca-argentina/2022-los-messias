@@ -34,8 +34,8 @@ Class {
 		'finished',
 		'diceCup',
 		'board',
-		'ships',
-		'timesPlayed'
+		'timesPlayed',
+		'sequenceOfShips'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -88,7 +88,7 @@ ZathuraGame >> initializePlayingBy: aCollectionOfShips movedInBoardOf: boardStru
 
 	diceCup := aDiceCup.
 	board := Board of: boardStructure withAll: aCollectionOfShips.
-	ships := aCollectionOfShips.
+	sequenceOfShips := Sequence with: aCollectionOfShips.
 	finished := false.
 	timesPlayed := 0
 ]
@@ -118,10 +118,10 @@ ZathuraGame >> playTurn [
 
 	| aShip |
 	self assertZathuraHasNotBeenPlayed.
-	aShip := ships removeFirst.
+	aShip := sequenceOfShips value.
 	board changePositionOf: aShip by: diceCup roll.
 	self checkIfWon: aShip.
-	ships addLast: aShip
+	sequenceOfShips next
 ]
 
 { #category : #positioning }
@@ -135,6 +135,6 @@ ZathuraGame >> winner [
 
 	| winner |
 	self assertZathuraHasFinished.
-	winner := ships select: [ :ship | (self rankingOf: ship) == 1 ].
+	winner := (sequenceOfShips collection) select: [ :ship | (self rankingOf: ship) == 1 ].
 	^ winner at: 1
 ]

@@ -72,7 +72,7 @@ ZathuraTest >> testBlueShipFallsIntoAHyperJumpLockerAndMovesThirtyOneParsecs [
 ]
 
 { #category : #boardTests }
-ZathuraTest >> testBlueShipFallsIntoAMoonWalkLockerAndTheResultIsItMovesAllOtherShipsBackwards [
+ZathuraTest >> testBlueShipFallsIntoAMoonWalkLockerAndTheResultIsItMovesAllOtherShipsBackwardsTwoLockers [
 
 	| die ships zathura boardStructure |
 	die := LoadedDie with: 3.
@@ -161,11 +161,6 @@ ZathuraTest >> testBlueShipFallsIntoAWormHoleLockerAndTheResultIsItAdvancesFourL
 
 { #category : #boardStructureAssertionTests }
 ZathuraTest >> testBoardStructureCannotHaveLessThanTwoLockers [
-
-	self
-		should: [ BoardDefinition with: {  } and: 20 played: 3 ]
-		raise: Error
-		withMessage: 'Board Structure cannot have less than two lockers'.
 
 	self
 		should: [ 
@@ -528,51 +523,6 @@ ZathuraTest >> testZathuraIsInitializedWithAllShipsInPositionZeroAndLapZero [
 		isAt: 0
 		with: 0
 		in: zathura
-]
-
-{ #category : #tests }
-ZathuraTest >> testZathuraIsPlayedAndTheWinnerIsTheGreenShip [
-
-	| zathura die ships  boardStructure |
-	die := LoadedDie with: 7.
-	ships := OrderedCollection
-		         with: 'GreenShip'
-		         with: 'RedShip'
-		         with: 'BlueShip'.
-	boardStructure := BoardDefinition
-		                  withNoEffectsOf: 10
-		                  and: 100
-		                  played: 1.
-	zathura := ZathuraGame
-		           playBy: ships
-		           movedInBoardOf: boardStructure
-		           rolling: die.
-
-	zathura playTurn.
-	zathura playTurn.
-	zathura playTurn.
-	self
-		assert: 'GreenShip'
-		isAt: 7
-		with: 0
-		in: zathura.
-	self
-		assert: 'RedShip'
-		isAt: 7
-		with: 0
-		in: zathura.
-	self
-		assert: 'BlueShip'
-		isAt: 7
-		with: 0
-		in: zathura.
-	zathura playTurn.
-	self
-		assert: 'GreenShip'
-		isAt: 0
-		with: 1
-		in: zathura.
-	self assert: zathura winner equals: 'GreenShip'
 ]
 
 { #category : #tests }

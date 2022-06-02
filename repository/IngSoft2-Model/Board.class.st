@@ -101,7 +101,8 @@ Board >> move: aShip byParsecs: numberOfParsecs [
 Board >> moveAllExcept: aShip by: aNumberOfLockers [
 
 	| ships |
-	ships := self shipsInGame copyWithout: aShip.
+	ships := (positionOfShips collect: [ :positionOfShip | 
+		          positionOfShip ship ]) copyWithout: aShip.
 	ships do: [ :ship | self move: ship by: aNumberOfLockers * -1 ]
 ]
 
@@ -126,30 +127,41 @@ self move: aShip by: ((self numberOfLockerOf: aShip) * -1 )
 { #category : #private }
 Board >> moving: aShip lockers: aNumberOfLockers [
 
-	| oldPosition newPosition |
+	| oldPosition newPosition newNumberOfLockers aLap aLocker |
 	oldPosition := self positionOf: aShip.
-	newPosition := self newPositionOf: aShip by: aNumberOfLockers.
+	newNumberOfLockers := oldPosition numberOfLocker + aNumberOfLockers.
 
-	positionOfShips replaceAll: oldPosition with: newPosition
+	aLap := oldPosition numberOfLap
+	        + (newNumberOfLockers // boardDefinition numberOfLockers).
+	aLocker := newNumberOfLockers % boardDefinition numberOfLockers.
+
+	"(newPosition < 0 and: [ aLap > 0 ]) ifTrue: [ aLap := aLap - 1 ]."
+	aLap < 0 ifTrue: [ 
+		aLap := 0.
+		aLocker := 0 ].
+	newPosition := SpaceshipPosition for: aShip at: aLap and: aLocker.
+	positionOfShips replaceAll: oldPosition with: newPosition.
+
+	
 ]
 
 { #category : #creating }
 Board >> newPositionOf: aShip by: aNumberOfLockers [
-
+"
 	| newPosition aLap aLocker oldPosition |
 	oldPosition := self positionOf: aShip.
 	newPosition := oldPosition numberOfLocker + aNumberOfLockers.
-	
+
 	aLap := oldPosition numberOfLap
 	        + (newPosition // boardDefinition numberOfLockers).
 	aLocker := newPosition % boardDefinition numberOfLockers.
-	
+
 	(newPosition < 0 and: [ aLap > 0 ]) ifTrue: [ aLap := aLap - 1 ].
 	aLap < 0 ifTrue: [ 
 		aLap := 0.
 		aLocker := 0 ].
 
-	^ SpaceshipPosition for: aShip at: aLap and: aLocker
+	^ SpaceshipPosition for: aShip at: aLap and: aLocker"
 ]
 
 { #category : #'accessing - attributes' }
@@ -172,15 +184,6 @@ Board >> positionOf: aShip [
 Board >> rankingOf: aShip [
 
 	^ self shipsSortedByPosition indexOf: aShip
-]
-
-{ #category : #'accessing - attributes' }
-Board >> shipsInGame [
-
-	| ships |
-	ships := OrderedCollection new.
-	positionOfShips do: [ :aShip | ships add: aShip ship ].
-	^ ships
 ]
 
 { #category : #ranking }

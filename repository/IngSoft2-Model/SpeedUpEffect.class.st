@@ -1,6 +1,6 @@
 Class {
 	#name : #SpeedUpEffect,
-	#superclass : #Locker,
+	#superclass : #Effect,
 	#category : #'IngSoft2-Model'
 }
 

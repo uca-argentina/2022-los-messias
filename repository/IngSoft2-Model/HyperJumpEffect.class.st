@@ -1,6 +1,6 @@
 Class {
 	#name : #HyperJumpEffect,
-	#superclass : #Locker,
+	#superclass : #Effect,
 	#instVars : [
 		'parsecsSequence'
 	],
@@ -28,15 +28,13 @@ HyperJumpEffect class >> with: parsecSequence [
 HyperJumpEffect >> applyFor: aShip on: aBoard [
 
 	| parsecs |
-	parsecs := parsecsSequence removeFirst.
+	parsecs := parsecsSequence value.
 	aBoard move: aShip byParsecs: parsecs.
-	parsecsSequence addLast: parsecs
+	parsecsSequence next
 ]
 
 { #category : #initialization }
 HyperJumpEffect >> initializeWith: aCollectionOfNumbers [
 
-	parsecsSequence := OrderedCollection new.
-	aCollectionOfNumbers do: [ :aNumber | 
-		parsecsSequence add: aNumber ]
+	parsecsSequence := Sequence with: aCollectionOfNumbers
 ]

@@ -41,15 +41,14 @@ SequencialDie class >> with: anArrayOfNumbers [
 { #category : #initialization }
 SequencialDie >> initializeWith: aCollectionOfNumbers [
 
-	numbers := OrderedCollection new.
-	aCollectionOfNumbers do: [ :number | numbers add: number ]
+	numbers := Sequence with: aCollectionOfNumbers
 ]
 
 { #category : #rolling }
 SequencialDie >> roll [
 
 	| result |
-	result  := numbers removeFirst.
-	numbers addLast: result .
+	result := numbers value.
+	numbers next.
 	^ result
 ]

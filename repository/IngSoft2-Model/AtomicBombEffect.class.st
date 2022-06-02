@@ -1,6 +1,6 @@
 Class {
 	#name : #AtomicBombEffect,
-	#superclass : #Locker,
+	#superclass : #Effect,
 	#category : #'IngSoft2-Model'
 }
 

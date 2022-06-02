@@ -25,7 +25,7 @@ Internal Representation and Key Implementation Points.
 "
 Class {
 	#name : #MoonWalkEffect,
-	#superclass : #Locker,
+	#superclass : #Effect,
 	#instVars : [
 		'lockers'
 	],
