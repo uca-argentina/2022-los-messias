@@ -15,7 +15,7 @@ Class {
 { #category : #'instance creation' }
 LockerGenerator class >> with: effects distributedBy: probabilytyDistribution [
 
-	^ self new initializeWith: effects distrutedBy: probabilytyDistribution
+	^ self new initializeWith: effects distributedBy: probabilytyDistribution
 ]
 
 { #category : #generating }
@@ -34,10 +34,4 @@ LockerGenerator >> initializeWith: collectionOfEffects distributedBy: aProbabili
 
 effects := collectionOfEffects.
 probabilityDistribution := aProbabilityDistribution 
-]
-
-{ #category : #initialization }
-LockerGenerator >> initializeWith: aEffects distrutedBy: aProbabilityDistribution [ 
-	effects := aEffects.
-	probabilityDistribution := aProbabilityDistribution 
 ]

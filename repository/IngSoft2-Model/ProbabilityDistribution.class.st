@@ -37,8 +37,8 @@ ProbabilityDistribution >> generateRandom [
 	sum := 0.
 	probabilities do: [ :prob | 
 		result <= (prob + sum)
-			ifTrue: [ ^probabilities indexOf: prob ]
-			ifFalse: [ sum := sum + prob ] ].
+			ifTrue: [ ^ probabilities indexOf: prob ]
+			ifFalse: [ sum := sum + prob ] ]
 ]
 
 { #category : #initalization }

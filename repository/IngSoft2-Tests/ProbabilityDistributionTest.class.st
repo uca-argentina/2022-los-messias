@@ -17,17 +17,18 @@ ProbabilityDistributionTest >> testProbabilityDistributionReceivesACollectionWit
 ProbabilityDistributionTest >> testProbabilityDistributionReceivesACollectionWithProbabilitiesAndDistributesThemCorrectly [
 
 	| aProbabilityDistribution aCollection |
-	aProbabilityDistribution := ProbabilityDistribution with: { 75. 20. 5 }.
+	aProbabilityDistribution := ProbabilityDistribution with:
+		                            { 75. 20. 5 }.
 	aCollection := OrderedCollection new.
 	1 to: 100 do: [ :i | 
 	aCollection add: aProbabilityDistribution generateRandom ].
 
 	self assert:
 		((aCollection select: [ :i | i == 1 ]) size between: 65 and: 85).
-		
+
 	self assert:
 		((aCollection select: [ :i | i == 2 ]) size between: 10 and: 30).
-		
+
 	self assert:
 		((aCollection select: [ :i | i == 3 ]) size between: 0 and: 10)
 ]
