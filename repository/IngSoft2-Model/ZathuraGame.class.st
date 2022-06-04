@@ -34,8 +34,8 @@ Class {
 		'finished',
 		'diceCup',
 		'board',
-		'ships',
-		'winner'
+		'timesPlayed',
+		'sequenceOfShips'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -65,24 +65,16 @@ ZathuraGame >> assertZathuraHasFinished [
 { #category : #asserting }
 ZathuraGame >> assertZathuraHasNotBeenPlayed [
 
-	finished ifTrue: [ 
+	timesPlayed = 1 ifTrue: [ 
 		Error signal: 'Zathura cannot be played more than once' ]
-]
-
-{ #category : #private }
-ZathuraGame >> changeActivePlayer [
-
-	| aShip |
-	aShip := ships removeFirst.
-	ships addLast: aShip
 ]
 
 { #category : #private }
 ZathuraGame >> checkIfWon: aShip [
 
-	(board hasCrossFinishLine: aShip) ifFalse: [^self].
-	winner := aShip.
-	finished := true.
+	(board hasCrossFinishLine: aShip) ifFalse: [ ^ self ].
+	timesPlayed := 1.
+	finished := true
 ]
 
 { #category : #state }
@@ -93,16 +85,24 @@ ZathuraGame >> hasFinished [
 
 { #category : #initialization }
 ZathuraGame >> initializePlayingBy: aCollectionOfShips movedInBoardOf: boardStructure rolling: aDiceCup [
-diceCup := aDiceCup.
+
+	diceCup := aDiceCup.
 	board := Board of: boardStructure withAll: aCollectionOfShips.
-	ships := aCollectionOfShips.
+	sequenceOfShips := Sequence with: aCollectionOfShips.
 	finished := false.
+	timesPlayed := 0
 ]
 
 { #category : #positioning }
 ZathuraGame >> numberOfLapOf: aShip [
 
-	^ (board spaceshipPositionOf: aShip) numberOfLap 
+	^ (board positionOf: aShip) numberOfLap 
+]
+
+{ #category : #positioning }
+ZathuraGame >> numberOfLockerOf: aShip [
+
+	^ board numberOfLockerOf: aShip
 ]
 
 { #category : #playing }
@@ -118,16 +118,10 @@ ZathuraGame >> playTurn [
 
 	| aShip |
 	self assertZathuraHasNotBeenPlayed.
-	aShip := ships at: 1.
-	board playTurnOnBoard: aShip by: diceCup roll.
+	aShip := sequenceOfShips value.
+	board changePositionOf: aShip by: diceCup roll.
 	self checkIfWon: aShip.
-	self changeActivePlayer
-]
-
-{ #category : #positioning }
-ZathuraGame >> positionOfShipOnBoard: aShip [
-
-	^ board numberOfLockerOf: aShip
+	sequenceOfShips next
 ]
 
 { #category : #positioning }
@@ -138,6 +132,9 @@ ZathuraGame >> rankingOf: aShip [
 
 { #category : #ending }
 ZathuraGame >> winner [
+
+	| winner |
 	self assertZathuraHasFinished.
-	^ winner
+	winner := (sequenceOfShips collection) select: [ :ship | (self rankingOf: ship) == 1 ].
+	^ winner at: 1
 ]

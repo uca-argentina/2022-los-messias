@@ -29,8 +29,7 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'positionOfShips',
-		'positionHandler',
-		'boardStructure'
+		'boardDefinition'
 	],
 	#classInstVars : [
 		'ships'
@@ -39,63 +38,15 @@ Class {
 }
 
 { #category : #'instance creation' }
-Board class >> assertValid: lockers [
-
-	lockers size >= 2 ifFalse: [ 
-		Error signal: 'Board cannot be created with less than two lockers' ]
-]
-
-{ #category : #'instance creation' }
 Board class >> of: boardStructure withAll: aCollectionOfShips [
 
-	self assertValid: boardStructure lockers.
 	^ self new
 		  initializeWith: boardStructure
 		  withAGroupOf: aCollectionOfShips
 ]
 
-{ #category : #'accessing - attributes' }
-Board >> AllNameOfShips [
-
-	| ships |
-	ships := OrderedCollection new.
-	positionOfShips do: [ :aShip | ships add: aShip ship ].
-	^ ships
-]
-
-{ #category : #accesing }
-Board >> boardStructure [
-	^ boardStructure
-]
-
-{ #category : #moving }
-Board >> correctPositionIfShipWon: aShip [
-
-	(self hasCrossFinishLine: aShip) ifTrue: [ 
-		self
-			remove: (self spaceshipPositionOf: aShip)
-			add: (positionHandler moveToFinalPosition:
-					 (self spaceshipPositionOf: aShip)) ]
-]
-
-{ #category : #moving }
-Board >> hasCrossFinishLine: aShip [
-
-	| positionOfShip |
-	positionOfShip := self spaceshipPositionOf: aShip.
-	^ positionOfShip numberOfLap >= boardStructure laps
-]
-
-{ #category : #initialization }
-Board >> initializeWith: aBoardStructure withAGroupOf: aCollectionOfShips [
-
-	boardStructure := aBoardStructure.
-	positionHandler := PositionHandler with: aBoardStructure lockers size.
-	self load: aCollectionOfShips
-]
-
 { #category : #private }
-Board >> load: aCollectionOfShips [
+Board >> addIntoGame: aCollectionOfShips [
 
 	positionOfShips := OrderedCollection new.
 	aCollectionOfShips do: [ :aShip | 
@@ -103,50 +54,112 @@ Board >> load: aCollectionOfShips [
 ]
 
 { #category : #moving }
-Board >> move: aShip by: aNumberOfLockers [
+Board >> changePositionOf: aShip by: aNumberOfLockers [
 
-	self moving: aShip lockers: aNumberOfLockers.
-	self correctPositionIfShipWon: aShip
+	self move: aShip by: aNumberOfLockers.
+	(self hasCrossFinishLine: aShip) ifFalse: [ 
+		boardDefinition
+			doEffectTo: aShip
+			inPosition: (self numberOfLockerOf: aShip)
+			of: self ].
+	self correctPositionIfFinishLineWasCrossedBy: aShip.
 ]
 
 { #category : #private }
-Board >> moving: aShip lockers: aNumberOfLockers [
+Board >> correctPositionIfFinishLineWasCrossedBy: aShip [
 
-	| oldPosition newPosition |
-	oldPosition := self spaceshipPositionOf: aShip.
-	newPosition := positionHandler
-		               createNewPositionOf: oldPosition
-		               by: aNumberOfLockers.
-	self remove: oldPosition add: newPosition.
+	(self hasCrossFinishLine: aShip) ifTrue: [ 
+	positionOfShips
+		replaceAll: (self positionOf: aShip)
+		with: (self moveToFinalPosition: aShip) ]
+]
+
+{ #category : #moving }
+Board >> hasCrossFinishLine: aShip [
+
+	| positionOfShip |
+	positionOfShip := self positionOf: aShip.
+	^ positionOfShip numberOfLap >= boardDefinition laps
+]
+
+{ #category : #initialization }
+Board >> initializeWith: aBoardStructure withAGroupOf: aCollectionOfShips [
+
+	boardDefinition := aBoardStructure.
+	self addIntoGame: aCollectionOfShips
+]
+
+{ #category : #private }
+Board >> move: aShip by: aNumberOfLockers [
+
+	| oldPosition newPosition newNumberOfLockers aLap aLocker |
+	oldPosition := self positionOf: aShip.
+	newNumberOfLockers := oldPosition numberOfLocker + aNumberOfLockers.
+
+	aLap := oldPosition numberOfLap
+	        + (newNumberOfLockers // boardDefinition numberOfLockers).
+	aLocker := newNumberOfLockers % boardDefinition numberOfLockers.
+
+	aLap < 0 ifTrue: [ 
+		aLap := 0.
+		aLocker := 0 ].
+	newPosition := SpaceshipPosition for: aShip at: aLap and: aLocker.
+	positionOfShips replaceAll: oldPosition with: newPosition
+]
+
+{ #category : #private }
+Board >> move: aShip byParsecs: numberOfParsecs [
+
+	self move: aShip by: (numberOfParsecs * (boardDefinition parsecsPerLocker )) asInteger
+]
+
+{ #category : #private }
+Board >> moveAllExcept: aShip by: aNumberOfLockers [
+
+	| ships |
+	ships := (positionOfShips collect: [ :positionOfShip | 
+		          positionOfShip ship ]) copyWithout: aShip.
+	ships do: [ :ship | self move: ship by: aNumberOfLockers * -1 ]
+]
+
+{ #category : #private }
+Board >> moveAllToLockerZero [
+
+	positionOfShips do: [ :aShip | self moveToLockerZero: aShip ship ]
+]
+
+{ #category : #creating }
+Board >> moveToFinalPosition: aShip [
+
+	^ SpaceshipPosition for: aShip at: boardDefinition laps and: 0
+]
+
+{ #category : #private }
+Board >> moveToLockerZero: aShip [
+
+self move: aShip by: ((self numberOfLockerOf: aShip) * -1 )
 ]
 
 { #category : #'accessing - attributes' }
 Board >> numberOfLockerOf: aShip [
 
-	^ (self spaceshipPositionOf: aShip) numberOfLocker 
+	^ (self positionOf: aShip) numberOfLocker 
 ]
 
-{ #category : #private }
-Board >> playTurnOnBoard: aShip by: aNumberOfLockers [
+{ #category : #'accessing - attributes' }
+Board >> positionOf: aShip [
 
-	self move: aShip by: aNumberOfLockers.
-	(boardStructure lockers at: (self numberOfLockerOf: aShip) + 1)
-		action: aShip
-		on: self
+	| positionOfShip |
+	positionOfShip := positionOfShips select: [ :aPositionOfShip | 
+		                  aPositionOfShip ship == aShip ].
+
+	^ positionOfShip removeFirst
 ]
 
 { #category : #ranking }
 Board >> rankingOf: aShip [
 
 	^ self shipsSortedByPosition indexOf: aShip
-]
-
-{ #category : #private }
-Board >> remove: positionOfShip add: newPosition [
-
-	positionOfShips removeAllSuchThat: [ :shipPosition | 
-		shipPosition == positionOfShip ].
-	positionOfShips add: newPosition
 ]
 
 { #category : #ranking }
@@ -160,14 +173,4 @@ Board >> sortedShipPositions [
 
 	^positionOfShips  sort: [ :positionA :positionB | 
 		  positionA > positionB ]
-]
-
-{ #category : #'accessing - attributes' }
-Board >> spaceshipPositionOf: aShip [
-
-	| positionOfShip |
-	positionOfShip := positionOfShips select: [ :aPositionOfShip | 
-		          aPositionOfShip ship == aShip ].
-
-	^ positionOfShip at: 1
 ]

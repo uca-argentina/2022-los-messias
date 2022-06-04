@@ -5,49 +5,15 @@ Class {
 }
 
 { #category : #tests }
-ZathuraFunctionalTest >> testZathuraAfterBeingPlayedHasFinishedReturnsTrue [
-
-	| zathura die ships lockers boardStructure |
-	die := RandomDie with: 6.
-	ships := OrderedCollection new.
-	ships addLast: 'BlueShip'.
-	ships addLast: 'RedShip'.
-	ships addLast: 'GreenShip'.
-	lockers := { 
-		           LockerNoEffect new.
-		           LockerNoEffect new.
-		           LockerNoEffect new.
-		           LockerNoEffect new.
-		           LockerNoEffect new }.
-		boardStructure := BoardStructure with: lockers and: 100 played: 3.
-	zathura := ZathuraGame
-		           playBy: ships
-		           movedInBoardOf: boardStructure
-		           rolling: die.
-
-	zathura play.
-	self assert: zathura hasFinished
-]
-
-{ #category : #tests }
 ZathuraFunctionalTest >> testZathuraAfterBeingPlayedHasOnlyOneWinnerOfTheShips [
 
-	| zathura diceCup ships aWinner notWinner lockers boardStructure |
+	| zathura diceCup ships aWinner notWinner  boardStructure |
 	diceCup := RandomDie with: 6.
-	ships := OrderedCollection new.
-	ships addLast: 'RedShip'.
-	ships addLast: 'BlueShip'.
-	lockers := { 
-		           LockerNoEffect new.
-		           LockerNoEffect new.
-		           LockerNoEffect new.
-		           LockerNoEffect new.
-		           LockerNoEffect new.
-		           LockerNoEffect new.
-		           LockerNoEffect new.
-		           LockerNoEffect new.
-		           LockerNoEffect new }.
-		boardStructure := BoardStructure with: lockers and: 100 played: 3.
+	ships := OrderedCollection with: 'RedShip' with: 'BlueShip'.
+	boardStructure := BoardDefinition
+		                  withNoEffectsOf: 9
+		                  and: 100
+		                  played: 3.
 	zathura := ZathuraGame
 		           playBy: ships
 		           movedInBoardOf: boardStructure
@@ -63,22 +29,68 @@ ZathuraFunctionalTest >> testZathuraAfterBeingPlayedHasOnlyOneWinnerOfTheShips [
 { #category : #tests }
 ZathuraFunctionalTest >> testZathuraIsPlayedWithGeneratedLockers [
 
-	| zathura die ships lockers boardStructure |
+	| zathura die ships  effects probabilityDistribution boardDefinition |
 	die := DiceCup withAll: { 
 			       (RandomDie with: 6).
 			       (RandomDie with: 8).
 			       (RandomDie with: 3) }.
-	ships := OrderedCollection new.
-	ships addLast: 'BlueShip'.
-	ships addLast: 'RedShip'.
-	ships addLast: 'GreenShip'.
-	boardStructure := LockerFactory new
-		                  generatesWith: 100
-		                  and: 1000
-		                  played: 3.
+	ships := OrderedCollection
+		         with: 'BlueShip'
+		         with: 'RedShip'
+		         with: 'GreenShip'.
+	effects := { 
+		           LockerNoEffect new.
+		           AtomicBombEffect new.
+		           (HyperJumpEffect with: { 2. 4. 8 }).
+		           (MoonWalkEffect with: 10).
+		           SpeedUpEffect new.
+		           WormHoleEffect new }.
+	probabilityDistribution := ProbabilityDistribution with:
+		                           { 40. 2. 8. 10. 20. 20 }.
+	boardDefinition := (BoardDefinitionGenerator with:
+		                    (LockerGenerator
+			                     with: effects
+			                     distributedBy: probabilityDistribution))
+		                   generatesWith: 100
+		                   and: 50
+		                   played: 3.
 	zathura := ZathuraGame
 		           playBy: ships
-		           movedInBoardOf: boardStructure
+		           movedInBoardOf: boardDefinition
+		           rolling: die.
+
+	zathura play.
+	self assert: zathura hasFinished
+]
+
+{ #category : #tests }
+ZathuraFunctionalTest >> testZathuraIsPlayedWithRandomDiceOfSixFacesAndABoardWithRandomEffectDistribution [
+
+	| zathura die ships effects probabilityDistribution boardDefinition |
+	die := RandomDie with: 6.
+	ships := OrderedCollection
+		         with: 'BlueShip'
+		         with: 'RedShip'
+		         with: 'GreenShip'.
+	effects := { 
+		           LockerNoEffect new.
+		           AtomicBombEffect new.
+		           (HyperJumpEffect with: { 2. 4. 8 }).
+		           (MoonWalkEffect with: 5).
+		           SpeedUpEffect new.
+		           WormHoleEffect new }.
+	probabilityDistribution := ProbabilityDistribution with:
+		                           { 40. 2. 8. 10. 20. 20 }.
+	boardDefinition := (BoardDefinitionGenerator with:
+		                    (LockerGenerator
+			                     with: effects
+			                     distributedBy: probabilityDistribution))
+		                   generatesWith: 100
+		                   and: 50
+		                   played: 3.
+	zathura := ZathuraGame
+		           playBy: ships
+		           movedInBoardOf: boardDefinition
 		           rolling: die.
 
 	zathura play.

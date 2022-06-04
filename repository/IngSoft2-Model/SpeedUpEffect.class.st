@@ -1,11 +1,11 @@
 Class {
-	#name : #SpeedUp,
-	#superclass : #Object,
+	#name : #SpeedUpEffect,
+	#superclass : #Effect,
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #'instance creation' }
-SpeedUp >> action: aShip on: aBoard [
+SpeedUpEffect >> applyFor: aShip on: aBoard [
 
 	aBoard move: aShip by: 4.
 ]
