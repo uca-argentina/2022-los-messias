@@ -35,6 +35,16 @@ HyperJumpEffect >> applyFor: aShip on: aBoard [
 
 { #category : #initialization }
 HyperJumpEffect >> initializeWith: aCollectionOfNumbers [
+	| aCollection |
+	aCollection := SortedCollection new.
+	aCollection copyAfter:  (aCollectionOfNumbers at: 1).
+	parsecsSequence := Sequence with: aCollection.
+	self sortedHyperJumpSequence
+]
 
-	parsecsSequence := Sequence with: aCollectionOfNumbers
+{ #category : #sorting }
+HyperJumpEffect >> sortedHyperJumpSequence [
+
+	parsecsSequence = (parsecsSequence collection) sort: [ :positionA :positionB | 
+		  positionA > positionB ]
 ]

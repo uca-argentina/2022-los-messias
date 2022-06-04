@@ -66,7 +66,7 @@ ZathuraFunctionalTest >> testZathuraIsPlayedWithGeneratedLockers [
 { #category : #tests }
 ZathuraFunctionalTest >> testZathuraIsPlayedWithRandomDiceOfSixFacesAndABoardWithRandomEffectDistribution [
 
-	| zathura die ships boardStructure effects probabilityDistribution boardDefinition |
+	| zathura die ships effects probabilityDistribution boardDefinition |
 	die := RandomDie with: 6.
 	ships := OrderedCollection
 		         with: 'BlueShip'

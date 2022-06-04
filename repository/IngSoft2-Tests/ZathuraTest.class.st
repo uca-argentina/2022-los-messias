@@ -62,7 +62,7 @@ ZathuraTest >> testBlueShipFallsIntoAHyperJumpLockerAndMovesThirtyOneParsecs [
 		         with: 'RedShip'
 		         with: 'GreenShip'.
 
-	parsecs := OrderedCollection with: 31 with: 25 with: 11.
+	parsecs := OrderedCollection with: 11 with: 25 with: 31.
 	boardStructure := BoardDefinition
 		                  withOnly: (HyperJumpEffect with: parsecs)
 		                  at: 2
