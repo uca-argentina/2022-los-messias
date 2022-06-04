@@ -30,7 +30,7 @@ BoardDefinitionGeneratorTest >> testBoardDefinitionGeneratorGeneratesABoardDefin
 ]
 
 { #category : #tests }
-BoardDefinitionGeneratorTest >> testLockerGeneratorGeneratesACollectionOfDifferentLockers [
+BoardDefinitionGeneratorTest >> testLockerGeneratorGeneratesACollectionOfDifferentLockersWithCorrectProportion [
 
 	| lockers effects probabilityDistribution |
 	effects := { 
@@ -48,23 +48,34 @@ BoardDefinitionGeneratorTest >> testLockerGeneratorGeneratesACollectionOfDiffere
 		            distributedBy: probabilityDistribution) 
 		           generateRandomLockersWith: 100.
 
-	self assert: (lockers anySatisfy: [ :aLocker | 
-			 aLocker isMemberOf: AtomicBombEffect ]).
+	self assert:
+		((lockers select: [ :i | i isMemberOf: WormHoleEffect ]) size
+			 between: 10
+			 and: 30).
 
 	self assert:
-		(lockers anySatisfy: [ :aLocker | 
-			 aLocker isMemberOf: HyperJumpEffect ]).
+		((lockers select: [ :i | i isMemberOf: SpeedUpEffect ]) size
+			 between: 10
+			 and: 30).
 
 	self assert:
-		(lockers anySatisfy: [ :aLocker | 
-			 aLocker isMemberOf: MoonWalkEffect ]).
+		((lockers select: [ :i | i isMemberOf: MoonWalkEffect ]) size
+			 between: 5
+			 and: 20).
 
 	self assert:
-		(lockers anySatisfy: [ :aLocker | aLocker isMemberOf: SpeedUpEffect ]).
+		((lockers select: [ :i | i isMemberOf: HyperJumpEffect ]) size
+			 between: 4
+			 and: 16).
 
 	self assert:
-		(lockers anySatisfy: [ :aLocker | 
-			 aLocker isMemberOf: WormHoleEffect ])
+		((lockers select: [ :i | i isMemberOf: AtomicBombEffect ]) size
+			 between: 0
+			 and: 4).
+	self assert:
+		((lockers select: [ :i | i isMemberOf: LockerNoEffect ]) size
+			 between: 30
+			 and: 50)
 ]
 
 { #category : #tests }
