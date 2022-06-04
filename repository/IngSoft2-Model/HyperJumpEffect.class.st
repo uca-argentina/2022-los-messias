@@ -43,10 +43,3 @@ HyperJumpEffect >> initializeWith: aCollectionOfNumbers [
 		                   positionA > positionB ].
 	parsecsSequence := Sequence with: parsecsSequence.
 ]
-
-{ #category : #sorting }
-HyperJumpEffect >> sortedHyperJumpSequence [
-
-	parsecsSequence = (parsecsSequence collection) sort: [ :positionA :positionB | 
-		  positionA > positionB ]
-]

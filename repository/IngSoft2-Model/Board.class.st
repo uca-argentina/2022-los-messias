@@ -140,25 +140,6 @@ Board >> moveToLockerZero: aShip [
 self move: aShip by: ((self numberOfLockerOf: aShip) * -1 )
 ]
 
-{ #category : #creating }
-Board >> newPositionOf: aShip by: aNumberOfLockers [
-"
-	| newPosition aLap aLocker oldPosition |
-	oldPosition := self positionOf: aShip.
-	newPosition := oldPosition numberOfLocker + aNumberOfLockers.
-
-	aLap := oldPosition numberOfLap
-	        + (newPosition // boardDefinition numberOfLockers).
-	aLocker := newPosition % boardDefinition numberOfLockers.
-
-	(newPosition < 0 and: [ aLap > 0 ]) ifTrue: [ aLap := aLap - 1 ].
-	aLap < 0 ifTrue: [ 
-		aLap := 0.
-		aLocker := 0 ].
-
-	^ SpaceshipPosition for: aShip at: aLap and: aLocker"
-]
-
 { #category : #'accessing - attributes' }
 Board >> numberOfLockerOf: aShip [
 
