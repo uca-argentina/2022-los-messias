@@ -53,35 +53,6 @@ ZathuraTest >> testBlueShipFallsIntoAAtomicBombAndAllShipsGoToFirstLockerOfTheSa
 ]
 
 { #category : #boardTests }
-ZathuraTest >> testBlueShipFallsIntoAHyperJumpLockerAndMovesThirtyOneParsecs [
-
-	| die ships parsecs boardStructure zathura |
-	die := LoadedDie with: 1.
-	ships := OrderedCollection
-		         with: 'BlueShip'
-		         with: 'RedShip'
-		         with: 'GreenShip'.
-
-	parsecs := OrderedCollection with: 11 with: 25 with: 31.
-	boardStructure := BoardDefinition
-		                  withOnly: (HyperJumpEffect with: parsecs)
-		                  at: 2
-		                  of: 10
-		                  and: 100
-		                  played: 3.
-	zathura := ZathuraGame
-		           playBy: ships
-		           movedInBoardOf: boardStructure
-		           rolling: die.
-	zathura playTurn.
-	self
-		assert: 'BlueShip'
-		isAt: 4
-		with: 0
-		in: zathura.
-]
-
-{ #category : #boardTests }
 ZathuraTest >> testBlueShipFallsIntoAMoonWalkLockerAndTheResultIsItMovesAllOtherShipsBackwardsTwoLockers [
 
 	| die ships zathura boardStructure |
@@ -316,7 +287,7 @@ ZathuraTest >> testMoonwalkCannotHaveLessThanZeroLockers [
 ZathuraTest >> testShipLandsOnAWormholeEffectAndGoesBackOneLap [
 
 	| zathura sequencialDie ships boardStructure |
-	sequencialDie := SequencialDie with: { 11. 11. 1 }.
+	sequencialDie := SequencialLoadedDie with: { 11. 11. 1 }.
 	boardStructure := BoardDefinition
 		                  withOnly: WormHoleEffect new
 		                  at: 3
@@ -366,18 +337,18 @@ ZathuraTest >> testShipsFallIntoAHyperJumpLockerAndMovesByTheParsecsInASequence 
 		           movedInBoardOf: boardStructure
 		           rolling: die.
 	zathura playTurn.
+	zathura playTurn.
+	zathura playTurn.
 	self
 		assert: 'BlueShip'
 		isAt: 4
 		with: 0
 		in: zathura.
-	zathura playTurn.
 	self
 		assert: 'RedShip'
 		isAt: 3
 		with: 0
 		in: zathura.
-	zathura playTurn.
 	self
 		assert: 'GreenShip'
 		isAt: 2
@@ -543,7 +514,7 @@ ZathuraTest >> testZathuraKnowsTheRankingOfAShip [
 	faces addLast: 5.
 	faces addLast: 8.
 	faces addLast: 9.
-	die := SequencialDie with: faces.
+	die := SequencialLoadedDie with: faces.
 	ships := OrderedCollection
 		         with: 'RedShip'
 		         with: 'GreenShip'

@@ -23,8 +23,7 @@ LockerGenerator >> generateRandomLockersWith: numberOfLockers [
 
 	| lockers |
 	lockers := OrderedCollection new.
-	lockers add: LockerNoEffect new.
-	2 to: numberOfLockers do: [ :number | 
+	1 to: numberOfLockers do: [ :number | 
 		lockers add:
 			(effects at: probabilityDistribution generateRandom) deepCopy ].
 	^ lockers

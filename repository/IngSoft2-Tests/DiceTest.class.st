@@ -65,10 +65,20 @@ DiceTest >> testRandomDieRollsAndTheResultIsANumberBetweenOneAndNumberOfDieFaces
 ]
 
 { #category : #'tests - SequencialDie' }
-DiceTest >> testSequencialDieRollsFiveAndThenEigth [
+DiceTest >> testSequencialLoadedDieCannotBeLoadedWithAnEmptyCollection [
+
+	self
+		should: [ SequencialLoadedDie with: #( 2 ) ]
+		raise: Error
+		withMessage:
+		'Sequential die should be loaded with more than one number'
+]
+
+{ #category : #'tests - SequencialDie' }
+DiceTest >> testSequencialLoadedDieRollsFiveAndThenEigth [
 
 	| sequencialDie |
-	sequencialDie := SequencialDie with: #(5 8).
+	sequencialDie := SequencialLoadedDie with: #(5 8).
 
 	self assert: sequencialDie roll equals: 5.
 	self assert: sequencialDie roll equals: 8.

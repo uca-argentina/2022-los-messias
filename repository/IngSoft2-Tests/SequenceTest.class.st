@@ -15,10 +15,10 @@ SequenceTest >> testSequenceThrowsErrorWhenInitializedWithAnEmptyCollection [
 ]
 
 { #category : #tests }
-SequenceTest >> testSequnceMethodNextWorksAsExpectedBanananananananana [
+SequenceTest >> testTheRotationOfTheSequenceWorksCorrectly [
 
 	| aCollection aSequence |
-	aCollection := OrderedCollection  with: 1 with: 2 with: 3.
+	aCollection := OrderedCollection with: 1 with: 2 with: 3.
 	aSequence := Sequence with: aCollection.
 
 	self assert: aSequence value equals: 1.
