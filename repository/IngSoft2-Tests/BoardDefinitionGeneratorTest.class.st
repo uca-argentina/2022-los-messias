@@ -30,9 +30,9 @@ BoardDefinitionGeneratorTest >> testBoardDefinitionGeneratorGeneratesABoardDefin
 ]
 
 { #category : #tests }
-BoardDefinitionGeneratorTest >> testLockerFactoryGeneratesACollectionOfDifferentLockers [
+BoardDefinitionGeneratorTest >> testLockerGeneratorGeneratesACollectionOfDifferentLockers [
 
-	| lockers effects probabilityDistribution boardDefinition |
+	| lockers effects probabilityDistribution |
 	effects := { 
 		           LockerNoEffect new.
 		           AtomicBombEffect new.
@@ -42,8 +42,11 @@ BoardDefinitionGeneratorTest >> testLockerFactoryGeneratesACollectionOfDifferent
 		           SpeedUpEffect new }.
 	probabilityDistribution := ProbabilityDistribution with:
 		                           { 40. 2. 8. 10. 20. 20 }.
-	
-	lockers := (LockerGenerator with: effects distributedBy: probabilityDistribution) generateRandomLockersWith: 100.
+
+	lockers := (LockerGenerator
+		            with: effects
+		            distributedBy: probabilityDistribution) 
+		           generateRandomLockersWith: 100.
 
 	self assert: (lockers anySatisfy: [ :aLocker | 
 			 aLocker isMemberOf: AtomicBombEffect ]).
@@ -65,7 +68,18 @@ BoardDefinitionGeneratorTest >> testLockerFactoryGeneratesACollectionOfDifferent
 ]
 
 { #category : #tests }
-BoardDefinitionGeneratorTest >> testLockerFactoryGeneratesACollectionOfSizeTen [
+BoardDefinitionGeneratorTest >> testLockerGeneratorGeneratesACollectionOfLockersWithDifferentInstancesOfEffects [
+
+	| lockers |
+	lockers := (LockerGenerator
+		            with: { (MoonWalkEffect with: 2) }
+		            distributedBy: (ProbabilityDistribution with: { 100 })) 
+		           generateRandomLockersWith: 3.
+	self deny: (lockers at: 2) identicalTo: (lockers at: 3)
+]
+
+{ #category : #tests }
+BoardDefinitionGeneratorTest >> testLockerGeneratorGeneratesACollectionOfSizeTen [
 
 	| lockers effects probabilityDistribution boardDefinition |
 	effects := { 

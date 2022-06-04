@@ -35,11 +35,13 @@ HyperJumpEffect >> applyFor: aShip on: aBoard [
 
 { #category : #initialization }
 HyperJumpEffect >> initializeWith: aCollectionOfNumbers [
+
 	| aCollection |
-	aCollection := SortedCollection new.
-	aCollection copyAfter:  (aCollectionOfNumbers at: 1).
-	parsecsSequence := Sequence with: aCollection.
-	self sortedHyperJumpSequence
+	aCollection := OrderedCollection new.
+	aCollectionOfNumbers do: [ :n | aCollection add: n ].
+	parsecsSequence := aCollection sort: [ :positionA :positionB | 
+		                   positionA > positionB ].
+	parsecsSequence := Sequence with: parsecsSequence.
 ]
 
 { #category : #sorting }

@@ -57,7 +57,12 @@ Board >> addIntoGame: aCollectionOfShips [
 Board >> changePositionOf: aShip by: aNumberOfLockers [
 
 	self move: aShip by: aNumberOfLockers.
-	boardDefinition doEffectTo: aShip inPosition: (self numberOfLockerOf:aShip) of: self  
+	(self hasCrossFinishLine: aShip) ifFalse: [ 
+		boardDefinition
+			doEffectTo: aShip
+			inPosition: (self numberOfLockerOf: aShip)
+			of: self ].
+	self correctPositionIfFinishLineWasCrossedBy: aShip.
 ]
 
 { #category : #private }
@@ -87,8 +92,19 @@ Board >> initializeWith: aBoardStructure withAGroupOf: aCollectionOfShips [
 { #category : #private }
 Board >> move: aShip by: aNumberOfLockers [
 
-	self moving: aShip lockers: aNumberOfLockers.
-	self correctPositionIfFinishLineWasCrossedBy: aShip
+	| oldPosition newPosition newNumberOfLockers aLap aLocker |
+	oldPosition := self positionOf: aShip.
+	newNumberOfLockers := oldPosition numberOfLocker + aNumberOfLockers.
+
+	aLap := oldPosition numberOfLap
+	        + (newNumberOfLockers // boardDefinition numberOfLockers).
+	aLocker := newNumberOfLockers % boardDefinition numberOfLockers.
+
+	aLap < 0 ifTrue: [ 
+		aLap := 0.
+		aLocker := 0 ].
+	newPosition := SpaceshipPosition for: aShip at: aLap and: aLocker.
+	positionOfShips replaceAll: oldPosition with: newPosition
 ]
 
 { #category : #private }
@@ -122,27 +138,6 @@ Board >> moveToFinalPosition: aShip [
 Board >> moveToLockerZero: aShip [
 
 self move: aShip by: ((self numberOfLockerOf: aShip) * -1 )
-]
-
-{ #category : #private }
-Board >> moving: aShip lockers: aNumberOfLockers [
-
-	| oldPosition newPosition newNumberOfLockers aLap aLocker |
-	oldPosition := self positionOf: aShip.
-	newNumberOfLockers := oldPosition numberOfLocker + aNumberOfLockers.
-
-	aLap := oldPosition numberOfLap
-	        + (newNumberOfLockers // boardDefinition numberOfLockers).
-	aLocker := newNumberOfLockers % boardDefinition numberOfLockers.
-
-	"(newPosition < 0 and: [ aLap > 0 ]) ifTrue: [ aLap := aLap - 1 ]."
-	aLap < 0 ifTrue: [ 
-		aLap := 0.
-		aLocker := 0 ].
-	newPosition := SpaceshipPosition for: aShip at: aLap and: aLocker.
-	positionOfShips replaceAll: oldPosition with: newPosition.
-
-	
 ]
 
 { #category : #creating }

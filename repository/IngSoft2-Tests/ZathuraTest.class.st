@@ -55,7 +55,7 @@ ZathuraTest >> testBlueShipFallsIntoAAtomicBombAndAllShipsGoToFirstLockerOfTheSa
 { #category : #boardTests }
 ZathuraTest >> testBlueShipFallsIntoAHyperJumpLockerAndMovesThirtyOneParsecs [
 
-	| die ships parsecs boardStructure |
+	| die ships parsecs boardStructure zathura |
 	die := LoadedDie with: 1.
 	ships := OrderedCollection
 		         with: 'BlueShip'
@@ -68,7 +68,17 @@ ZathuraTest >> testBlueShipFallsIntoAHyperJumpLockerAndMovesThirtyOneParsecs [
 		                  at: 2
 		                  of: 10
 		                  and: 100
-		                  played: 3
+		                  played: 3.
+	zathura := ZathuraGame
+		           playBy: ships
+		           movedInBoardOf: boardStructure
+		           rolling: die.
+	zathura playTurn.
+	self
+		assert: 'BlueShip'
+		isAt: 4
+		with: 0
+		in: zathura.
 ]
 
 { #category : #boardTests }
@@ -344,7 +354,7 @@ ZathuraTest >> testShipsFallIntoAHyperJumpLockerAndMovesByTheParsecsInASequence 
 		         with: 'RedShip'
 		         with: 'GreenShip'.
 
-	parsecs := OrderedCollection with: 31 with: 25 with: 11.
+	parsecs := OrderedCollection with: 25 with: 31 with: 11.
 	boardStructure := BoardDefinition
 		                  withOnly: (HyperJumpEffect with: parsecs)
 		                  at: 2
