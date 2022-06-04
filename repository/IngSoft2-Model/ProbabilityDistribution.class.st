@@ -32,13 +32,14 @@ ProbabilityDistribution class >> with: probabilities [
 { #category : #generating }
 ProbabilityDistribution >> generateRandom [
 
-	| result sum index |
+	| result sum counter |
 	result := 100 atRandom.
 	sum := 0.
+	counter := 1.
 	probabilities do: [ :prob | 
 		result <= (prob + sum)
-			ifTrue: [ ^ probabilities indexOf: prob ]
-			ifFalse: [ sum := sum + prob ] ]
+			ifTrue: [ ^ counter ]
+			ifFalse: [ sum := sum + prob. counter := counter + 1 ] ]
 ]
 
 { #category : #initalization }
