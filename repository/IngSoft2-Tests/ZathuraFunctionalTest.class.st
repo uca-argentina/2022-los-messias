@@ -29,26 +29,28 @@ ZathuraFunctionalTest >> testZathuraAfterBeingPlayedHasOnlyOneWinnerOfTheShips [
 { #category : #tests }
 ZathuraFunctionalTest >> testZathuraIsPlayedWithGeneratedLockers [
 
-	| zathura die ships  effects probabilityDistribution boardDefinition |
+	| zathura die ships effects probabilityDistribution boardDefinition |
 	die := DiceCup withAll: { 
 			       (RandomDie with: 6).
 			       (RandomDie with: 8).
 			       (RandomDie with: 3) }.
-	ships := OrderedCollection
-		         with: 'BlueShip'
-		         with: 'RedShip'
-		         with: 'GreenShip'.
-	effects := { 
+		effects := { 
 		           LockerNoEffect new.
 		           AtomicBombEffect new.
 		           (HyperJumpEffect with: { 2. 4. 8 }).
 		           (MoonWalkEffect with: 10).
-		           SpeedUpEffect new.
-		           WormHoleEffect new }.
+		           WormHoleEffect new.
+		           CardEffect new.
+		           SpeedUpEffect new }.
 	probabilityDistribution := ProbabilityDistribution with:
-		                           { 40. 2. 8. 10. 20. 20 }.
+		                           { 30. 2. 8. 10. 20. 10. 20 }.
+	ships := OrderedCollection
+		         with: 'BlueShip'
+		         with: 'RedShip'
+		         with: 'GreenShip'.
+
 	boardDefinition := (BoardDefinitionGenerator with:
-		                    (LockerGenerator
+		                    (RandomGenerator
 			                     with: effects
 			                     distributedBy: probabilityDistribution))
 		                   generatesWith: 100
@@ -82,7 +84,7 @@ ZathuraFunctionalTest >> testZathuraIsPlayedWithRandomDiceOfSixFacesAndABoardWit
 	probabilityDistribution := ProbabilityDistribution with:
 		                           { 40. 2. 8. 10. 20. 20 }.
 	boardDefinition := (BoardDefinitionGenerator with:
-		                    (LockerGenerator
+		                    (RandomGenerator
 			                     with: effects
 			                     distributedBy: probabilityDistribution))
 		                   generatesWith: 100

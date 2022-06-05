@@ -15,7 +15,7 @@ BoardDefinitionGenerator class >> with: lockerGenerator [
 { #category : #creation }
 BoardDefinitionGenerator >> generatesWith: lockers and: parsecs played: laps [
 	
-	^ BoardDefinition with: (lockerGenerator generateRandomLockersWith: lockers) and: parsecs played: laps
+	^ BoardDefinition with: (lockerGenerator generateRandomObjectsWith: lockers) and: parsecs played: laps
 ]
 
 { #category : #creation }

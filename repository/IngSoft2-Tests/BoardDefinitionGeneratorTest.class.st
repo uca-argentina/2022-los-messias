@@ -17,7 +17,7 @@ BoardDefinitionGeneratorTest >> testBoardDefinitionGeneratorGeneratesABoardDefin
 		           WormHoleEffect new }.
 	probabilityDistribution := ProbabilityDistribution with: { 40. 2. 8. 10. 20. 20 }.
 	boardDefinition := (BoardDefinitionGenerator with:
-		                    (LockerGenerator
+		                    (RandomGenerator
 			                     with: effects
 			                     distributedBy: probabilityDistribution))
 		                   generatesWith: 10

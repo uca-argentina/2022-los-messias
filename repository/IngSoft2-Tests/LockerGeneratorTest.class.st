@@ -14,14 +14,15 @@ LockerGeneratorTest >> testLockerGeneratorGeneratesACollectionOfDifferentLockers
 		           (HyperJumpEffect with: { 2. 4. 8 }).
 		           (MoonWalkEffect with: 10).
 		           WormHoleEffect new.
+		           CardEffect new.
 		           SpeedUpEffect new }.
 	probabilityDistribution := ProbabilityDistribution with:
-		                           { 40. 2. 8. 10. 20. 20 }.
+		                           { 30. 2. 8. 10. 20. 10. 20 }.
 
-	lockers := (LockerGenerator
+	lockers := (RandomGenerator
 		            with: effects
 		            distributedBy: probabilityDistribution) 
-		           generateRandomLockersWith: 100000.
+		           generateRandomObjectsWith: 100000.
 
 	self assert:
 		((lockers select: [ :i | i isMemberOf: WormHoleEffect ]) size
@@ -49,18 +50,22 @@ LockerGeneratorTest >> testLockerGeneratorGeneratesACollectionOfDifferentLockers
 			 and: 4000).
 	self assert:
 		((lockers select: [ :i | i isMemberOf: LockerNoEffect ]) size
-			 between: 30000
-			 and: 50000)
+			 between: 20000
+			 and: 40000).
+	self assert:
+		((lockers select: [ :i | i isMemberOf: CardEffect ]) size
+			 between: 0
+			 and: 20000)
 ]
 
 { #category : #tests }
 LockerGeneratorTest >> testLockerGeneratorGeneratesACollectionOfLockersWithDifferentInstancesOfEffects [
 
 	| lockers |
-	lockers := (LockerGenerator
+	lockers := (RandomGenerator
 		            with: { (MoonWalkEffect with: 2) }
 		            distributedBy: (ProbabilityDistribution with: { 100 })) 
-		           generateRandomLockersWith: 3.
+		           generateRandomObjectsWith: 3.
 	self deny: (lockers at: 2) identicalTo: (lockers at: 3)
 ]
 
@@ -77,10 +82,10 @@ LockerGeneratorTest >> testLockerGeneratorGeneratesACollectionOfSizeTen [
 		           SpeedUpEffect new }.
 	probabilityDistribution := ProbabilityDistribution with:
 		                           { 40. 2. 8. 10. 20. 20 }.
-	lockers := (LockerGenerator
+	lockers := (RandomGenerator
 		            with: effects
 		            distributedBy: probabilityDistribution) 
-		           generateRandomLockersWith: 10.
+		           generateRandomObjectsWith: 10.
 
 	self assert: lockers size equals: 10
 ]
