@@ -37,5 +37,7 @@ Hand >> throw: aCard [
 	cardToThrow := nil.
 	cardsInHand do: [ :card | 
 		card = aCard ifTrue: [ cardToThrow := card ] ].
-	cardToThrow = nil ifTrue: [ Error signal: 'Card is not in Hand' ] ifFalse: [^ cardToThrow].
+	cardToThrow
+		ifNil: [ Error signal: 'Card is not in Hand' ]
+		ifNotNil: [ ^ cardToThrow ]
 ]
