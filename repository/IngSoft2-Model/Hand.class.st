@@ -1,6 +1,9 @@
 Class {
 	#name : #Hand,
 	#superclass : #Object,
+	#instVars : [
+		'cardsInHand'
+	],
 	#category : #'IngSoft2-Model'
 }
 
@@ -14,5 +17,25 @@ Hand class >> assertValid: collectionOfCards [
 { #category : #'instance creation' }
 Hand class >> with: collectionOfCards [
 	self assertValid:  collectionOfCards.
-	^self initializedWith: collectionOfCards
+	^self new initializedWith: collectionOfCards
+]
+
+{ #category : #attributes }
+Hand >> cards [
+	^ cardsInHand
+]
+
+{ #category : #initialization }
+Hand >> initializedWith: aCollectionOfCards [
+	cardsInHand := aCollectionOfCards.
+]
+
+{ #category : #action }
+Hand >> throw: aCard [
+
+	| cardToThrow |
+	cardToThrow := nil.
+	cardsInHand do: [ :card | 
+		card = aCard ifTrue: [ cardToThrow := card ] ].
+	cardToThrow = nil ifTrue: [ Error signal: 'Card is not in Hand' ] ifFalse: [^ cardToThrow].
 ]

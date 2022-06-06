@@ -7,8 +7,8 @@ Class {
 { #category : #tests }
 CardGeneratorTest >> testCardGeneratorGeneratesACollectionOfDifferentCardsWithCorrectProportion [
 
-	| lockers probabilityDistribution cards |
-	cards := { 
+	| lockers probabilityDistribution cards generator |
+	"cards := { 
 		         OverloadCard new.
 		         SpeedCard new.
 		         AccelerationCard new.
@@ -26,12 +26,16 @@ CardGeneratorTest >> testCardGeneratorGeneratesACollectionOfDifferentCardsWithCo
 	lockers := (RandomGenerator
 		            with: cards
 		            distributedBy: probabilityDistribution) 
-		           generateRandomObjectsWith: 100000.
+		           generateRandomObjectsWith: 100000."
+	generator := CardGenerator initializeNew.
+	lockers := generator generate: 100000.
 
-	self assert: ((lockers select: [ :i | i isMemberOf: OverloadCard ]) size
+	self assert:
+		((lockers select: [ :i | i isMemberOf: OverloadCard ]) size
 			 between: 10000
 			 and: 20000).
-	self assert: ((lockers select: [ :i | i isMemberOf: SpeedCard ]) size
+	self assert:
+		((lockers select: [ :i | i isMemberOf: SpeedCard ]) size
 			 between: 10000
 			 and: 20000).
 	self assert:
@@ -45,7 +49,8 @@ CardGeneratorTest >> testCardGeneratorGeneratesACollectionOfDifferentCardsWithCo
 	self assert: ((lockers select: [ :i | i isMemberOf: RedoCard ]) size
 			 between: 10000
 			 and: 20000).
-	self assert: ((lockers select: [ :i | i isMemberOf: RepeatCard ]) size
+	self assert:
+		((lockers select: [ :i | i isMemberOf: RepeatCard ]) size
 			 between: 10000
 			 and: 20000)
 ]
