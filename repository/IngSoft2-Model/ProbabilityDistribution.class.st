@@ -25,6 +25,7 @@ ProbabilityDistribution class >> assertValid: probabilities [
 
 { #category : #'instance creation' }
 ProbabilityDistribution class >> with: probabilities [
+
 	self assertValid: probabilities.
 	^ self new initializeWith: probabilities
 ]

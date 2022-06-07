@@ -35,7 +35,8 @@ Class {
 		'diceCup',
 		'board',
 		'timesPlayed',
-		'sequenceOfShips'
+		'cardGenerator',
+		'shipsWithHandOfCards'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -54,6 +55,19 @@ ZathuraGame class >> playBy: ships movedInBoardOf: boardStructure rolling: die [
 		  initializePlayingBy: ships
 		  movedInBoardOf: boardStructure
 		  rolling: die
+]
+
+{ #category : #adding }
+ZathuraGame >> addIntoGame: aCollectionOfShips [
+
+	| collectionOfShipsWithHandOfCards |
+	collectionOfShipsWithHandOfCards := OrderedCollection new.
+	aCollectionOfShips do: [ :aShip | 
+		collectionOfShipsWithHandOfCards add:
+			((ShipWithHandOfCards with: aShip) addAll:
+				 (cardGenerator generate: 2)) ].
+	shipsWithHandOfCards := Sequence with:
+		                                  collectionOfShipsWithHandOfCards
 ]
 
 { #category : #asserting }
@@ -89,10 +103,8 @@ ZathuraGame >> initializePlayingBy: aCollectionOfShips movedInBoardOf: boardStru
 	| shipPlayer |
 	diceCup := aDiceCup.
 	board := Board of: boardStructure withAll: aCollectionOfShips.
-	shipPlayer := OrderedCollection new.
-	aCollectionOfShips do: [ :aShip | 
-	shipPlayer add: (Player withTheName: aShip) ].
-	sequenceOfShips := Sequence with: shipPlayer.
+	cardGenerator := CardGenerator initializeNew .
+	self addIntoGame: aCollectionOfShips.
 	finished := false.
 	timesPlayed := 0
 ]
@@ -122,16 +134,24 @@ ZathuraGame >> playTurn [
 
 	| aShip |
 	self assertZathuraHasNotBeenPlayed.
-	aShip := sequenceOfShips value.
-	board changePositionOf: (aShip name) by: diceCup roll.
+	aShip := shipsWithHandOfCards value.
+	board changePositionOf: aShip name by: diceCup roll.
 	self checkIfWon: aShip.
-	sequenceOfShips next
+	shipsWithHandOfCards next
 ]
 
 { #category : #positioning }
 ZathuraGame >> rankingOf: aShip [
 
 	^ board rankingOf: aShip.
+]
+
+{ #category : #accesing }
+ZathuraGame >> shipWithHandOfCards: aShip [ 
+	| ship |
+	ship := (shipsWithHandOfCards collection) select: [ :aShipWithHandOfCards | aShipWithHandOfCards name == aShip].
+	^ ship at: 1
+	
 ]
 
 { #category : #accessing }
@@ -145,7 +165,7 @@ ZathuraGame >> winner [
 
 	| winner |
 	self assertZathuraHasFinished.
-	winner := sequenceOfShips collection select: [ :ship | 
-		          (self rankingOf: (ship name)) == 1 ].
+	winner := shipsWithHandOfCards collection select: [ :ship | 
+		          (self rankingOf: ship name) == 1 ].
 	^ winner at: 1
 ]

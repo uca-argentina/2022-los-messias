@@ -41,6 +41,7 @@ SequencialLoadedDie class >> assertValid: anArrayOfNumbers [
 
 { #category : #'instance creation' }
 SequencialLoadedDie class >> with: anArrayOfNumbers [
+
 	self assertValid: anArrayOfNumbers.
 	^ self new initializeWith: anArrayOfNumbers
 ]

@@ -41,6 +41,7 @@ RandomDie class >> assertValid: aNumberOfFaces [
 
 { #category : #'instance creation' }
 RandomDie class >> with: aNumberOfFaces [
+
 	self assertValid: aNumberOfFaces.
 	^ self new initializeWith: aNumberOfFaces
 ]

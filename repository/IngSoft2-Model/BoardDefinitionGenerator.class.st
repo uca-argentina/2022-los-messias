@@ -9,7 +9,8 @@ Class {
 
 { #category : #'instance creation' }
 BoardDefinitionGenerator class >> with: lockerGenerator [
-	^ self new initializeWith: lockerGenerator 
+
+	^ self new initializeWith: lockerGenerator
 ]
 
 { #category : #creation }

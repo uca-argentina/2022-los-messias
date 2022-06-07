@@ -19,9 +19,9 @@ HyperJumpEffect class >> assertSequenceIsValid: parsecSequence [
 
 { #category : #'instance creation' }
 HyperJumpEffect class >> with: parsecSequence [
-	
+
 	self assertSequenceIsValid: parsecSequence.
-	^ self new initializeWith: parsecSequence 
+	^ self new initializeWith: parsecSequence
 ]
 
 { #category : #'instance creation' }
