@@ -20,10 +20,10 @@ ZathuraFunctionalTest >> testZathuraAfterBeingPlayedHasOnlyOneWinnerOfTheShips [
 		           rolling: diceCup.
 
 	zathura play.
-	aWinner := ships select: [ :aShip | aShip == zathura winner ].
-	notWinner := ships select: [ :aShip | aShip ~= zathura winner ].
-	self assert: (aWinner at: 1) equals: zathura winner.
-	self deny: (notWinner at: 1) equals: zathura winner
+	aWinner := ships select: [ :aShip | aShip == (zathura winner) name ].
+	notWinner := ships select: [ :aShip | aShip ~= (zathura winner) name ].
+	self assert: (aWinner at: 1) equals: (zathura winner) name.
+	self deny: (notWinner at: 1) equals: (zathura winner) name.
 ]
 
 { #category : #tests }

@@ -72,7 +72,7 @@ ZathuraGame >> assertZathuraHasNotBeenPlayed [
 { #category : #private }
 ZathuraGame >> checkIfWon: aShip [
 
-	(board hasCrossFinishLine: aShip) ifFalse: [ ^ self ].
+	(board hasCrossFinishLine: (aShip name)) ifFalse: [ ^ self ].
 	timesPlayed := 1.
 	finished := true
 ]
@@ -86,9 +86,13 @@ ZathuraGame >> hasFinished [
 { #category : #initialization }
 ZathuraGame >> initializePlayingBy: aCollectionOfShips movedInBoardOf: boardStructure rolling: aDiceCup [
 
+	| shipPlayer |
 	diceCup := aDiceCup.
 	board := Board of: boardStructure withAll: aCollectionOfShips.
-	sequenceOfShips := Sequence with: aCollectionOfShips.
+	shipPlayer := OrderedCollection new.
+	aCollectionOfShips do: [ :aShip | 
+	shipPlayer add: (Player withTheName: aShip) ].
+	sequenceOfShips := Sequence with: shipPlayer.
 	finished := false.
 	timesPlayed := 0
 ]
@@ -119,7 +123,7 @@ ZathuraGame >> playTurn [
 	| aShip |
 	self assertZathuraHasNotBeenPlayed.
 	aShip := sequenceOfShips value.
-	board changePositionOf: aShip by: diceCup roll.
+	board changePositionOf: (aShip name) by: diceCup roll.
 	self checkIfWon: aShip.
 	sequenceOfShips next
 ]
@@ -127,7 +131,13 @@ ZathuraGame >> playTurn [
 { #category : #positioning }
 ZathuraGame >> rankingOf: aShip [
 
-	^ (board rankingOf: aShip).
+	^ board rankingOf: aShip.
+]
+
+{ #category : #accessing }
+ZathuraGame >> showHandOf: aShip [
+
+	^ {1. 1.}
 ]
 
 { #category : #ending }
@@ -135,6 +145,7 @@ ZathuraGame >> winner [
 
 	| winner |
 	self assertZathuraHasFinished.
-	winner := (sequenceOfShips collection) select: [ :ship | (self rankingOf: ship) == 1 ].
+	winner := sequenceOfShips collection select: [ :ship | 
+		          (self rankingOf: (ship name)) == 1 ].
 	^ winner at: 1
 ]

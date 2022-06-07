@@ -245,7 +245,7 @@ ZathuraTest >> testGreenShipWinsAndFinishesInPositionZeroWithOneLapCompleted [
 		isAt: 0
 		with: 1
 		in: zathura.
-	self assert: zathura winner equals: 'GreenShip'
+	self assert: (zathura winner name) equals: 'GreenShip'
 ]
 
 { #category : #boardStructureAssertionTests }
@@ -442,6 +442,30 @@ ZathuraTest >> testZathuraCannotBePlayedMoreThanOnce [
 		should: [ zathura play ]
 		raise: Error
 		withMessage: 'Zathura cannot be played more than once'
+]
+
+{ #category : #tests }
+ZathuraTest >> testZathuraEveryShipStartsWithTwoCards [
+
+	| zathura die ships boardStructure |
+	"Falta hacerlo"
+	die := LoadedDie with: 7.
+	ships := OrderedCollection
+		         with: 'GreenShip'
+		         with: 'RedShip'
+		         with: 'BlueShip'.
+
+	boardStructure := BoardDefinition
+		                  withNoEffectsOf: 10
+		                  and: 100
+		                  played: 1.
+
+	zathura := ZathuraGame
+		           playBy: ships
+		           movedInBoardOf: boardStructure
+		           rolling: die.
+
+	self assert: (zathura showHandOf: 'GreenShip') size equals: 2
 ]
 
 { #category : #tests }
