@@ -30,7 +30,7 @@ ZathuraFunctionalTest >> boardDefinitionWithRandomEffects [
 { #category : #tests }
 ZathuraFunctionalTest >> testZathuraAfterBeingPlayedHasOnlyOneWinnerOfTheShips [
 
-	| zathura diceCup ships aWinner notWinner  boardStructure |
+	| zathura diceCup ships aWinner notWinner boardStructure |
 	diceCup := RandomDie with: 6.
 	ships := OrderedCollection with: 'RedShip' with: 'BlueShip'.
 	boardStructure := BoardDefinition
@@ -40,13 +40,14 @@ ZathuraFunctionalTest >> testZathuraAfterBeingPlayedHasOnlyOneWinnerOfTheShips [
 	zathura := ZathuraGame
 		           playBy: ships
 		           movedInBoardOf: boardStructure
-		           rolling: diceCup.
+		           rolling: diceCup
+					  withCards: { OverloadCard new }.
 
 	zathura play.
-	aWinner := ships select: [ :aShip | aShip == (zathura winner) name ].
-	notWinner := ships select: [ :aShip | aShip ~= (zathura winner) name ].
-	self assert: (aWinner at: 1) equals: (zathura winner) name.
-	self deny: (notWinner at: 1) equals: (zathura winner) name.
+	aWinner := ships select: [ :aShip | aShip == zathura winner ship ].
+	notWinner := ships select: [ :aShip | aShip ~= zathura winner ship ].
+	self assert: (aWinner at: 1) equals: zathura winner ship.
+	self deny: (notWinner at: 1) equals: zathura winner ship
 ]
 
 { #category : #tests }
