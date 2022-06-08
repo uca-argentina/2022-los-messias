@@ -36,8 +36,8 @@ Class {
 		'board',
 		'timesPlayed',
 		'cardGenerator',
-		'shipsWithHandOfCards',
-		'aDeck'
+		'aDeck',
+		'zathuraShips'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -56,6 +56,7 @@ ZathuraGame class >> playBy: ships movedInBoardOf: boardStructure rolling: die [
 		  initializePlayingBy: ships
 		  movedInBoardOf: boardStructure
 		  rolling: die
+		  withCards: { OverloadCard new }.
 ]
 
 { #category : #'class initialization' }
@@ -71,14 +72,11 @@ ZathuraGame class >> playBy: ships movedInBoardOf: boardStructure rolling: die w
 { #category : #adding }
 ZathuraGame >> addIntoGame: aCollectionOfShips [
 
-	| collectionOfShipsWithHandOfCards |
-	collectionOfShipsWithHandOfCards := OrderedCollection new.
-	aCollectionOfShips do: [ :aShip | 
-		collectionOfShipsWithHandOfCards add:
-			((HandOfCards with: aShip) addAll:
-				 (aDeck generate: 2)) ].
-	shipsWithHandOfCards := Sequence with:
-		                                  collectionOfShipsWithHandOfCards
+	| zShips |
+	zShips := OrderedCollection new.
+	aCollectionOfShips do: [ :ship | zShips add: (ZathuraShip with: ship and: (CardHand with: (aDeck generate: 2))) ].
+
+	zathuraShips := Sequence with: zShips
 ]
 
 { #category : #asserting }
@@ -100,10 +98,15 @@ ZathuraGame >> cardsOf: spaceship [
 	^{1. 2}
 ]
 
+{ #category : #action }
+ZathuraGame >> changeRollOf: ship by: integer [ 
+	(self zathuraShip: ship) changeRolBy: integer. 
+]
+
 { #category : #private }
 ZathuraGame >> checkIfWon: aShip [
 
-	(board hasCrossFinishLine: (aShip name)) ifFalse: [ ^ self ].
+	(board hasCrossFinishLine: (aShip ship)) ifFalse: [ ^ self ].
 	timesPlayed := 1.
 	finished := true
 ]
@@ -150,10 +153,10 @@ ZathuraGame >> playTurn [
 
 	| aShip |
 	self assertZathuraHasNotBeenPlayed.
-	aShip := shipsWithHandOfCards value.
-	board changePositionOf: aShip name by: ((diceCup roll) + (aShip changeOfRoll)).
+	aShip := zathuraShips value.
+	board changePositionOf: aShip ship by: ((diceCup roll) + (aShip changeOfRoll)).
 	self checkIfWon: aShip.
-	shipsWithHandOfCards next
+	zathuraShips next
 ]
 
 { #category : #positioning }
@@ -162,30 +165,21 @@ ZathuraGame >> rankingOf: aShip [
 	^ board rankingOf: aShip.
 ]
 
-{ #category : #actions }
-ZathuraGame >> reduceRollDiceOf: aString [ 
-	self shouldBeImplemented.
-]
-
-{ #category : #actions }
-ZathuraGame >> reduceRollDiceOf: aShip by: anInteger [ 
-	(self shipWithHandOfCards: aShip) reduceRollBy: anInteger .
-]
-
-{ #category : #accesing }
-ZathuraGame >> shipWithHandOfCards: aShip [ 
-	| ship |
-	ship := (shipsWithHandOfCards collection) select: [ :aShipWithHandOfCards | aShipWithHandOfCards name == aShip].
-	^ ship at: 1
-	
-]
-
 { #category : #ending }
 ZathuraGame >> winner [
 
 	| winner |
 	self assertZathuraHasFinished.
-	winner := shipsWithHandOfCards collection select: [ :ship | 
-		          (self rankingOf: ship name) == 1 ].
+	winner := zathuraShips collection select: [ :ship | 
+		          (self rankingOf: ship ship) == 1 ].
 	^ winner at: 1
+]
+
+{ #category : #accesing }
+ZathuraGame >> zathuraShip: aShip [
+
+	| zathuraShip |
+	zathuraShip := zathuraShips collection select: [ :zShip | 
+		               (zShip ship) == aShip ].
+	^ zathuraShip first
 ]
