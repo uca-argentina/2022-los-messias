@@ -25,15 +25,37 @@ HandOfCards >> addAll: cards [
 	cards do: [ :card | handOfCards add: card ]
 ]
 
+{ #category : #asserting }
+HandOfCards >> assertOverloadInHand [
+
+	(self checkIfInDeck: 'Overload') ifFalse: [ Error signal: 'Card is not in Hand' ]
+]
+
 { #category : #attributes }
 HandOfCards >> cards [
 
 	^ handOfCards 
 ]
 
+{ #category : #accesing }
+HandOfCards >> cardsOf: nameCard [ 
+	| num |
+	num:= 0.
+	handOfCards do: [ :aCard | (aCard name = nameCard) ifTrue: [ num:= num + 1 ] ].
+	^num
+]
+
 { #category : #accessing }
 HandOfCards >> changeOfRoll [
 	^ changeOfRoll
+]
+
+{ #category : #assertions }
+HandOfCards >> checkIfInDeck: nameCard [
+	| inHand |
+	inHand:= false.
+	handOfCards do: [:aCard | ((aCard name) = nameCard) ifTrue: [ inHand:= true ] ].
+	^inHand
 ]
 
 { #category : #initialization }
@@ -57,21 +79,12 @@ HandOfCards >> reduceRollBy: anInteger [
 { #category : #action }
 HandOfCards >> throw: aCard [
 
-	| cardToThrow |
-	cardToThrow := nil.
-	handOfCards  do: [ :card | 
-		card = aCard ifTrue: [ cardToThrow := card ] ].
-	cardToThrow
-		ifNil: [ Error signal: 'Card is not in Hand' ]
-		ifNotNil: [ ^ cardToThrow ]
-]
-
-{ #category : #actions }
-HandOfCards >> throwOverloadTo: aString [ 
-	self shouldBeImplemented.
+	handOfCards  removeIndex: (handOfCards indexOf: aCard)
 ]
 
 { #category : #actions }
 HandOfCards >> throwOverloadTo: aShip in: aZathuraGame [ 
+self assertOverloadInHand.
+"self throw: 'Overload'."
 	aZathuraGame reduceRollDiceOf: aShip by: 2.
 ]

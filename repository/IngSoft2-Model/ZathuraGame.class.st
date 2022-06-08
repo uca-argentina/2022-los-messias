@@ -36,7 +36,8 @@ Class {
 		'board',
 		'timesPlayed',
 		'cardGenerator',
-		'shipsWithHandOfCards'
+		'shipsWithHandOfCards',
+		'aDeck'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -57,6 +58,16 @@ ZathuraGame class >> playBy: ships movedInBoardOf: boardStructure rolling: die [
 		  rolling: die
 ]
 
+{ #category : #'class initialization' }
+ZathuraGame class >> playBy: ships movedInBoardOf: boardStructure rolling: die withCards: aCollectionOfCards [
+
+	self assertNumberOfShipsIsValid: ships.
+	^ self new
+		  initializePlayingBy: ships
+		  movedInBoardOf: boardStructure
+		  rolling: die withCards: aCollectionOfCards
+]
+
 { #category : #adding }
 ZathuraGame >> addIntoGame: aCollectionOfShips [
 
@@ -65,7 +76,7 @@ ZathuraGame >> addIntoGame: aCollectionOfShips [
 	aCollectionOfShips do: [ :aShip | 
 		collectionOfShipsWithHandOfCards add:
 			((HandOfCards with: aShip) addAll:
-				 (cardGenerator generate: 2)) ].
+				 (aDeck generate: 2)) ].
 	shipsWithHandOfCards := Sequence with:
 		                                  collectionOfShipsWithHandOfCards
 ]
@@ -109,7 +120,25 @@ ZathuraGame >> initializePlayingBy: aCollectionOfShips movedInBoardOf: boardStru
 	| shipPlayer |
 	diceCup := aDiceCup.
 	board := Board of: boardStructure withAll: aCollectionOfShips.
-	cardGenerator := CardGenerator initializeNew .
+	aDeck:= Deck withAll: { 
+		         OverloadCard new.
+		         SpeedCard new.
+		         AccelerationCard new.
+		         CancellationCard new.
+		         RedoCard new.
+		         RepeatCard new }.
+	cardGenerator := CardGenerator initializeNew.
+	self addIntoGame: aCollectionOfShips.
+	finished := false.
+	timesPlayed := 0
+]
+
+{ #category : #initalization }
+ZathuraGame >> initializePlayingBy: aCollectionOfShips movedInBoardOf: boardStructure rolling: aDiceCup withCards: aCollectionOfCards [ 
+	| shipPlayer |
+	diceCup := aDiceCup.
+	board := Board of: boardStructure withAll: aCollectionOfShips.
+	aDeck:= Deck withAll: aCollectionOfCards.
 	self addIntoGame: aCollectionOfShips.
 	finished := false.
 	timesPlayed := 0
