@@ -114,25 +114,6 @@ ZathuraGame >> hasFinished [
 	^ finished
 ]
 
-{ #category : #initialization }
-ZathuraGame >> initializePlayingBy: aCollectionOfShips movedInBoardOf: boardStructure rolling: aDiceCup [
-
-	| shipPlayer |
-	diceCup := aDiceCup.
-	board := Board of: boardStructure withAll: aCollectionOfShips.
-	aDeck:= Deck withAll: { 
-		         OverloadCard new.
-		         SpeedCard new.
-		         AccelerationCard new.
-		         CancellationCard new.
-		         RedoCard new.
-		         RepeatCard new }.
-	cardGenerator := CardGenerator initializeNew.
-	self addIntoGame: aCollectionOfShips.
-	finished := false.
-	timesPlayed := 0
-]
-
 { #category : #initalization }
 ZathuraGame >> initializePlayingBy: aCollectionOfShips movedInBoardOf: boardStructure rolling: aDiceCup withCards: aCollectionOfCards [ 
 	| shipPlayer |

@@ -16,11 +16,6 @@ HandOfCards class >> with: aName [
 ]
 
 { #category : #adding }
-HandOfCards >> add: aCollection [ 
-	self shouldBeImplemented.
-]
-
-{ #category : #adding }
 HandOfCards >> addAll: cards [ 
 	cards do: [ :card | handOfCards add: card ]
 ]
