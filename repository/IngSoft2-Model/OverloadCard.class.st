@@ -8,8 +8,3 @@ Class {
 OverloadCard >> applyEffectTo: ship in: zathuraGame [ 
 	zathuraGame changeRollOf: ship by: -2
 ]
-
-{ #category : #attributes }
-OverloadCard >> name [
-	^'Overload'
-]

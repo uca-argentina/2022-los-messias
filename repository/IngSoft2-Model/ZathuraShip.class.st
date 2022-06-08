@@ -15,11 +15,6 @@ ZathuraShip class >> with: ship and: cardHand [
 	^ self new initializeWith: ship and: cardHand
 ]
 
-{ #category : #accesing }
-ZathuraShip >> cardHand [
-	^ cardHand
-]
-
 { #category : #accessing }
 ZathuraShip >> cardsOf: aCard [ 
 	^ cardHand cardsOf: aCard

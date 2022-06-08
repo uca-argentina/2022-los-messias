@@ -13,22 +13,11 @@ CardHand class >> with: cards [
 	^ self new initializeWith: cards
 ]
 
-{ #category : #adding }
-CardHand >> addAll: cards [ 
-	cards do: [ :card | handOfCards add: card ]
-]
-
 { #category : #asserting }
 CardHand >> assertCardIsInHand: aCard [
 
 	(handOfCards anySatisfy: [ :card | aCard isMemberOf: (card class) ]) 
 		ifFalse: [ Error signal: 'Card is not in Hand' ]
-]
-
-{ #category : #attributes }
-CardHand >> cards [
-
-	^ handOfCards 
 ]
 
 { #category : #accesing }
