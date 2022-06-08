@@ -5,6 +5,29 @@ Class {
 }
 
 { #category : #tests }
+ZathuraFunctionalTest >> boardDefinitionWithRandomEffects [
+
+	| effects boardDefinition probabilityDistribution |
+	effects := { 
+		           LockerNoEffect new.
+		           AtomicBombEffect new.
+		           (HyperJumpEffect with: { 2. 4. 8 }).
+		           (MoonWalkEffect with: 5).
+		           SpeedUpEffect new.
+		           WormHoleEffect new }.
+	probabilityDistribution := ProbabilityDistribution with:
+		                           { 40. 2. 8. 10. 20. 20 }.
+	boardDefinition := (BoardDefinitionGenerator with:
+		                    (RandomGenerator
+			                     with: effects
+			                     distributedBy: probabilityDistribution))
+		                   generatesWith: 100
+		                   and: 50
+		                   played: 3.
+	^ boardDefinition
+]
+
+{ #category : #tests }
 ZathuraFunctionalTest >> testZathuraAfterBeingPlayedHasOnlyOneWinnerOfTheShips [
 
 	| zathura diceCup ships aWinner notWinner  boardStructure |
@@ -34,7 +57,7 @@ ZathuraFunctionalTest >> testZathuraIsPlayedWithGeneratedLockers [
 			       (RandomDie with: 6).
 			       (RandomDie with: 8).
 			       (RandomDie with: 3) }.
-		effects := { 
+	effects := { 
 		           LockerNoEffect new.
 		           AtomicBombEffect new.
 		           (HyperJumpEffect with: { 2. 4. 8 }).
@@ -68,33 +91,12 @@ ZathuraFunctionalTest >> testZathuraIsPlayedWithGeneratedLockers [
 { #category : #tests }
 ZathuraFunctionalTest >> testZathuraIsPlayedWithRandomDiceOfSixFacesAndABoardWithRandomEffectDistribution [
 
-	| zathura die ships effects probabilityDistribution boardDefinition |
+	| zathura die |
 	die := RandomDie with: 6.
-	ships := OrderedCollection
-		         with: 'BlueShip'
-		         with: 'RedShip'
-		         with: 'GreenShip'.
-	effects := { 
-		           LockerNoEffect new.
-		           AtomicBombEffect new.
-		           (HyperJumpEffect with: { 2. 4. 8 }).
-		           (MoonWalkEffect with: 5).
-		           SpeedUpEffect new.
-		           WormHoleEffect new }.
-	probabilityDistribution := ProbabilityDistribution with:
-		                           { 40. 2. 8. 10. 20. 20 }.
-	boardDefinition := (BoardDefinitionGenerator with:
-		                    (RandomGenerator
-			                     with: effects
-			                     distributedBy: probabilityDistribution))
-		                   generatesWith: 100
-		                   and: 50
-		                   played: 3.
 	zathura := ZathuraGame
-		           playBy: ships
-		           movedInBoardOf: boardDefinition
+		           playBy: { 'BlueShip'. 'RedShip'. 'GreenShip' }
+		           movedInBoardOf: self boardDefinitionWithRandomEffects
 		           rolling: die.
-
 	zathura play.
 	self assert: zathura hasFinished
 ]

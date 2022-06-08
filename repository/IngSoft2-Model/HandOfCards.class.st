@@ -1,5 +1,5 @@
 Class {
-	#name : #ShipWithHandOfCards,
+	#name : #HandOfCards,
 	#superclass : #Object,
 	#instVars : [
 		'name',
@@ -9,41 +9,41 @@ Class {
 }
 
 { #category : #'class initialization' }
-ShipWithHandOfCards class >> with: aName [
+HandOfCards class >> with: aName [
 
 	^ self new initializeWith: aName
 ]
 
 { #category : #adding }
-ShipWithHandOfCards >> add: aCollection [ 
+HandOfCards >> add: aCollection [ 
 	self shouldBeImplemented.
 ]
 
 { #category : #adding }
-ShipWithHandOfCards >> addAll: cards [ 
+HandOfCards >> addAll: cards [ 
 	cards do: [ :card | handOfCards add: card ]
 ]
 
 { #category : #attributes }
-ShipWithHandOfCards >> cards [
+HandOfCards >> cards [
 
 	^ handOfCards 
 ]
 
 { #category : #initialization }
-ShipWithHandOfCards >> initializeWith: aString [
+HandOfCards >> initializeWith: aString [
 
 	name := aString.
 	handOfCards := OrderedCollection new.
 ]
 
 { #category : #'accessing - attributes' }
-ShipWithHandOfCards >> name [
+HandOfCards >> name [
 	^ name
 ]
 
 { #category : #action }
-ShipWithHandOfCards >> throw: aCard [
+HandOfCards >> throw: aCard [
 
 	| cardToThrow |
 	cardToThrow := nil.

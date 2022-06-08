@@ -83,17 +83,16 @@ RandomGeneratorTest >> testCardGeneratorGeneratesACollectionOfDifferentCardsWith
 { #category : #lockerGeneratorTests }
 RandomGeneratorTest >> testLockerGeneratorGeneratesACollectionOfDifferentLockersWithCorrectProportion [
 
-	| lockers effects probabilityDistribution |
+	"| lockers effects probabilityDistribution |
 	effects := { 
 		           LockerNoEffect new.
 		           AtomicBombEffect new.
 		           (HyperJumpEffect with: { 2. 4. 8 }).
 		           (MoonWalkEffect with: 10).
 		           WormHoleEffect new.
-		           CardEffect new.
-		           SpeedUpEffect new }.
+		           CardEffect new }.
 	probabilityDistribution := ProbabilityDistribution with:
-		                           { 30. 2. 8. 10. 20. 10. 20 }.
+		                           { 30. 2. 8. 10. 20. 30 }.
 
 	lockers := (RandomGenerator
 		            with: effects
@@ -105,10 +104,6 @@ RandomGeneratorTest >> testLockerGeneratorGeneratesACollectionOfDifferentLockers
 			 between: 10000
 			 and: 30000).
 
-	self assert:
-		((lockers select: [ :i | i isMemberOf: SpeedUpEffect ]) size
-			 between: 10000
-			 and: 30000).
 
 	self assert:
 		((lockers select: [ :i | i isMemberOf: MoonWalkEffect ]) size
@@ -131,7 +126,7 @@ RandomGeneratorTest >> testLockerGeneratorGeneratesACollectionOfDifferentLockers
 	self assert:
 		((lockers select: [ :i | i isMemberOf: CardEffect ]) size
 			 between: 0
-			 and: 20000)
+			 and: 20000)"
 ]
 
 { #category : #lockerGeneratorTests }

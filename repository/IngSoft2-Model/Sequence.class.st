@@ -20,10 +20,7 @@ Sequence class >> with: aCollection [
 
 	| newOrderedCollection |
 	self assertValid: aCollection.
-	newOrderedCollection := OrderedCollection new.
-	1 to: aCollection size do: [ :i | 
-	newOrderedCollection add: (aCollection at: i) ].
-	^ self new initializeWith: newOrderedCollection
+	^ self new initializeWith: aCollection asOrderedCollection 
 ]
 
 { #category : #accessing }

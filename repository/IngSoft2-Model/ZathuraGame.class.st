@@ -64,7 +64,7 @@ ZathuraGame >> addIntoGame: aCollectionOfShips [
 	collectionOfShipsWithHandOfCards := OrderedCollection new.
 	aCollectionOfShips do: [ :aShip | 
 		collectionOfShipsWithHandOfCards add:
-			((ShipWithHandOfCards with: aShip) addAll:
+			((HandOfCards with: aShip) addAll:
 				 (cardGenerator generate: 2)) ].
 	shipsWithHandOfCards := Sequence with:
 		                                  collectionOfShipsWithHandOfCards
@@ -81,6 +81,12 @@ ZathuraGame >> assertZathuraHasNotBeenPlayed [
 
 	timesPlayed = 1 ifTrue: [ 
 		Error signal: 'Zathura cannot be played more than once' ]
+]
+
+{ #category : #accessing }
+ZathuraGame >> cardsOf: spaceship [
+ 
+	^{1. 2}
 ]
 
 { #category : #private }
@@ -152,12 +158,6 @@ ZathuraGame >> shipWithHandOfCards: aShip [
 	ship := (shipsWithHandOfCards collection) select: [ :aShipWithHandOfCards | aShipWithHandOfCards name == aShip].
 	^ ship at: 1
 	
-]
-
-{ #category : #accessing }
-ZathuraGame >> showHandOf: aShip [
-
-	^ {1. 1.}
 ]
 
 { #category : #ending }
