@@ -25,12 +25,31 @@ ZathuraTest >> testBlueShipAndRedShipStartsTheGameWithTwoCards [
 	zathura := ZathuraGame
 		           playBy: ships
 		           movedInBoardOf: boardStructure
-		           rolling: die.
+		           rolling: die
+					  withCards: { OverloadCard new }.
 
 	redShipCardHand := zathura cardsOf: 'RedShip'.
 	self assert: redShipCardHand size equals: 2.
 	blueShipCardHand := zathura cardsOf: 'BlueShipp'.
 	self assert: blueShipCardHand size equals: 2
+]
+
+{ #category : #shipWithHandOfCardsTests }
+ZathuraTest >> testBlueShipCantThrowOverloadCardIfNotInHand [
+
+	| zathura aDie blueShip |
+	aDie := LoadedDie with: 1.
+	zathura := ZathuraGame
+		           playBy: { 'BlueShip'. 'RedShip' }
+		           movedInBoardOf:
+		           (BoardDefinition withNoEffectsOf: 10 and: 100 played: 1)
+		           rolling: aDie
+		           withCards: { AccelerationCard  new }.
+	blueShip := zathura zathuraShip:  'BlueShip'.
+	self
+		should: [ blueShip throw: (OverloadCard new) to: 'RedShip' in: zathura ]
+		raise: Error
+		withMessage: 'Card is not in Hand'
 ]
 
 { #category : #boardTests }
@@ -162,7 +181,27 @@ ZathuraTest >> testBlueShipFallsIntoAWormHoleLockerAndTheResultIsItAdvancesFourL
 		in: zathura
 ]
 
-{ #category : #boardTests }
+{ #category : #shipWithHandOfCardsTests }
+ZathuraTest >> testBlueShipThrowsAnOverloadCardToRedShipAndLosesOneOverloadCard [
+
+	| zathura aDie blueShip |
+	aDie := LoadedDie with: 1.
+	zathura := ZathuraGame
+		           playBy: { 'BlueShip'. 'RedShip' }
+		           movedInBoardOf:
+		           (BoardDefinition withNoEffectsOf: 10 and: 100 played: 1)
+		           rolling: aDie
+		           withCards: { OverloadCard new }.
+	blueShip := zathura zathuraShip: 'BlueShip'.
+	zathura playTurn.
+	zathura playTurn.
+	blueShip throw: OverloadCard new to: 'RedShip' in: zathura.
+	zathura playTurn.
+	zathura playTurn.
+	self assert: (blueShip cardsOf: OverloadCard new) equals: 1
+]
+
+{ #category : #shipWithHandOfCardsTests }
 ZathuraTest >> testBlueShipThrowsAnOverloadCardToRedShipAndRedShipMovesBackwards [
 
 	| positionOfBlueShip positionOfRedShip zathura aDie blueShip |
@@ -171,49 +210,51 @@ ZathuraTest >> testBlueShipThrowsAnOverloadCardToRedShipAndRedShipMovesBackwards
 		           playBy: { 'BlueShip'. 'RedShip' }
 		           movedInBoardOf:
 		           (BoardDefinition withNoEffectsOf: 10 and: 100 played: 1)
-		           rolling: aDie.
-	blueShip := zathura shipWithHandOfCards: 'BlueShip'.
+		           rolling: aDie
+		           withCards: { OverloadCard new }.
+	blueShip := zathura zathuraShip: 'BlueShip'.
 	zathura playTurn.
 	zathura playTurn.
-	blueShip throwOverloadTo: 'RedShip' in: zathura.
+	blueShip throw: OverloadCard new to: 'RedShip' in: zathura.
 	zathura playTurn.
 	zathura playTurn.
 	positionOfBlueShip := zathura numberOfLockerOf: 'BlueShip'.
 	positionOfRedShip := zathura numberOfLockerOf: 'RedShip'.
 	self assert: positionOfBlueShip equals: 2.
-	self assert: positionOfRedShip equals: 0.
+	self assert: positionOfRedShip equals: 0
 ]
 
-{ #category : #boardTests }
+{ #category : #shipWithHandOfCardsTests }
 ZathuraTest >> testBlueShipThrowsAnOverloadCardToRedShipAndRedShipMovesRolledNumberMinusTwoAllGame [
 
-	| tmp1 tmp2 tmp3 tmp4 tmp5 tmp6 |
-	tmp5 := DiceCup withAll: { 
+	| diceCup zathura zBlueShip lockersOfBlueShip lockersOfRedShip |
+	diceCup := DiceCup withAll: { 
 			        (LoadedDie with: 3).
 			        (LoadedDie with: 4) }.
-	tmp4 := ZathuraGame
+	zathura := ZathuraGame
 		        playBy: { 'BlueShip'. 'RedShip' }
 		        movedInBoardOf:
 		        (BoardDefinition withNoEffectsOf: 15 and: 100 played: 1)
-		        rolling: tmp5.
-	tmp6 := tmp4 shipWithHandOfCards: 'BlueShip'.
-	tmp6 throwOverloadTo: 'RedShip' in: tmp4.
-	tmp4
+		        rolling: diceCup
+		        withCards: { OverloadCard new }.
+	zBlueShip := zathura zathuraShip: 'BlueShip'.
+	zBlueShip throw: OverloadCard new to: 'RedShip' in: zathura.
+	zathura
 		playTurn;
 		playTurn.
-	tmp2 := tmp4 numberOfLockerOf: 'BlueShip'.
-	tmp3 := tmp4 numberOfLockerOf: 'RedShip'.
+	lockersOfBlueShip := zathura numberOfLockerOf: 'BlueShip'.
+	lockersOfRedShip := zathura numberOfLockerOf: 'RedShip'.
 	self
-		assert: tmp2 equals: 7;
-		assert: tmp3 equals: 5.
-	tmp4
+		assert: lockersOfBlueShip equals: 7;
+		assert: lockersOfRedShip equals: 5.
+	zathura
 		playTurn;
 		playTurn.
-	tmp2 := tmp4 numberOfLockerOf: 'BlueShip'.
-	tmp3 := tmp4 numberOfLockerOf: 'RedShip'.
+	lockersOfBlueShip := zathura numberOfLockerOf: 'BlueShip'.
+	lockersOfRedShip := zathura numberOfLockerOf: 'RedShip'.
 	self
-		assert: tmp2 equals: 14;
-		assert: tmp3 equals: 10
+		assert: lockersOfBlueShip equals: 14;
+		assert: lockersOfRedShip equals: 10
 ]
 
 { #category : #boardStructureAssertionTests }
@@ -281,7 +322,7 @@ ZathuraTest >> testBoardStructureCannotHaveLessThanZeroParsecs [
 { #category : #tests }
 ZathuraTest >> testGreenShipWinsAndFinishesInPositionZeroWithOneLapCompleted [
 
-	| zathura die ships  boardStructure |
+	| zathura die ships boardStructure |
 	die := LoadedDie with: 7.
 	ships := OrderedCollection
 		         with: 'GreenShip'
@@ -295,7 +336,8 @@ ZathuraTest >> testGreenShipWinsAndFinishesInPositionZeroWithOneLapCompleted [
 	zathura := ZathuraGame
 		           playBy: ships
 		           movedInBoardOf: boardStructure
-		           rolling: die.
+		           rolling: die
+					  withCards: { OverloadCard new }.
 
 	zathura playTurn.
 	zathura playTurn.
@@ -321,35 +363,7 @@ ZathuraTest >> testGreenShipWinsAndFinishesInPositionZeroWithOneLapCompleted [
 		isAt: 0
 		with: 1
 		in: zathura.
-	self assert: (zathura winner name) equals: 'GreenShip'
-]
-
-{ #category : #shipWithHandOfCardsTests }
-ZathuraTest >> testHandCanThrowACard [
-
-	| aShipWithHand card overload speed |
-	overload := OverloadCard new.
-	speed := SpeedCard new.
-	aShipWithHand := HandOfCards with: 'Red'.
-	aShipWithHand addAll: { 
-			overload.
-			speed }.
-	card := aShipWithHand throw: overload.
-	self assert: card equals: overload
-]
-
-{ #category : #shipWithHandOfCardsTests }
-ZathuraTest >> testHandThrowsErrorIfThrowsCardNotInHand [
-
-	| aHand overload speed accelaration |
-	overload := OverloadCard new.
-	speed := SpeedCard new.
-	accelaration := AccelerationCard new.
-	aHand := HandOfCards with: 'RedShip'.
-	self
-		should: [ aHand throw: accelaration ]
-		raise: Error
-		withMessage: 'Card is not in Hand'
+	self assert: zathura winner ship equals: 'GreenShip'
 ]
 
 { #category : #boardStructureAssertionTests }
@@ -548,7 +562,7 @@ ZathuraTest >> testZathuraCannotBePlayedMoreThanOnce [
 		withMessage: 'Zathura cannot be played more than once'
 ]
 
-{ #category : #tests }
+{ #category : #shipWithHandOfCardsTests }
 ZathuraTest >> testZathuraEveryShipStartsWithTwoCards [
 
 	| zathura die ships boardStructure |
@@ -663,11 +677,12 @@ ZathuraTest >> testZathuraKnowsTheNameOfShipWithHandOfCards [
 	zathura := ZathuraGame
 		           playBy: ships
 		           movedInBoardOf: boardDefinition
-		           rolling: die.
+		           rolling: die
+					  withCards: { OverloadCard new }.
 
-	aShipWithHandOfCards := zathura shipWithHandOfCards: aShip.
+	aShipWithHandOfCards := zathura zathuraShip: aShip.
 
-	self assert: aShipWithHandOfCards name equals: aShip
+	self assert: aShipWithHandOfCards ship equals: aShip
 ]
 
 { #category : #tests }
@@ -704,41 +719,6 @@ ZathuraTest >> testZathuraKnowsTheRankingOfAShip [
 	self assert: (zathura rankingOf: 'GreenShip') equals: 2.
 	self assert: (zathura rankingOf: 'BlueShip') equals: 1.
 	self assert: (zathura rankingOf: 'RedShip') equals: 3
-]
-
-{ #category : #shipWithHandOfCardsTests }
-ZathuraTest >> testZathuraPlaysTurnAndShipThrowsCard [
-
-	| aShipWithHand effects probabilityDistribution boardDefinition die ships zathura card |
-	effects := { 
-		           LockerNoEffect new.
-		           AtomicBombEffect new.
-		           (HyperJumpEffect with: { 2. 4. 8 }).
-		           (MoonWalkEffect with: 10).
-		           WormHoleEffect new.
-		           CardEffect new.
-		           SpeedUpEffect new }.
-	probabilityDistribution := ProbabilityDistribution with:
-		                           { 30. 2. 8. 10. 20. 10. 20 }.
-
-	boardDefinition := (BoardDefinitionGenerator with:
-		                    (RandomGenerator
-			                     with: effects
-			                     distributedBy: probabilityDistribution))
-		                   generatesWith: 100
-		                   and: 50
-		                   played: 3.
-
-	die := RandomDie with: 6.
-	ships := OrderedCollection with: 'BlueShip' with: 'RedShip'.
-	zathura := ZathuraGame
-		           playBy: ships
-		           movedInBoardOf: boardDefinition
-		           rolling: die.
-
-	aShipWithHand := zathura shipWithHandOfCards: 'BlueShip'.
-	card := aShipWithHand throw: (aShipWithHand cards first).
-	self assert: card equals: (aShipWithHand cards first)
 ]
 
 { #category : #tests }

@@ -50,7 +50,7 @@ Board >> addIntoGame: aCollectionOfShips [
 
 	positionOfShips := OrderedCollection new.
 	aCollectionOfShips do: [ :aShip | 
-		positionOfShips add: (SpaceshipPosition for: aShip at: 0 and: 0) ]
+		positionOfShips add: (ShipPosition for: aShip at: 0 and: 0) ]
 ]
 
 { #category : #moving }
@@ -103,7 +103,7 @@ Board >> move: aShip by: aNumberOfLockers [
 	aLap < 0 ifTrue: [ 
 		aLap := 0.
 		aLocker := 0 ].
-	newPosition := SpaceshipPosition for: aShip at: aLap and: aLocker.
+	newPosition := ShipPosition for: aShip at: aLap and: aLocker.
 	positionOfShips replaceAll: oldPosition with: newPosition
 ]
 
@@ -131,7 +131,7 @@ Board >> moveAllToLockerZero [
 { #category : #creating }
 Board >> moveToFinalPosition: aShip [
 
-	^ SpaceshipPosition for: aShip at: boardDefinition laps and: 0
+	^ ShipPosition for: aShip at: boardDefinition laps and: 0
 ]
 
 { #category : #private }
