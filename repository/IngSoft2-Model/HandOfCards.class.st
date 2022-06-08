@@ -3,7 +3,8 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'name',
-		'handOfCards'
+		'handOfCards',
+		'changeOfRoll'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -30,16 +31,27 @@ HandOfCards >> cards [
 	^ handOfCards 
 ]
 
+{ #category : #accessing }
+HandOfCards >> changeOfRoll [
+	^ changeOfRoll
+]
+
 { #category : #initialization }
 HandOfCards >> initializeWith: aString [
 
 	name := aString.
 	handOfCards := OrderedCollection new.
+	changeOfRoll := 0.
 ]
 
 { #category : #'accessing - attributes' }
 HandOfCards >> name [
 	^ name
+]
+
+{ #category : #effects }
+HandOfCards >> reduceRollBy: anInteger [ 
+	changeOfRoll := changeOfRoll - anInteger.
 ]
 
 { #category : #action }
@@ -52,4 +64,14 @@ HandOfCards >> throw: aCard [
 	cardToThrow
 		ifNil: [ Error signal: 'Card is not in Hand' ]
 		ifNotNil: [ ^ cardToThrow ]
+]
+
+{ #category : #actions }
+HandOfCards >> throwOverloadTo: aString [ 
+	self shouldBeImplemented.
+]
+
+{ #category : #actions }
+HandOfCards >> throwOverloadTo: aShip in: aZathuraGame [ 
+	aZathuraGame reduceRollDiceOf: aShip by: 2.
 ]

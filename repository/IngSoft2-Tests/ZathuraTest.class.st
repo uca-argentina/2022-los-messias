@@ -162,6 +162,60 @@ ZathuraTest >> testBlueShipFallsIntoAWormHoleLockerAndTheResultIsItAdvancesFourL
 		in: zathura
 ]
 
+{ #category : #boardTests }
+ZathuraTest >> testBlueShipThrowsAnOverloadCardToRedShipAndRedShipMovesBackwards [
+
+	| positionOfBlueShip positionOfRedShip zathura aDie blueShip |
+	aDie := LoadedDie with: 1.
+	zathura := ZathuraGame
+		           playBy: { 'BlueShip'. 'RedShip' }
+		           movedInBoardOf:
+		           (BoardDefinition withNoEffectsOf: 10 and: 100 played: 1)
+		           rolling: aDie.
+	blueShip := zathura shipWithHandOfCards: 'BlueShip'.
+	zathura playTurn.
+	zathura playTurn.
+	blueShip throwOverloadTo: 'RedShip' in: zathura.
+	zathura playTurn.
+	zathura playTurn.
+	positionOfBlueShip := zathura numberOfLockerOf: 'BlueShip'.
+	positionOfRedShip := zathura numberOfLockerOf: 'RedShip'.
+	self assert: positionOfBlueShip equals: 2.
+	self assert: positionOfRedShip equals: 0.
+]
+
+{ #category : #boardTests }
+ZathuraTest >> testBlueShipThrowsAnOverloadCardToRedShipAndRedShipMovesRolledNumberMinusTwoAllGame [
+
+	| tmp1 tmp2 tmp3 tmp4 tmp5 tmp6 |
+	tmp5 := DiceCup withAll: { 
+			        (LoadedDie with: 3).
+			        (LoadedDie with: 4) }.
+	tmp4 := ZathuraGame
+		        playBy: { 'BlueShip'. 'RedShip' }
+		        movedInBoardOf:
+		        (BoardDefinition withNoEffectsOf: 15 and: 100 played: 1)
+		        rolling: tmp5.
+	tmp6 := tmp4 shipWithHandOfCards: 'BlueShip'.
+	tmp6 throwOverloadTo: 'RedShip' in: tmp4.
+	tmp4
+		playTurn;
+		playTurn.
+	tmp2 := tmp4 numberOfLockerOf: 'BlueShip'.
+	tmp3 := tmp4 numberOfLockerOf: 'RedShip'.
+	self
+		assert: tmp2 equals: 7;
+		assert: tmp3 equals: 5.
+	tmp4
+		playTurn;
+		playTurn.
+	tmp2 := tmp4 numberOfLockerOf: 'BlueShip'.
+	tmp3 := tmp4 numberOfLockerOf: 'RedShip'.
+	self
+		assert: tmp2 equals: 14;
+		assert: tmp3 equals: 10
+]
+
 { #category : #boardStructureAssertionTests }
 ZathuraTest >> testBoardStructureCannotHaveLessThanTwoLockers [
 

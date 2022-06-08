@@ -141,7 +141,7 @@ ZathuraGame >> playTurn [
 	| aShip |
 	self assertZathuraHasNotBeenPlayed.
 	aShip := shipsWithHandOfCards value.
-	board changePositionOf: aShip name by: diceCup roll.
+	board changePositionOf: aShip name by: ((diceCup roll) + (aShip changeOfRoll)).
 	self checkIfWon: aShip.
 	shipsWithHandOfCards next
 ]
@@ -150,6 +150,16 @@ ZathuraGame >> playTurn [
 ZathuraGame >> rankingOf: aShip [
 
 	^ board rankingOf: aShip.
+]
+
+{ #category : #actions }
+ZathuraGame >> reduceRollDiceOf: aString [ 
+	self shouldBeImplemented.
+]
+
+{ #category : #actions }
+ZathuraGame >> reduceRollDiceOf: aShip by: anInteger [ 
+	(self shipWithHandOfCards: aShip) reduceRollBy: anInteger .
 ]
 
 { #category : #accesing }
