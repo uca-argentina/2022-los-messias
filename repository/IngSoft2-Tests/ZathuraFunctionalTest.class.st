@@ -30,18 +30,15 @@ ZathuraFunctionalTest >> boardDefinitionWithRandomEffects [
 { #category : #tests }
 ZathuraFunctionalTest >> testZathuraAfterBeingPlayedHasOnlyOneWinnerOfTheShips [
 
-	| zathura diceCup ships aWinner notWinner boardStructure |
+	| zathura diceCup ships aWinner notWinner boardDefinition |
 	diceCup := RandomDie with: 6.
 	ships := OrderedCollection with: 'RedShip' with: 'BlueShip'.
-	boardStructure := BoardDefinition
-		                  withNoEffectsOf: 9
-		                  and: 100
-		                  played: 3.
+	boardDefinition := self boardDefinitionWithRandomEffects.
 	zathura := ZathuraGame
 		           playBy: ships
-		           movedInBoardOf: boardStructure
+		           movedInBoardOf: boardDefinition
 		           rolling: diceCup
-					  withCards: { OverloadCard new }.
+		           withCards: { OverloadCard new }.
 
 	zathura play.
 	aWinner := ships select: [ :aShip | aShip == zathura winner ship ].

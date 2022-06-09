@@ -92,19 +92,14 @@ Board >> initializeWith: aBoardStructure withAGroupOf: aCollectionOfShips [
 { #category : #private }
 Board >> move: aShip by: aNumberOfLockers [
 
-	| oldPosition newPosition newNumberOfLockers aLap aLocker |
+	| oldPosition newPosition |
 	oldPosition := self positionOf: aShip.
-	newNumberOfLockers := oldPosition numberOfLocker + aNumberOfLockers.
-
-	aLap := oldPosition numberOfLap
-	        + (newNumberOfLockers // boardDefinition numberOfLockers).
-	aLocker := newNumberOfLockers % boardDefinition numberOfLockers.
-
-	aLap < 0 ifTrue: [ 
-		aLap := 0.
-		aLocker := 0 ].
-	newPosition := ShipPosition for: aShip at: aLap and: aLocker.
+	newPosition := self
+		               newPositionStartingAt: oldPosition
+		               movingBy: aNumberOfLockers.
 	positionOfShips replaceAll: oldPosition with: newPosition
+
+
 ]
 
 { #category : #private }
@@ -138,6 +133,20 @@ Board >> moveToFinalPosition: aShip [
 Board >> moveToLockerZero: aShip [
 
 self move: aShip by: ((self numberOfLockerOf: aShip) * -1 )
+]
+
+{ #category : #accessing }
+Board >> newPositionStartingAt: oldPosition movingBy: aNumberOfLockers [
+
+	| newNumberOfLockers aLap aLocker |
+	newNumberOfLockers := oldPosition numberOfLocker + aNumberOfLockers.
+	aLap := oldPosition numberOfLap
+	        + (newNumberOfLockers // boardDefinition numberOfLockers).
+	aLocker := newNumberOfLockers % boardDefinition numberOfLockers.
+	aLap < 0 ifTrue: [ 
+		aLap := 0.
+		aLocker := 0 ].
+	^ ShipPosition for: oldPosition ship at: aLap and: aLocker
 ]
 
 { #category : #'accessing - attributes' }

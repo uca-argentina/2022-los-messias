@@ -43,9 +43,8 @@ Sequence class >> assertValid: aCollection [
 { #category : #'instance creation' }
 Sequence class >> with: aCollection [
 
-	| newOrderedCollection |
 	self assertValid: aCollection.
-	^ self new initializeWith: aCollection asOrderedCollection 
+	^ self new initializeWith: aCollection asOrderedCollection
 ]
 
 { #category : #accessing }
