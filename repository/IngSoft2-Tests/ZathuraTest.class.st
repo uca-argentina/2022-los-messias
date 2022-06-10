@@ -674,13 +674,11 @@ ZathuraTest >> testZathuraKnowsTheNameOfShipWithHandOfCards [
 		           WormHoleEffect new.
 		           CardEffect new.
 		           SpeedUpEffect new }.
-	probabilityDistribution := ProbabilityDistribution with:
-		                           { 30. 2. 8. 10. 20. 10. 20 }.
+	probabilityDistribution := ProbabilityDistribution withX: effects  andY: { 30. 2. 8. 10. 20. 10. 20 }.
 
 	boardDefinition := (BoardDefinitionGenerator with:
-		                    (RandomGenerator
-			                     with: effects
-			                     distributedBy: probabilityDistribution))
+		                    (RandomGenerator distributedBy:
+			                     probabilityDistribution))
 		                   generatesWith: 100
 		                   and: 50
 		                   played: 3.
@@ -691,7 +689,7 @@ ZathuraTest >> testZathuraKnowsTheNameOfShipWithHandOfCards [
 		           playBy: ships
 		           movedInBoardOf: boardDefinition
 		           rolling: die
-					  withCards: { OverloadCard new }.
+		           withCards: { OverloadCard new }.
 
 	aShipWithHandOfCards := zathura zathuraShip: aShip.
 

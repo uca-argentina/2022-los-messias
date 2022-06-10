@@ -15,12 +15,11 @@ CardGenerator class >> initializeNew [
 ]
 
 { #category : #generate }
-CardGenerator >> generate: aNumberOfCards [ 
+CardGenerator >> generate: aNumberOfCards [
+
 	| generator |
-	generator := (RandomGenerator
-		            with: cards
-		            distributedBy: probabilityDistribution).
-	^generator generateRandomObjectsWith: aNumberOfCards.
+	generator := RandomGenerator distributedBy: probabilityDistribution.
+	^ generator generateRandomObjectsWith: aNumberOfCards
 ]
 
 { #category : #intialization }

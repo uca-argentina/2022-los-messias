@@ -15,13 +15,13 @@ ZathuraFunctionalTest >> boardDefinitionWithRandomEffects [
 		           (MoonWalkEffect with: 5).
 		           SpeedUpEffect new.
 		           WormHoleEffect new }.
-	probabilityDistribution := ProbabilityDistribution with:
-		                           { 40. 2. 8. 10. 20. 20 }.
+	probabilityDistribution := ProbabilityDistribution
+		                           withX: effects
+		                           andY: { 40. 2. 8. 10. 20. 20 }.
 	boardDefinition := (BoardDefinitionGenerator with:
-		                    (RandomGenerator
-			                     with: effects
-			                     distributedBy: probabilityDistribution))
-		                   generatesWith: 100
+		                    (RandomGenerator distributedBy:
+			                     probabilityDistribution))
+		                   generatesWith: 10
 		                   and: 50
 		                   played: 3.
 	^ boardDefinition
@@ -63,7 +63,7 @@ ZathuraFunctionalTest >> testZathuraIsPlayedWithGeneratedLockers [
 		           WormHoleEffect new.
 		           CardEffect new.
 		           SpeedUpEffect new }.
-	probabilityDistribution := ProbabilityDistribution with:
+	probabilityDistribution := ProbabilityDistribution withX: effects  andY:
 		                           { 30. 2. 8. 10. 20. 10. 20 }.
 	ships := OrderedCollection
 		         with: 'BlueShip'
@@ -71,9 +71,8 @@ ZathuraFunctionalTest >> testZathuraIsPlayedWithGeneratedLockers [
 		         with: 'GreenShip'.
 
 	boardDefinition := (BoardDefinitionGenerator with:
-		                    (RandomGenerator
-			                     with: effects
-			                     distributedBy: probabilityDistribution))
+		                    (RandomGenerator distributedBy:
+			                     probabilityDistribution))
 		                   generatesWith: 100
 		                   and: 50
 		                   played: 3.

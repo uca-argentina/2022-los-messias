@@ -15,11 +15,12 @@ RandomGeneratorTest >> testBoardDefinitionGeneratorGeneratesABoardDefinition [
 		           (MoonWalkEffect with: 10).
 		           SpeedUpEffect new.
 		           WormHoleEffect new }.
-	probabilityDistribution := ProbabilityDistribution with: { 40. 2. 8. 10. 20. 20 }.
+	probabilityDistribution := ProbabilityDistribution
+		                           withX: effects
+		                           andY: { 40. 2. 8. 10. 20. 20 }.
 	boardDefinition := (BoardDefinitionGenerator with:
-		                    (RandomGenerator
-			                     with: effects
-			                     distributedBy: probabilityDistribution))
+		                    (RandomGenerator distributedBy:
+			                     probabilityDistribution))
 		                   generatesWith: 10
 		                   and: 100
 		                   played: 3.
@@ -33,14 +34,14 @@ RandomGeneratorTest >> testBoardDefinitionGeneratorGeneratesABoardDefinition [
 RandomGeneratorTest >> testCardGeneratorGeneratesACollectionOfDifferentCardsWithCorrectProportion [
 
 	| lockers probabilityDistribution cards generator |
-	"cards := { 
+	cards := { 
 		         OverloadCard new.
 		         SpeedCard new.
 		         AccelerationCard new.
 		         CancellationCard new.
 		         RedoCard new.
 		         RepeatCard new }.
-	probabilityDistribution := ProbabilityDistribution with: { 
+	probabilityDistribution := ProbabilityDistribution withX: cards andY:  { 
 			                           (100 / 6).
 			                           (100 / 6).
 			                           (100 / 6).
@@ -49,11 +50,8 @@ RandomGeneratorTest >> testCardGeneratorGeneratesACollectionOfDifferentCardsWith
 			                           (100 / 6) }.
 
 	lockers := (RandomGenerator
-		            with: cards
 		            distributedBy: probabilityDistribution) 
-		           generateRandomObjectsWith: 100000."
-	generator := CardGenerator initializeNew.
-	lockers := generator generate: 100000.
+		           generateRandomObjectsWith: 100000.
 
 	self assert:
 		((lockers select: [ :i | i isMemberOf: OverloadCard ]) size
@@ -133,9 +131,8 @@ RandomGeneratorTest >> testLockerGeneratorGeneratesACollectionOfDifferentLockers
 RandomGeneratorTest >> testLockerGeneratorGeneratesACollectionOfLockersWithDifferentInstancesOfEffects [
 
 	| lockers |
-	lockers := (RandomGenerator
-		            with: { (MoonWalkEffect with: 2) }
-		            distributedBy: (ProbabilityDistribution with: { 100 })) 
+	lockers := (RandomGenerator distributedBy:
+		            (ProbabilityDistribution withX: { MoonWalkEffect new } andY: { 100 })) 
 		           generateRandomObjectsWith: 3.
 	self deny: (lockers at: 2) identicalTo: (lockers at: 3)
 ]
@@ -151,11 +148,9 @@ RandomGeneratorTest >> testLockerGeneratorGeneratesACollectionOfSizeTen [
 		           (MoonWalkEffect with: 10).
 		           WormHoleEffect new.
 		           SpeedUpEffect new }.
-	probabilityDistribution := ProbabilityDistribution with:
-		                           { 40. 2. 8. 10. 20. 20 }.
-	lockers := (RandomGenerator
-		            with: effects
-		            distributedBy: probabilityDistribution) 
+	probabilityDistribution := ProbabilityDistribution withX: effects  andY:{ 40. 2. 8. 10. 20. 20 }.
+		                           .
+	lockers := (RandomGenerator distributedBy: probabilityDistribution) 
 		           generateRandomObjectsWith: 10.
 
 	self assert: lockers size equals: 10

@@ -2,9 +2,7 @@ Class {
 	#name : #RandomGenerator,
 	#superclass : #Object,
 	#instVars : [
-		'parsecsBoard',
-		'probabilityDistribution',
-		'objects'
+		'probabilityDistribution'
 	],
 	#classInstVars : [
 		'parsecsBoard'
@@ -13,27 +11,27 @@ Class {
 }
 
 { #category : #'instance creation' }
-RandomGenerator class >> with: objects distributedBy: probabilytyDistribution [
+RandomGenerator class >> distributedBy: probabilytyDistribution [
 
 	^ self new
-		  initializeWith: objects
-		  distributedBy: probabilytyDistribution
+		  initializeWith: probabilytyDistribution
 ]
 
 { #category : #generating }
 RandomGenerator >> generateRandomObjectsWith: numberOfObjects [
-"Como que le falta declaratividad pero no se me ocurre otra forma de poder reutilizarlo para las cartas también"
+
+	"Como que le falta declaratividad pero no se me ocurre otra forma de poder reutilizarlo para las cartas también"
+
 	| objectsGenerated |
 	objectsGenerated := OrderedCollection new.
 	1 to: numberOfObjects do: [ :number | 
 		objectsGenerated add:
-			(objects at: probabilityDistribution generateRandom) deepCopy ].
+			(probabilityDistribution generateRandom) deepCopy ].
 	^ objectsGenerated
 ]
 
 { #category : #initialization }
-RandomGenerator >> initializeWith: collectionOfObjects distributedBy: aProbabilityDistribution [
+RandomGenerator >> initializeWith:aProbabilityDistribution [
 
-objects := collectionOfObjects.
-probabilityDistribution := aProbabilityDistribution 
+	probabilityDistribution := aProbabilityDistribution
 ]
