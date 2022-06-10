@@ -17,23 +17,26 @@ ProbabilityDistributionTest >> testProbabilityDistributionReceivesACollectionWit
 { #category : #tests }
 ProbabilityDistributionTest >> testProbabilityDistributionReceivesACollectionWithProbabilitiesAndDistributesThemCorrectly [
 
-	| aProbabilityDistribution aCollection unvjn a b |
+	| aProbabilityDistribution aCollection a b |
 	aProbabilityDistribution := ProbabilityDistribution
 		                            withX: { 'a'. 'b'. 'c' }
 		                            andY: { 75. 20. 5 }.
 
 	aCollection := OrderedCollection new.
-	1 to: 10 do: [ :i | 
+	1 to: 100000 do: [ :i | 
 	aCollection add: aProbabilityDistribution generateRandom ].
-	unvjn := aCollection select: [ :e | e == a ].
-	self assert: (unvjn size between: 65000 and: 85000).
+	self assert:
+		((aCollection select: [ :e | e = 'a' ]) size
+			 between: 65000
+			 and: 85000).
 
-	self assert: ((aCollection select: [ :i | i == b ]) size
+	self assert:
+		((aCollection select: [ :i | i = 'b' ]) size
 			 between: 10000
 			 and: 30000).
 
 	self assert:
-		((aCollection select: [ :i | i == 'c' ]) size between: 0 and: 10000)
+		((aCollection select: [ :i | i = 'c' ]) size between: 0 and: 10000)
 ]
 
 { #category : #tests }
