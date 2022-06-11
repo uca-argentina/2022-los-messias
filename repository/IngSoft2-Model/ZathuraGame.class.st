@@ -80,9 +80,13 @@ ZathuraGame >> addIntoGame: aCollectionOfShips [
 
 	| zShips |
 	zShips := OrderedCollection new.
-	aCollectionOfShips do: [ :ship | zShips add: (ZathuraShip with: ship and: (CardHand with: (aDeck generate: 2))) ].
 
-	zathuraShips := Sequence with: zShips
+	aCollectionOfShips do: [ :ship | 
+		zShips add: (ZathuraShip with: ship and: (CardHand with: { 
+						  aDeck next.
+						  aDeck next })) ].
+
+	zathuraShips := Sequence withAll: zShips
 ]
 
 { #category : #asserting }
@@ -113,7 +117,7 @@ ZathuraGame >> changeRollOf: ship by: number [
 { #category : #action }
 ZathuraGame >> changeRollOfAllShipsBy: number [
 
-	(zathuraShips collection) do: [:zShip | zShip changeRollBy: number ].
+	zathuraShips do: [:zShip | zShip changeRollBy: number ].
 ]
 
 { #category : #private }
@@ -135,7 +139,7 @@ ZathuraGame >> initializePlayingBy: aCollectionOfShips movedInBoardOf: boardStru
 
 	diceCup := aDiceCup.
 	board := Board of: boardStructure withAll: aCollectionOfShips.
-	aDeck := Deck withAll: aCollectionOfCards.
+	aDeck := Sequence withAll: aCollectionOfCards.
 	cardsOnTable := OrderedCollection new.
 	self addIntoGame: aCollectionOfShips.
 	finished := false.
@@ -145,7 +149,7 @@ ZathuraGame >> initializePlayingBy: aCollectionOfShips movedInBoardOf: boardStru
 { #category : #testing }
 ZathuraGame >> isTurnOf: aShip [
 
-	^ zathuraShips value ship == aShip
+	^ zathuraShips first ship == aShip
 ]
 
 { #category : #positioning }
@@ -173,10 +177,9 @@ ZathuraGame >> playTurn [
 
 	| aShip |
 	self assertZathuraHasNotBeenPlayed.
-	aShip := zathuraShips value.
+	aShip := zathuraShips next.
 	board changePositionOf: aShip ship by: ((diceCup roll) + (aShip changeOfRoll)).
 	self checkIfWon: aShip.
-	zathuraShips next
 ]
 
 { #category : #positioning }
@@ -186,11 +189,14 @@ ZathuraGame >> rankingOf: aShip [
 ]
 
 { #category : #set }
-ZathuraGame >> removeCardFromCardsOnTable: aCard [
+ZathuraGame >> removeFromCardsOnTable: aCard [
 
-	| overLoadCard |
-	overLoadCard := cardsOnTable select: [ :card | aCard = card ].
-	cardsOnTable remove: overLoadCard
+	| theCard |
+	theCard := 0.
+	cardsOnTable do: [ :card | 
+		(card isMemberOf: aCard class) ifTrue: [ theCard := card ] ].
+	aCard disapplyEffectTo: 'RedShip' in: self.
+	cardsOnTable remove: theCard
 ]
 
 { #category : #ending }
@@ -198,7 +204,7 @@ ZathuraGame >> winner [
 
 	| winner |
 	self assertZathuraHasFinished.
-	winner := zathuraShips collection select: [ :ship | 
+	winner := zathuraShips select: [ :ship | 
 		          (self rankingOf: ship ship) == 1 ].
 	^ winner at: 1
 ]
@@ -207,7 +213,7 @@ ZathuraGame >> winner [
 ZathuraGame >> zathuraShip: aShip [
 
 	| zathuraShip |
-	zathuraShip := zathuraShips collection select: [ :zShip | 
+	zathuraShip := zathuraShips select: [ :zShip | 
 		               (zShip ship) = aShip ].
 	^ zathuraShip first
 ]

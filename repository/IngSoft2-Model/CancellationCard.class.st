@@ -6,5 +6,5 @@ Class {
 
 { #category : #action }
 CancellationCard >> applyEffectToACard: anOverloadCard in: aZathuraGame [ 
-	aZathuraGame removeCardFromCardsOnTable: anOverloadCard
+	aZathuraGame removeFromCardsOnTable: anOverloadCard
 ]

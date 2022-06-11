@@ -53,18 +53,18 @@ HyperJumpEffect class >> with: parsecSequence [
 HyperJumpEffect >> applyFor: aShip on: aBoard [
 
 	| parsecs |
-	parsecs := parsecsSequence value.
+	parsecs := parsecsSequence next.
 	aBoard move: aShip byParsecs: parsecs.
-	parsecsSequence next
 ]
 
 { #category : #initialization }
 HyperJumpEffect >> initializeWith: aCollectionOfNumbers [
 
-	| aSortedCollectionOfNumbers |
-	aSortedCollectionOfNumbers := SortedCollection sortBlock: [ 
+	| anOrderedCollectionOfNumbers |
+	anOrderedCollectionOfNumbers := aCollectionOfNumbers asOrderedCollection.
+	anOrderedCollectionOfNumbers sort: [ 
 		                              :positionA 
 		                              :positionB | positionA > positionB ].
-	aCollectionOfNumbers do: [ :number | aSortedCollectionOfNumbers add: number ].
-	parsecsSequence := Sequence with: aSortedCollectionOfNumbers
+	
+	parsecsSequence := Sequence withAll: anOrderedCollectionOfNumbers
 ]

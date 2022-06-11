@@ -9,3 +9,10 @@ OverloadCard >> applyEffectTo: ship in: zathuraGame [
 	zathuraGame addCardToBoard: self.
 	zathuraGame changeRollOf: ship by: -2
 ]
+
+{ #category : #action }
+OverloadCard >> disapplyEffectTo: ship in: zathuraGame [
+
+	zathuraGame addCardToBoard: self.
+	zathuraGame changeRollOf: ship by: 2
+]

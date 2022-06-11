@@ -25,48 +25,32 @@ Internal Representation and Key Implementation Points.
 "
 Class {
 	#name : #Sequence,
-	#superclass : #Object,
+	#superclass : #OrderedCollection,
 	#instVars : [
 		'collection'
 	],
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #asserting }
-Sequence class >> assertValid: aCollection [
-
-	aCollection size <= 0 ifTrue: [ 
-		Error signal:
-			'Sequence should not be loaded with an empty Collection' ]
-]
-
 { #category : #'instance creation' }
-Sequence class >> with: aCollection [
+Sequence class >> withAll: aCollection [
 
-	self assertValid: aCollection.
-	^ self new initializeWith: aCollection asOrderedCollection
-]
+	"Esto hay que refactorizarlo, estaria bueno escribir en el dominio de nuestro paquete un asSequence en Collection"
 
-{ #category : #accessing }
-Sequence >> collection [
-
-	^collection 
+	^ self new initializeWithAll: aCollection
 ]
 
 { #category : #initialization }
-Sequence >> initializeWith: aCollection [ 
-	collection := aCollection 
+Sequence >> initializeWithAll: aCollection [
+
+	(1 to: aCollection size) do: [ :i | self add: (aCollection at: i) ]
 ]
 
 { #category : #'change set' }
 Sequence >> next [
+
 	| aValue |
-	aValue := collection removeFirst.
-	collection addLast: aValue
-]
-
-{ #category : #accessing }
-Sequence >> value [
-
-	^ collection at: 1
+	aValue := self removeFirst.
+	self addLast: aValue.
+	^aValue 
 ]

@@ -53,14 +53,13 @@ SequencialLoadedDie >> initializeWith: aCollectionOfNumbers [
 	collectionOfDies := OrderedCollection new.
 	aCollectionOfNumbers do: [ :number | 
 		collectionOfDies add: (LoadedDie with: number) ].
-	dies := Sequence with: collectionOfDies
+	dies := Sequence withAll: collectionOfDies
 ]
 
 { #category : #rolling }
 SequencialLoadedDie >> roll [
 
 	| result |
-	result := (dies value) roll.
-	dies next.
+	result := (dies next) roll.
 	^ result
 ]
