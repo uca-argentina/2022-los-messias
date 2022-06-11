@@ -88,19 +88,19 @@ ZathuraGame >> assertZathuraHasFinished [
 { #category : #asserting }
 ZathuraGame >> assertZathuraHasNotBeenPlayed [
 
-	timesPlayed = 1 ifTrue: [ 
+	(timesPlayed == 1) ifTrue: [ 
 		Error signal: 'Zathura cannot be played more than once' ]
 ]
 
 { #category : #accessing }
 ZathuraGame >> cardsOf: spaceship [
- 
-	^{1. 2}
+	^{1 . 2}.
+	"(self zathuraShip: spaceship) cardsOf Lo acabo de agregar pero no se que iria acá porque no se bien para que usamos el cardsOf: en ZathuraShip"
 ]
 
 { #category : #action }
 ZathuraGame >> changeRollOf: ship by: integer [ 
-	(self zathuraShip: ship) changeRolBy: integer. 
+	(self zathuraShip: ship) changeRollBy: integer. 
 ]
 
 { #category : #private }
@@ -126,6 +126,12 @@ ZathuraGame >> initializePlayingBy: aCollectionOfShips movedInBoardOf: boardStru
 	self addIntoGame: aCollectionOfShips.
 	finished := false.
 	timesPlayed := 0
+]
+
+{ #category : #testing }
+ZathuraGame >> isTurnOf: aShip [
+
+	^ zathuraShips value ship == aShip
 ]
 
 { #category : #positioning }
@@ -180,6 +186,6 @@ ZathuraGame >> zathuraShip: aShip [
 
 	| zathuraShip |
 	zathuraShip := zathuraShips collection select: [ :zShip | 
-		               (zShip ship) == aShip ].
+		               (zShip ship) = aShip ].
 	^ zathuraShip first
 ]

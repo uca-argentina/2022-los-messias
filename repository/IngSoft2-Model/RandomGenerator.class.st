@@ -26,7 +26,7 @@ RandomGenerator >> generateRandomObjectsWith: numberOfObjects [
 	objectsGenerated := OrderedCollection new.
 	1 to: numberOfObjects do: [ :number | 
 		objectsGenerated add:
-			(probabilityDistribution generateRandom) deepCopy ].
+			((probabilityDistribution generateRandom) deepCopy) ].
 	^ objectsGenerated
 ]
 

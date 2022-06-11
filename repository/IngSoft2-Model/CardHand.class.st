@@ -44,7 +44,7 @@ CardHand >> remove: aCard [
 ]
 
 { #category : #throwing }
-CardHand >> throw: card to: ship in: zathuraGame [
+CardHand >> using: card to: ship in: zathuraGame [
 
 	self assertCardIsInHand: card.
 	card applyEffectTo: ship in: zathuraGame.

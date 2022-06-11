@@ -25,7 +25,6 @@ RandomGeneratorTest >> testBoardDefinitionGeneratorGeneratesABoardDefinition [
 		                   and: 100
 		                   played: 3.
 
-	self assert: boardDefinition lockers size equals: 10.
 	self assert: boardDefinition laps equals: 3.
 	self assert: boardDefinition parsecsPerLocker equals: 0.1
 ]
@@ -81,20 +80,20 @@ RandomGeneratorTest >> testCardGeneratorGeneratesACollectionOfDifferentCardsWith
 { #category : #lockerGeneratorTests }
 RandomGeneratorTest >> testLockerGeneratorGeneratesACollectionOfDifferentLockersWithCorrectProportion [
 
-	"| lockers effects probabilityDistribution |
+	| lockers effects probabilityDistribution |
 	effects := { 
 		           LockerNoEffect new.
 		           AtomicBombEffect new.
 		           (HyperJumpEffect with: { 2. 4. 8 }).
 		           (MoonWalkEffect with: 10).
 		           WormHoleEffect new.
+					  SpeedUpEffect new. 
 		           CardEffect new }.
-	probabilityDistribution := ProbabilityDistribution with:
-		                           { 30. 2. 8. 10. 20. 30 }.
+	probabilityDistribution := ProbabilityDistribution
+		                           withX: effects
+		                           andY: { 30. 2. 8. 10. 20. 20 . 10 }.
 
-	lockers := (RandomGenerator
-		            with: effects
-		            distributedBy: probabilityDistribution) 
+	lockers := (RandomGenerator distributedBy: probabilityDistribution) 
 		           generateRandomObjectsWith: 100000.
 
 	self assert:
@@ -124,7 +123,7 @@ RandomGeneratorTest >> testLockerGeneratorGeneratesACollectionOfDifferentLockers
 	self assert:
 		((lockers select: [ :i | i isMemberOf: CardEffect ]) size
 			 between: 0
-			 and: 20000)"
+			 and: 20000)
 ]
 
 { #category : #lockerGeneratorTests }

@@ -58,11 +58,10 @@ Board >> changePositionOf: aShip by: aNumberOfLockers [
 
 	self move: aShip by: aNumberOfLockers.
 	(self hasCrossFinishLine: aShip) ifFalse: [ 
-		boardDefinition
-			doEffectTo: aShip
-			inPosition: (self numberOfLockerOf: aShip)
-			of: self ].
-	self correctPositionIfFinishLineWasCrossedBy: aShip.
+		(boardDefinition  lockerAt: (self numberOfLockerOf: aShip) + 1)
+			applyFor: aShip
+			on: self ].
+	self correctPositionIfFinishLineWasCrossedBy: aShip
 ]
 
 { #category : #private }

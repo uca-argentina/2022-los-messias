@@ -17,7 +17,7 @@ ProbabilityDistributionTest >> testProbabilityDistributionReceivesACollectionWit
 { #category : #tests }
 ProbabilityDistributionTest >> testProbabilityDistributionReceivesACollectionWithProbabilitiesAndDistributesThemCorrectly [
 
-	| aProbabilityDistribution aCollection a b |
+	| aProbabilityDistribution aCollection |
 	aProbabilityDistribution := ProbabilityDistribution
 		                            withX: { 'a'. 'b'. 'c' }
 		                            andY: { 75. 20. 5 }.

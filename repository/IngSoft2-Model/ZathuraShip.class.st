@@ -15,6 +15,12 @@ ZathuraShip class >> with: ship and: cardHand [
 	^ self new initializeWith: ship and: cardHand
 ]
 
+{ #category : #asserting }
+ZathuraShip >> assertIsYourTurn: aShip in: zathuraGame [
+
+	(zathuraGame isTurnOf: aShip) ifFalse: [ Error signal: 'Permanent cards can only be used when its your turn' ]
+]
+
 { #category : #accessing }
 ZathuraShip >> cardsOf: aCard [ 
 	^ cardHand cardsOf: aCard
@@ -26,7 +32,7 @@ ZathuraShip >> changeOfRoll [
 ]
 
 { #category : #accesing }
-ZathuraShip >> changeRolBy: integer [
+ZathuraShip >> changeRollBy: integer [
 
 	changeOfRoll := changeOfRoll + integer
 ]
@@ -45,7 +51,8 @@ ZathuraShip >> ship [
 ]
 
 { #category : #action }
-ZathuraShip >> throw: card to: aShip in: zathuraGame [ 
+ZathuraShip >> using: card to: aShip in: zathuraGame [
 
-	cardHand throw: card to: aShip in: zathuraGame.
+	self assertIsYourTurn: (self ship) in: zathuraGame.
+	cardHand using: card to: aShip in: zathuraGame
 ]

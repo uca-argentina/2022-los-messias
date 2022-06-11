@@ -38,7 +38,7 @@ ProbabilityDistribution class >> withX: indices andY: probabilities [
 ProbabilityDistribution >> f: exe [
 
 	| index |
-	index := (x indexOf: [ :val | val == exe ])+1.
+	index := x indexOf: exe.
 	^ y at: index
 ]
 
