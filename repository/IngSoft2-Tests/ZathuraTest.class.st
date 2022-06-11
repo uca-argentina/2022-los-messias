@@ -204,6 +204,78 @@ ZathuraTest >> testBlueShipFallsIntoAWormHoleLockerAndTheResultIsItAdvancesFourL
 ]
 
 { #category : #shipWithHandOfCardsTests }
+ZathuraTest >> testBlueShipThrowsASpeedCardToRedShipAndRedShipMovesRolledNumberPlusOneAllGame [
+
+	| diceCup zathura zBlueShip lockersOfBlueShip lockersOfRedShip |
+	diceCup := DiceCup withAll: { 
+			           (LoadedDie with: 3).
+			           (LoadedDie with: 4) }.
+	zathura := ZathuraGame
+		           playBy: { 'BlueShip'. 'RedShip' }
+		           movedInBoardOf:
+		           (self
+			            boardDefinitionWithNoEffectsOf: 20
+			            and: 100
+			            played: 1)
+		           rolling: diceCup
+		           withCards: { SpeedCard new }.
+	zBlueShip := zathura zathuraShip: 'BlueShip'.
+	zBlueShip using: SpeedCard new to: 'RedShip' in: zathura.
+	zathura
+		playTurn;
+		playTurn.
+	lockersOfBlueShip := zathura numberOfLockerOf: 'BlueShip'.
+	lockersOfRedShip := zathura numberOfLockerOf: 'RedShip'.
+	self
+		assert: lockersOfBlueShip equals: 7;
+		assert: lockersOfRedShip equals: 8.
+	zathura
+		playTurn;
+		playTurn.
+	lockersOfBlueShip := zathura numberOfLockerOf: 'BlueShip'.
+	lockersOfRedShip := zathura numberOfLockerOf: 'RedShip'.
+	self
+		assert: lockersOfBlueShip equals: 14;
+		assert: lockersOfRedShip equals: 16
+]
+
+{ #category : #shipWithHandOfCardsTests }
+ZathuraTest >> testBlueShipThrowsAnAccelerationCardToRedShipAndAllShipMovesRolledNumberPlusOneAllGame [
+
+	| diceCup zathura zBlueShip lockersOfBlueShip lockersOfRedShip |
+	diceCup := DiceCup withAll: { 
+			           (LoadedDie with: 3).
+			           (LoadedDie with: 4) }.
+	zathura := ZathuraGame
+		           playBy: { 'BlueShip'. 'RedShip' }
+		           movedInBoardOf:
+		           (self
+			            boardDefinitionWithNoEffectsOf: 20
+			            and: 100
+			            played: 1)
+		           rolling: diceCup
+		           withCards: { AccelerationCard new }.
+	zBlueShip := zathura zathuraShip: 'BlueShip'.
+	zBlueShip using: AccelerationCard new toAllShipsin: zathura.
+	zathura
+		playTurn;
+		playTurn.
+	lockersOfBlueShip := zathura numberOfLockerOf: 'BlueShip'.
+	lockersOfRedShip := zathura numberOfLockerOf: 'RedShip'.
+	self
+		assert: lockersOfBlueShip equals: 8;
+		assert: lockersOfRedShip equals: 8.
+	zathura
+		playTurn;
+		playTurn.
+	lockersOfBlueShip := zathura numberOfLockerOf: 'BlueShip'.
+	lockersOfRedShip := zathura numberOfLockerOf: 'RedShip'.
+	self
+		assert: lockersOfBlueShip equals: 16;
+		assert: lockersOfRedShip equals: 16
+]
+
+{ #category : #shipWithHandOfCardsTests }
 ZathuraTest >> testBlueShipThrowsAnOverloadCardToRedShipAndLosesOneOverloadCard [
 
 	| zathura aDie blueShip |
@@ -230,7 +302,7 @@ ZathuraTest >> testBlueShipThrowsAnOverloadCardToRedShipAndLosesOneOverloadCard 
 ZathuraTest >> testBlueShipThrowsAnOverloadCardToRedShipAndRedShipMovesBackwards [
 
 	| positionOfBlueShip positionOfRedShip zathura aDie blueShip |
-	aDie := LoadedDie with: 4.
+	aDie := SequencialLoadedDie with: { 4. 4. 1. 1 }.
 	zathura := ZathuraGame
 		           playBy: { 'BlueShip'. 'RedShip' }
 		           movedInBoardOf:
@@ -248,8 +320,8 @@ ZathuraTest >> testBlueShipThrowsAnOverloadCardToRedShipAndRedShipMovesBackwards
 	zathura playTurn.
 	positionOfBlueShip := zathura numberOfLockerOf: 'BlueShip'.
 	positionOfRedShip := zathura numberOfLockerOf: 'RedShip'.
-	self assert: positionOfBlueShip equals: 8.
-	self assert: positionOfRedShip equals: 6
+	self assert: positionOfBlueShip equals: 5.
+	self assert: positionOfRedShip equals: 3
 ]
 
 { #category : #shipWithHandOfCardsTests }
@@ -288,7 +360,7 @@ ZathuraTest >> testBlueShipThrowsAnOverloadCardToRedShipAndRedShipMovesRolledNum
 { #category : #shipWithHandOfCardsTests }
 ZathuraTest >> testBlueShipThrowsErrorWhenUsesAnOverloadCardAndItIsNotItsTurn [
 
-	| redShipCardHand blueShipCardHand die ships boardStructure zathura blueShip |
+	| die ships boardStructure zathura blueShip |
 	die := LoadedDie with: 7.
 	ships := #( 'BlueShip' 'RedShip' ).
 	boardStructure := self
@@ -307,6 +379,32 @@ ZathuraTest >> testBlueShipThrowsErrorWhenUsesAnOverloadCardAndItIsNotItsTurn [
 	self
 		should: [ 
 		blueShip using: OverloadCard new to: 'RedShip' in: zathura ]
+		raise: Error
+		withMessage: 'Permanent cards can only be used when its your turn'
+]
+
+{ #category : #shipWithHandOfCardsTests }
+ZathuraTest >> testBlueShipThrowsErrorWhenUsesAnSpeedCardAndItIsNotItsTurn [
+
+	| die ships boardStructure zathura blueShip |
+	die := LoadedDie with: 7.
+	ships := #( 'BlueShip' 'RedShip' ).
+	boardStructure := self
+		                  boardDefinitionWithNoEffectsOf: 10
+		                  and: 100
+		                  played: 1.
+
+	zathura := ZathuraGame
+		           playBy: ships
+		           movedInBoardOf: boardStructure
+		           rolling: die
+		           withCards: { SpeedCard new }.
+	zathura playTurn.
+	blueShip := zathura zathuraShip: 'BlueShip'.
+
+	self
+		should: [ 
+		blueShip using: SpeedCard new to: 'RedShip' in: zathura ]
 		raise: Error
 		withMessage: 'Permanent cards can only be used when its your turn'
 ]

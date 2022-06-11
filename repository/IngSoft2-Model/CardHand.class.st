@@ -50,3 +50,11 @@ CardHand >> using: card to: ship in: zathuraGame [
 	card applyEffectTo: ship in: zathuraGame.
 	self remove: card
 ]
+
+{ #category : #throwing }
+CardHand >> using: card toAllShipsin: zathuraGame [
+
+	self assertCardIsInHand: card.
+	card applyEffectToAllShipsIn: zathuraGame.
+	self remove: card
+]

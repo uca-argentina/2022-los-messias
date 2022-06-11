@@ -56,3 +56,10 @@ ZathuraShip >> using: card to: aShip in: zathuraGame [
 	self assertIsYourTurn: (self ship) in: zathuraGame.
 	cardHand using: card to: aShip in: zathuraGame
 ]
+
+{ #category : #action }
+ZathuraShip >> using: card toAllShipsin: zathuraGame [
+
+	self assertIsYourTurn: self ship in: zathuraGame.
+	cardHand using: card toAllShipsin: zathuraGame
+]

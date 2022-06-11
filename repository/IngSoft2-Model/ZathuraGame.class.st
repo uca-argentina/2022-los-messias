@@ -99,8 +99,15 @@ ZathuraGame >> cardsOf: spaceship [
 ]
 
 { #category : #action }
-ZathuraGame >> changeRollOf: ship by: integer [ 
-	(self zathuraShip: ship) changeRollBy: integer. 
+ZathuraGame >> changeRollOf: ship by: number [
+
+	(self zathuraShip: ship) changeRollBy: number
+]
+
+{ #category : #action }
+ZathuraGame >> changeRollOfAllShipsBy: number [
+
+	(zathuraShips collection) do: [:zShip | zShip changeRollBy: number ].
 ]
 
 { #category : #private }
