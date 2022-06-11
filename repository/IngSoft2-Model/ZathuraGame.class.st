@@ -37,7 +37,8 @@ Class {
 		'timesPlayed',
 		'cardGenerator',
 		'aDeck',
-		'zathuraShips'
+		'zathuraShips',
+		'cardsOnTable'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -67,6 +68,11 @@ ZathuraGame class >> playBy: ships movedInBoardOf: boardStructure rolling: die w
 		  initializePlayingBy: ships
 		  movedInBoardOf: boardStructure
 		  rolling: die withCards: aCollectionOfCards
+]
+
+{ #category : #adding }
+ZathuraGame >> addCardToBoard: aCard [ 
+	cardsOnTable add: aCard
 ]
 
 { #category : #adding }
@@ -125,11 +131,12 @@ ZathuraGame >> hasFinished [
 ]
 
 { #category : #initalization }
-ZathuraGame >> initializePlayingBy: aCollectionOfShips movedInBoardOf: boardStructure rolling: aDiceCup withCards: aCollectionOfCards [ 
-	| shipPlayer |
+ZathuraGame >> initializePlayingBy: aCollectionOfShips movedInBoardOf: boardStructure rolling: aDiceCup withCards: aCollectionOfCards [
+
 	diceCup := aDiceCup.
 	board := Board of: boardStructure withAll: aCollectionOfShips.
-	aDeck:= Deck withAll: aCollectionOfCards.
+	aDeck := Deck withAll: aCollectionOfCards.
+	cardsOnTable := OrderedCollection new.
 	self addIntoGame: aCollectionOfShips.
 	finished := false.
 	timesPlayed := 0
@@ -176,6 +183,14 @@ ZathuraGame >> playTurn [
 ZathuraGame >> rankingOf: aShip [
 
 	^ board rankingOf: aShip.
+]
+
+{ #category : #set }
+ZathuraGame >> removeCardFromCardsOnTable: aCard [
+
+	| overLoadCard |
+	overLoadCard := cardsOnTable select: [ :card | aCard = card ].
+	cardsOnTable remove: overLoadCard
 ]
 
 { #category : #ending }

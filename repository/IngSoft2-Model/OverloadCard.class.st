@@ -5,6 +5,7 @@ Class {
 }
 
 { #category : #action }
-OverloadCard >> applyEffectTo: ship in: zathuraGame [ 
+OverloadCard >> applyEffectTo: ship in: zathuraGame [
+	zathuraGame addCardToBoard: self.
 	zathuraGame changeRollOf: ship by: -2
 ]

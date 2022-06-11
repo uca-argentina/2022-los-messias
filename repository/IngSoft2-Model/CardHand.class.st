@@ -58,3 +58,9 @@ CardHand >> using: card toAllShipsin: zathuraGame [
 	card applyEffectToAllShipsIn: zathuraGame.
 	self remove: card
 ]
+
+{ #category : #action }
+CardHand >> using: cancellationCard toCard: overloadCard in: zathuraGame [ 
+"Esto rompe si hay más de una OverLoad en el tablero, vamos a tener que identificar al ship en algunos casos y en otros no. El nombre applyEffectToACard: desp hay que cambiarlo"
+	cancellationCard applyEffectToACard: overloadCard in: zathuraGame
+]

@@ -63,3 +63,8 @@ ZathuraShip >> using: card toAllShipsin: zathuraGame [
 	self assertIsYourTurn: self ship in: zathuraGame.
 	cardHand using: card toAllShipsin: zathuraGame
 ]
+
+{ #category : #action }
+ZathuraShip >> using: aCancellationCard toCard: anOverloadCard in: zathuraGame [ 
+	cardHand using: aCancellationCard toCard: anOverloadCard in: zathuraGame
+]
