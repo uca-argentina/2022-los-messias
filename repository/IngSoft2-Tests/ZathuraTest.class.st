@@ -387,8 +387,8 @@ ZathuraTest >> testBlueShipThrowsAnOverloadCardToRedShipThenRedShipsThrowsACance
 		assert: lockersOfRedShip equals: 5.
 	zRedShip := zathura zathuraShip: 'BlueShip'.
 	zRedShip
-		using: CancellationCard new
-		toCard: OverloadCard new
+		using: CancellationCard new to: 'RedShip'
+		removing: OverloadCard new
 		in: zathura.
 	zathura
 		playTurn;

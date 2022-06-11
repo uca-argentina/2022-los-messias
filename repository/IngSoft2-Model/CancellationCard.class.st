@@ -5,6 +5,7 @@ Class {
 }
 
 { #category : #action }
-CancellationCard >> applyEffectToACard: anOverloadCard in: aZathuraGame [ 
-	aZathuraGame removeFromCardsOnTable: anOverloadCard
+CancellationCard >> applyEffectTo: aShip removing: aCard in: aZathuraGame [
+
+	aZathuraGame removeFromCardsOnTable: aCard of: aShip
 ]

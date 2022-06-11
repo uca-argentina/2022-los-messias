@@ -199,6 +199,17 @@ ZathuraGame >> removeFromCardsOnTable: aCard [
 	cardsOnTable remove: theCard
 ]
 
+{ #category : #set }
+ZathuraGame >> removeFromCardsOnTable: aCard of: aShip [
+
+	| theCard |
+	theCard := 0.
+	cardsOnTable do: [ :card | 
+		(card isMemberOf: aCard class) ifTrue: [ theCard := card ] ].
+	aCard disapplyEffectTo: aShip in: self.
+	cardsOnTable remove: theCard
+]
+
 { #category : #ending }
 ZathuraGame >> winner [
 
