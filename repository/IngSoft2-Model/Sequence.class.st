@@ -54,3 +54,8 @@ Sequence >> next [
 	self addLast: aValue.
 	^aValue 
 ]
+
+{ #category : #actions }
+Sequence >> random [
+	^self atRandom
+]

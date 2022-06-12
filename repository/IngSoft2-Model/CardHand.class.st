@@ -13,6 +13,11 @@ CardHand class >> with: cards [
 	^ self new initializeWith: cards
 ]
 
+{ #category : #actions }
+CardHand >> add: aCard [
+	handOfCards add: aCard.
+]
+
 { #category : #asserting }
 CardHand >> assertCardIsInHand: aCard [
 
@@ -21,11 +26,15 @@ CardHand >> assertCardIsInHand: aCard [
 ]
 
 { #category : #accesing }
+CardHand >> cardsOf [
+
+	^ handOfCards
+]
+
+{ #category : #accesing }
 CardHand >> cardsOf: aCard [
 
-	| cards |
-	cards := handOfCards select: [ :card | aCard isMemberOf: card class ].
-	^ cards size
+	^handOfCards select: [ :card | card isMemberOf: aCard class ].
 ]
 
 { #category : #initialization }

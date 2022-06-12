@@ -32,7 +32,7 @@ RandomGeneratorTest >> testBoardDefinitionGeneratorGeneratesABoardDefinition [
 { #category : #cardGeneratorTests }
 RandomGeneratorTest >> testCardGeneratorGeneratesACollectionOfDifferentCardsWithCorrectProportion [
 
-	| lockers probabilityDistribution cards generator |
+	| lockers probabilityDistribution cards  |
 	cards := { 
 		         OverloadCard new.
 		         SpeedCard new.
@@ -40,16 +40,17 @@ RandomGeneratorTest >> testCardGeneratorGeneratesACollectionOfDifferentCardsWith
 		         CancellationCard new.
 		         RedoCard new.
 		         RepeatCard new }.
-	probabilityDistribution := ProbabilityDistribution withX: cards andY:  { 
-			                           (100 / 6).
-			                           (100 / 6).
-			                           (100 / 6).
-			                           (100 / 6).
-			                           (100 / 6).
-			                           (100 / 6) }.
+	probabilityDistribution := ProbabilityDistribution
+		                           withX: cards
+		                           andY: { 
+				                           (100 / 6).
+				                           (100 / 6).
+				                           (100 / 6).
+				                           (100 / 6).
+				                           (100 / 6).
+				                           (100 / 6) }.
 
-	lockers := (RandomGenerator
-		            distributedBy: probabilityDistribution) 
+	lockers := (RandomGenerator distributedBy: probabilityDistribution) 
 		           generateRandomObjectsWith: 100000.
 
 	self assert:

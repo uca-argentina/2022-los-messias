@@ -29,7 +29,8 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'positionOfShips',
-		'boardDefinition'
+		'boardDefinition',
+		'aDeck'
 	],
 	#classInstVars : [
 		'ships'
@@ -38,11 +39,12 @@ Class {
 }
 
 { #category : #'instance creation' }
-Board class >> of: boardStructure withAll: aCollectionOfShips [
+Board class >> of: boardStructure withAll: aCollectionOfShips withCards: aCollectionOfCards [
 
 	^ self new
 		  initializeWith: boardStructure
 		  withAGroupOf: aCollectionOfShips
+		withCards: aCollectionOfCards
 ]
 
 { #category : #private }
@@ -73,6 +75,11 @@ Board >> correctPositionIfFinishLineWasCrossedBy: aShip [
 		with: (self moveToFinalPosition: aShip) ]
 ]
 
+{ #category : #private }
+Board >> giveRandomCardTo: aShip [
+	aShip addCardToHand: aDeck random.
+]
+
 { #category : #moving }
 Board >> hasCrossFinishLine: aShip [
 
@@ -86,6 +93,14 @@ Board >> initializeWith: aBoardStructure withAGroupOf: aCollectionOfShips [
 
 	boardDefinition := aBoardStructure.
 	self addIntoGame: aCollectionOfShips
+]
+
+{ #category : #initialization }
+Board >> initializeWith: aBoardStructure withAGroupOf: aCollectionOfShips withCards: aCollectionOfCards [
+
+	boardDefinition := aBoardStructure.
+	self addIntoGame: aCollectionOfShips.
+	aDeck := Sequence withAll: aCollectionOfCards.
 ]
 
 { #category : #private }
@@ -159,7 +174,7 @@ Board >> positionOf: aShip [
 
 	| positionOfShip |
 	positionOfShip := positionOfShips select: [ :aPositionOfShip | 
-		                  aPositionOfShip ship == aShip ].
+		                  (aPositionOfShip ship) == aShip ].
 
 	^ positionOfShip removeFirst
 ]

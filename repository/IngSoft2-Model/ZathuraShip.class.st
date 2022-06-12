@@ -15,10 +15,21 @@ ZathuraShip class >> with: ship and: cardHand [
 	^ self new initializeWith: ship and: cardHand
 ]
 
+{ #category : #actions }
+ZathuraShip >> addCardToHand: aCard [
+	cardHand add: aCard.
+]
+
 { #category : #asserting }
 ZathuraShip >> assertIsYourTurn: aShip in: zathuraGame [
 
 	(zathuraGame isTurnOf: aShip) ifFalse: [ Error signal: 'Permanent cards can only be used when its your turn' ]
+]
+
+{ #category : #accessing }
+ZathuraShip >> cardsOf [
+
+	^ cardHand cardsOf
 ]
 
 { #category : #accessing }

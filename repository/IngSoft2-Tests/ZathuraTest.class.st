@@ -11,7 +11,7 @@ ZathuraTest >> assert: aShip isAt: locker with: lap in: aGame [
 	self assert: (aGame numberOfLapOf: aShip) equals: lap.
 ]
 
-{ #category : #jvbfjdvfjvk }
+{ #category : #boardSpecificDefinitions }
 ZathuraTest >> boardDefinitionWithNoEffectsOf: numberOfLockers and: parsecs played: laps [
 
 	| lockers |
@@ -21,7 +21,7 @@ ZathuraTest >> boardDefinitionWithNoEffectsOf: numberOfLockers and: parsecs play
 	^ BoardDefinition with: lockers and: parsecs played: laps
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #boardSpecificDefinitions }
 ZathuraTest >> boardDefinitionWithOnly: effect at: effectLockerNumber of: numberOfLockers and: parsecs played: laps [
 
 	| lockers |
@@ -37,13 +37,10 @@ ZathuraTest >> boardDefinitionWithOnly: effect at: effectLockerNumber of: number
 ZathuraTest >> testBlueShipAndRedShipStartsTheGameWithTwoCards [
 
 	| redShipCardHand blueShipCardHand die ships boardStructure zathura |
-	die := LoadedDie with: 7.
+	die := LoadedDie with: 2.
 	ships := #( 'RedShip' 'BlueShip' ).
 	boardStructure := self
-		                  boardDefinitionWithNoEffectsOf: 10
-		                  and: 100
-		                  played: 1.
-
+		                  boardDefinitionWithNoEffectsOf: 10 and: 100  played: 1.
 	zathura := ZathuraGame
 		           playBy: ships
 		           movedInBoardOf: boardStructure
@@ -51,9 +48,9 @@ ZathuraTest >> testBlueShipAndRedShipStartsTheGameWithTwoCards [
 		           withCards: { OverloadCard new }.
 
 	redShipCardHand := zathura cardsOf: 'RedShip'.
-	self assert: redShipCardHand size equals: 2.
 	blueShipCardHand := zathura cardsOf: 'BlueShip'.
-	self assert: blueShipCardHand size equals: 2
+	self assert: redShipCardHand size equals: 2.
+	self assert: blueShipCardHand size equals: 2.
 ]
 
 { #category : #shipWithHandOfCardsTests }
@@ -295,7 +292,7 @@ ZathuraTest >> testBlueShipThrowsAnOverloadCardToRedShipAndLosesOneOverloadCard 
 	blueShip using: OverloadCard new to: 'RedShip' in: zathura.
 	zathura playTurn.
 	zathura playTurn.
-	self assert: (blueShip cardsOf: OverloadCard new) equals: 1
+	self assert: (blueShip cardsOf: OverloadCard new) size equals: 1
 ]
 
 { #category : #shipWithHandOfCardsTests }
@@ -622,6 +619,29 @@ ZathuraTest >> testMoonwalkCannotHaveLessThanZeroLockers [
 		'MoonWalk cannot be created with less than zero lockers'
 ]
 
+{ #category : #shipWithHandOfCardsTests }
+ZathuraTest >> testRedShipsFallsIntoaCardGetterLockerAndGetsARandomCard [
+
+	| redShipCardHand die ships boardStructure zathura |
+	die := LoadedDie with: 1.
+	ships := #( 'RedShip' 'BlueShip' ).
+	boardStructure := self
+		                  boardDefinitionWithOnly: CardEffect
+		                  at: 2
+		                  of: 10
+		                  and: 100
+		                  played: 1.
+	zathura := ZathuraGame
+		           playBy: ships
+		           movedInBoardOf: boardStructure
+		           rolling: die
+		           withCards: { OverloadCard new }.
+
+	zathura playTurn.
+	redShipCardHand := zathura cardsOf: 'RedShip'.
+	self assert: redShipCardHand size equals: 3
+]
+
 { #category : #tests }
 ZathuraTest >> testShipLandsOnAWormholeEffectAndGoesBackOneLap [
 
@@ -759,11 +779,12 @@ ZathuraTest >> testWhenShipGoesBackwardsInTheFirstLapItStayesAtTheLapZero [
 { #category : #zathuraAssertionTests }
 ZathuraTest >> testZathuraCannotBePlayedMoreThanOnce [
 
-	| ships aDie zathura lockers boardStructure |
+	| ships aDie zathura  boardStructure |
 	aDie := LoadedDie with: 8.
 	ships := OrderedCollection with: 'BlueShip' with: 'RedShip'.
 
-	boardStructure := self boardDefinitionWithNoEffectsOf: 5
+	boardStructure := self
+		                  boardDefinitionWithNoEffectsOf: 5
 		                  and: 100
 		                  played: 3.
 	zathura := ZathuraGame
@@ -878,9 +899,6 @@ ZathuraTest >> testZathuraKnowsTheRankingOfAShip [
 
 	| die ships zathura faces boardStructure |
 	faces := OrderedCollection with: 5 with: 8 with: 9.
-	faces addLast: 5.
-	faces addLast: 8.
-	faces addLast: 9.
 	die := SequencialLoadedDie with: faces.
 	ships := OrderedCollection
 		         with: 'RedShip'
@@ -969,10 +987,11 @@ ZathuraTest >> testZathuraWhenCrossingTheLastLockerTheShipsStartsAnotherLap [
 { #category : #zathuraAssertionTests }
 ZathuraTest >> testZathuraWhileItHasNotFinishedAsksWinnerThrowsError [
 
-	| die ships zathura lockers boardStructure |
+	| die ships zathura  boardStructure |
 	die := LoadedDie with: 6.
 	ships := OrderedCollection with: 'GreenShip' with: 'BlueShip'.
-	boardStructure := self boardDefinitionWithNoEffectsOf: 3
+	boardStructure := self
+		                  boardDefinitionWithNoEffectsOf: 3
 		                  and: 100
 		                  played: 3.
 	zathura := ZathuraGame

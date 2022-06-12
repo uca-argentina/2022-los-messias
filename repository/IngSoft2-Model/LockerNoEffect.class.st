@@ -28,5 +28,4 @@ Class {
 
 { #category : #action }
 LockerNoEffect >> applyFor: aShip on: aBoard [
-
 ]
