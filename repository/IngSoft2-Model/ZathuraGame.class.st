@@ -193,17 +193,6 @@ ZathuraGame >> rankingOf: aShip [
 ]
 
 { #category : #set }
-ZathuraGame >> removeFromCardsOnTable: aCard [
-
-	| theCard |
-	theCard := 0.
-	cardsOnTable do: [ :card | 
-		(card isMemberOf: aCard class) ifTrue: [ theCard := card ] ].
-	aCard disapplyEffectTo: 'RedShip' in: self.
-	cardsOnTable remove: theCard
-]
-
-{ #category : #set }
 ZathuraGame >> removeFromCardsOnTable: aCard of: aShip [
 
 	| theCard |

@@ -44,7 +44,10 @@ ProbabilityDistributionTest >> testProbabilityDistributionReceivesACollectionWit
 ProbabilityDistributionTest >> testProbabilityDistributionThrowsErrorWhenIsIitializedWithANegativeProbability [
 
 	self
-		should: [ ProbabilityDistribution withX: { 'a' . 'b'. 'c'} andY:  { 50. 60. -10 } ]
+		should: [ ProbabilityDistribution withPoints: { 
+			           (PointProbability withX: 'a' andY: 50).
+			           (PointProbability withX: 'b' andY: 60).
+			           (PointProbability withX: 'c' andY: -10) } ]
 		raise: Error
 		withMessage: 'A probabilty can not be negative'
 ]
@@ -53,7 +56,9 @@ ProbabilityDistributionTest >> testProbabilityDistributionThrowsErrorWhenIsIitia
 ProbabilityDistributionTest >> testProbabilityDistributionThrowsErrorWhenIsIitializedWithASumOfValuesDifferentOfAHundred [
 
 	self
-		should: [ ProbabilityDistribution withX: { 'a' . 'b' } andY: { 10. 89 } ]
+		should: [ ProbabilityDistribution withPoints: { 
+					(PointProbability withX: 'a' andY: 10).
+					(PointProbability withX: 'b' andY: 89) }]
 		raise: Error
 		withMessage: 'The sum of the probabilities must be 100%'
 ]
@@ -62,18 +67,8 @@ ProbabilityDistributionTest >> testProbabilityDistributionThrowsErrorWhenIsIitia
 ProbabilityDistributionTest >> testProbabilityDistributionThrowsErrorWhenIsIitializedWithAnEmptyCollection [
 
 	self
-		should: [ ProbabilityDistribution withX: {  } andY: {  } ]
+		should: [ ProbabilityDistribution withPoints: {  } ]
 		raise: Error
 		withMessage:
 		'Probabilities should not be loaded with an empty Collection'
-]
-
-{ #category : #tests }
-ProbabilityDistributionTest >> testProbabilityDistributionThrowsErrorWhenIsIitializedWithXSizeDifferentFromYSize [
-
-	self
-		should: [ 
-		ProbabilityDistribution withX: { 'a'. 'b' } andY: { 10. 80. 10 } ]
-		raise: Error
-		withMessage: 'Probabilities should be loaded with the same amount of data for x and y'
 ]

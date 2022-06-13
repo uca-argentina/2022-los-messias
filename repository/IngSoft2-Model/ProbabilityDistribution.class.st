@@ -41,21 +41,6 @@ ProbabilityDistribution class >> withPoints: aCollectionOfPoints [
 	^self new withPoints: aCollectionOfPoints.
 ]
 
-{ #category : #'instance creation' }
-ProbabilityDistribution class >> withX: indices andY: probabilities [
-
-	self assertValidX: indices andY: probabilities.
-	^ self new initializeWithX:indices andY: probabilities
-]
-
-{ #category : #generating }
-ProbabilityDistribution >> f: exe [
-
-	| index |
-	index := x indexOf: exe.
-	^ y at: index
-]
-
 { #category : #generating }
 ProbabilityDistribution >> generateRandom [
 
@@ -67,13 +52,6 @@ ProbabilityDistribution >> generateRandom [
 		result <= (prob + sum)
 			ifTrue: [ ^ aPoint x ]
 			ifFalse: [ sum := sum + prob ] ]
-]
-
-{ #category : #initialization }
-ProbabilityDistribution >> initializeWithX: collectionOfIndices andY: collectionOfProbabilities [
-	x := collectionOfIndices.
-	y := collectionOfProbabilities
-	
 ]
 
 { #category : #initialization }

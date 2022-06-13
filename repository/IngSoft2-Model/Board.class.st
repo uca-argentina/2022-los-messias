@@ -89,13 +89,6 @@ Board >> hasCrossFinishLine: aShip [
 ]
 
 { #category : #initialization }
-Board >> initializeWith: aBoardStructure withAGroupOf: aCollectionOfShips [
-
-	boardDefinition := aBoardStructure.
-	self addIntoGame: aCollectionOfShips
-]
-
-{ #category : #initialization }
 Board >> initializeWith: aBoardStructure withAGroupOf: aCollectionOfShips withCards: aCollectionOfCards [
 
 	boardDefinition := aBoardStructure.
