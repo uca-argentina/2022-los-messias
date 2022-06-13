@@ -25,6 +25,16 @@ CardHand >> assertCardIsInHand: aCard [
 		ifFalse: [ Error signal: 'Card is not in Hand' ]
 ]
 
+{ #category : #assertions }
+CardHand >> assertZathuraHasCardsOnTable [
+	self shouldBeImplemented.
+]
+
+{ #category : #assertion }
+CardHand >> assertZathuraHasCardsOnTableIn: aZathuraGame [ 
+	self shouldBeImplemented.
+]
+
 { #category : #accesing }
 CardHand >> cardsOf [
 
@@ -61,11 +71,15 @@ CardHand >> using: card to: ship in: zathuraGame [
 ]
 
 { #category : #action }
-CardHand >> using: cancellationCard to: aShip removing: overloadCard in: zathuraGame [
+CardHand >> using: cancellationCard to: aShip removing: aCard in: zathuraGame [
 
 	"Esto rompe si hay más de una OverLoad en el tablero, vamos a tener que identificar al ship en algunos casos y en otros no. El nombre applyEffectToACard: desp hay que cambiarlo"
 
-	cancellationCard applyEffectTo: aShip removing: overloadCard in: zathuraGame
+(zathuraGame cardsOnTableOf: aCard) = 0 ifTrue:[Error signal:'There are not cards in play' ].
+	cancellationCard
+		applyEffectTo: aShip
+		removing: aCard
+		in: zathuraGame
 ]
 
 { #category : #throwing }
@@ -74,10 +88,4 @@ CardHand >> using: card toAllShipsin: zathuraGame [
 	self assertCardIsInHand: card.
 	card applyEffectToAllShipsIn: zathuraGame.
 	self remove: card
-]
-
-{ #category : #action }
-CardHand >> using: cancellationCard toCard: overloadCard in: zathuraGame [ 
-"Esto rompe si hay más de una OverLoad en el tablero, vamos a tener que identificar al ship en algunos casos y en otros no. El nombre applyEffectToACard: desp hay que cambiarlo"
-	cancellationCard applyEffectToACard: overloadCard in: zathuraGame
 ]

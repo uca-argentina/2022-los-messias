@@ -54,6 +54,67 @@ ZathuraTest >> testBlueShipAndRedShipStartsTheGameWithTwoCards [
 ]
 
 { #category : #shipWithHandOfCardsTests }
+ZathuraTest >> testBlueShipCantThrowCancellationCardIfNotCardsHaveBeenPlayed [
+
+	| diceCup zathura zBlueShip    |
+	diceCup := DiceCup withAll: { 
+			           (LoadedDie with: 3).
+			           (LoadedDie with: 4) }.
+	zathura := ZathuraGame
+		           playBy: { 'BlueShip'. 'RedShip' }
+		           movedInBoardOf:
+		           (self
+			            boardDefinitionWithNoEffectsOf: 15
+			            and: 100
+			            played: 1)
+		           rolling: diceCup
+		           withCards: { 
+				           OverloadCard new.
+				           CancellationCard new }.
+	zBlueShip := zathura zathuraShip: 'BlueShip'.
+	self
+		should: [ 
+			zBlueShip
+				using: CancellationCard new
+				to: 'RedShip'
+				removing: OverloadCard new
+				in: zathura ]
+		raise: Error
+		withMessage: 'There are not cards in play'
+]
+
+{ #category : #shipWithHandOfCardsTests }
+ZathuraTest >> testBlueShipCantThrowCancellationCardToOverloadCardIfNotOverloadCardsHaveBeenPlayed [
+
+	| diceCup zathura zBlueShip |
+	diceCup := DiceCup withAll: { 
+			           (LoadedDie with: 3).
+			           (LoadedDie with: 4) }.
+	zathura := ZathuraGame
+		           playBy: { 'BlueShip'. 'RedShip' }
+		           movedInBoardOf:
+		           (self
+			            boardDefinitionWithNoEffectsOf: 15
+			            and: 100
+			            played: 1)
+		           rolling: diceCup
+		           withCards: { 
+				           SpeedCard  new.
+				           CancellationCard new }.
+	zBlueShip := zathura zathuraShip: 'BlueShip'.
+	zBlueShip using: SpeedCard  new to: 'RedShip' in: zathura.
+	self
+		should: [ 
+			zBlueShip
+				using: CancellationCard new
+				to: 'RedShip'
+				removing: OverloadCard new
+				in: zathura ]
+		raise: Error
+		withMessage: 'There are not cards in play'
+]
+
+{ #category : #shipWithHandOfCardsTests }
 ZathuraTest >> testBlueShipCantThrowOverloadCardIfNotInHand [
 
 	| zathura aDie blueShip |
@@ -237,7 +298,56 @@ ZathuraTest >> testBlueShipThrowsASpeedCardToRedShipAndRedShipMovesRolledNumberP
 ]
 
 { #category : #shipWithHandOfCardsTests }
-ZathuraTest >> testBlueShipThrowsAnAccelerationCardToRedShipAndAllShipMovesRolledNumberPlusOneAllGame [
+ZathuraTest >> testBlueShipThrowsAnAccelerationCardAndAfterTwoRoundsThrowsACancellationCard [
+
+	| diceCup zathura zBlueShip lockersOfBlueShip lockersOfRedShip |
+	diceCup := DiceCup withAll: { 
+			           (LoadedDie with: 3).
+			           (LoadedDie with: 4) }.
+	zathura := ZathuraGame
+		           playBy: { 'BlueShip'. 'RedShip' }
+		           movedInBoardOf:
+		           (self
+			            boardDefinitionWithNoEffectsOf: 30
+			            and: 100
+			            played: 1)
+		           rolling: diceCup
+		           withCards: { AccelerationCard new }.
+	zBlueShip := zathura zathuraShip: 'BlueShip'.
+	zBlueShip using: AccelerationCard new toAllShipsin: zathura.
+	zathura
+		playTurn;
+		playTurn.
+	lockersOfBlueShip := zathura numberOfLockerOf: 'BlueShip'.
+	lockersOfRedShip := zathura numberOfLockerOf: 'RedShip'.
+	self
+		assert: lockersOfBlueShip equals: 8;
+		assert: lockersOfRedShip equals: 8.
+	zathura
+		playTurn;
+		playTurn.
+	lockersOfBlueShip := zathura numberOfLockerOf: 'BlueShip'.
+	lockersOfRedShip := zathura numberOfLockerOf: 'RedShip'.
+	self
+		assert: lockersOfBlueShip equals: 16;
+		assert: lockersOfRedShip equals: 16.
+	zBlueShip
+		using: CancellationCard new
+		removing: AccelerationCard new
+		in: zathura.
+	zathura
+		playTurn;
+		playTurn.
+	lockersOfBlueShip := zathura numberOfLockerOf: 'BlueShip'.
+	lockersOfRedShip := zathura numberOfLockerOf: 'RedShip'.
+	self
+		assert: lockersOfBlueShip equals: 23;
+		assert: lockersOfRedShip equals: 23;
+		assert: (zathura cardsOnTableOf: AccelerationCard new )equals: 0.
+]
+
+{ #category : #shipWithHandOfCardsTests }
+ZathuraTest >> testBlueShipThrowsAnAccelerationCardAndAllShipMovesRolledNumberPlusOneAllGame [
 
 	| diceCup zathura zBlueShip lockersOfBlueShip lockersOfRedShip |
 	diceCup := DiceCup withAll: { 
@@ -251,9 +361,9 @@ ZathuraTest >> testBlueShipThrowsAnAccelerationCardToRedShipAndAllShipMovesRolle
 			            and: 100
 			            played: 1)
 		           rolling: diceCup
-		           withCards: { AccelerationCard new }.
+		           withCards: { AccelerationCard  new }.
 	zBlueShip := zathura zathuraShip: 'BlueShip'.
-	zBlueShip using: AccelerationCard new toAllShipsin: zathura.
+	zBlueShip using: AccelerationCard  new toAllShipsin: zathura.
 	zathura
 		playTurn;
 		playTurn.

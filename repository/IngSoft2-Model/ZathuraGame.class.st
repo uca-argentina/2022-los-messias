@@ -106,7 +106,13 @@ ZathuraGame >> assertZathuraHasNotBeenPlayed [
 ZathuraGame >> cardsOf: spaceship [
 
 	^ (self zathuraShip: spaceship) cardsOf
-	"(self zathuraShip: spaceship) cardsOf Lo acabo de agregar pero no se que iria acá porque no se bien para que usamos el cardsOf: en ZathuraShip"
+]
+
+{ #category : #'accessing - attributes' }
+ZathuraGame >> cardsOnTableOf: aCard [ 
+	| cards |
+	cards:= cardsOnTable select: [:card | card isMemberOf: (aCard class)].
+	^(cards size)
 ]
 
 { #category : #action }

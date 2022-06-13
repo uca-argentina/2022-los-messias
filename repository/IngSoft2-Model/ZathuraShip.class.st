@@ -61,6 +61,15 @@ ZathuraShip >> ship [
 	^ ship
 ]
 
+{ #category : #actions }
+ZathuraShip >> using: aCancellationCard removing: aCard in: aZathuraGame [ 
+			cardHand
+		using: aCancellationCard
+		to: ''
+		removing: aCard
+		in: aZathuraGame
+]
+
 { #category : #action }
 ZathuraShip >> using: card to: aShip in: zathuraGame [
 
