@@ -3,7 +3,8 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'x',
-		'y'
+		'y',
+		'points'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -27,6 +28,19 @@ ProbabilityDistribution class >> assertValidX: indices andY: probabilities [
 		Error signal: 'A probabilty can not be negative' ]
 ]
 
+{ #category : #'class initialization' }
+ProbabilityDistribution class >> withPoints: aCollectionOfPoints [
+
+	| indices probabilities |
+	indices := OrderedCollection new.
+	probabilities := OrderedCollection new.
+	aCollectionOfPoints do: [ :aPoint | 
+		indices add: aPoint x.
+		probabilities add: aPoint y ].
+	self assertValidX: indices andY: probabilities.
+	^self new withPoints: aCollectionOfPoints.
+]
+
 { #category : #'instance creation' }
 ProbabilityDistribution class >> withX: indices andY: probabilities [
 
@@ -48,16 +62,21 @@ ProbabilityDistribution >> generateRandom [
 	| result sum prob |
 	result := 100 atRandom.
 	sum := 0.
-	x do: [ :exe | 
-		prob := self f: exe.
+	points do: [ :aPoint | 
+		prob := aPoint y.
 		result <= (prob + sum)
-			ifTrue: [ ^ exe ]
+			ifTrue: [ ^ aPoint x ]
 			ifFalse: [ sum := sum + prob ] ]
 ]
 
-{ #category : #initalization }
+{ #category : #initialization }
 ProbabilityDistribution >> initializeWithX: collectionOfIndices andY: collectionOfProbabilities [
 	x := collectionOfIndices.
 	y := collectionOfProbabilities
 	
+]
+
+{ #category : #initialization }
+ProbabilityDistribution >> withPoints: aCollectionOfPoints [ 
+	points:= aCollectionOfPoints.
 ]

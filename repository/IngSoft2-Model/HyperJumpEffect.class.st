@@ -42,9 +42,26 @@ HyperJumpEffect class >> assertSequenceIsValid: parsecSequence [
 		Error signal: 'Hyperjump cannot have less than zero parsecs in the sequence' ]
 ]
 
+{ #category : #conversion }
+HyperJumpEffect class >> convertToParsec: aCollectionOfLightYears [ 
+	| parsecs |
+	parsecs:= OrderedCollection new.
+	aCollectionOfLightYears do: [ :aLightYear | parsecs add: ((aLightYear / 3) asInteger)].
+	^parsecs
+]
+
 { #category : #'instance creation' }
 HyperJumpEffect class >> with: parsecSequence [
 
+	self assertSequenceIsValid: parsecSequence.
+	^ self new initializeWith: parsecSequence
+]
+
+{ #category : #'instance creation' }
+HyperJumpEffect class >> withLightYears: lightYearsSequence [
+
+	| parsecSequence |
+	parsecSequence:= self convertToParsec: lightYearsSequence.
 	self assertSequenceIsValid: parsecSequence.
 	^ self new initializeWith: parsecSequence
 ]

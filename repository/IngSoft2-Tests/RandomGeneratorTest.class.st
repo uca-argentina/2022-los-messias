@@ -7,17 +7,19 @@ Class {
 { #category : #boardDefinitionGeneratorTests }
 RandomGeneratorTest >> testBoardDefinitionGeneratorGeneratesABoardDefinition [
 
-	| boardDefinition effects probabilityDistribution |
-	effects := { 
-		           LockerNoEffect new.
-		           AtomicBombEffect new.
-		           (HyperJumpEffect with: { 2. 4. 8 }).
-		           (MoonWalkEffect with: 10).
-		           SpeedUpEffect new.
-		           WormHoleEffect new }.
-	probabilityDistribution := ProbabilityDistribution
-		                           withX: effects
-		                           andY: { 40. 2. 8. 10. 20. 20 }.
+	| boardDefinition  probabilityDistribution points |
+	points := { 
+		          (PointProbability withX: LockerNoEffect new andY: 40).
+		          (PointProbability withX: AtomicBombEffect new andY: 2).
+		          (PointProbability
+			           withX: (HyperJumpEffect with: { 2.4. 8 })
+			           andY: 8).
+		          (PointProbability
+			           withX: (MoonWalkEffect with: 10)
+			           andY: 10).
+		          (PointProbability withX: SpeedUpEffect new andY: 20).
+		          (PointProbability withX: WormHoleEffect new andY: 20) }.
+	probabilityDistribution := ProbabilityDistribution withPoints: points.
 	boardDefinition := (BoardDefinitionGenerator with:
 		                    (RandomGenerator distributedBy:
 			                     probabilityDistribution))
@@ -40,7 +42,7 @@ RandomGeneratorTest >> testCardGeneratorGeneratesACollectionOfDifferentCardsWith
 		         CancellationCard new.
 		         RedoCard new.
 		         RepeatCard new }.
-	probabilityDistribution := ProbabilityDistribution
+	"probabilityDistribution := ProbabilityDistribution
 		                           withX: cards
 		                           andY: { 
 				                           (100 / 6).
@@ -48,9 +50,9 @@ RandomGeneratorTest >> testCardGeneratorGeneratesACollectionOfDifferentCardsWith
 				                           (100 / 6).
 				                           (100 / 6).
 				                           (100 / 6).
-				                           (100 / 6) }.
+				                           (100 / 6) }."
 
-	lockers := (RandomGenerator distributedBy: probabilityDistribution) 
+	lockers := (RandomGenerator distributedByRandom: cards) 
 		           generateRandomObjectsWith: 100000.
 
 	self assert:
@@ -81,18 +83,21 @@ RandomGeneratorTest >> testCardGeneratorGeneratesACollectionOfDifferentCardsWith
 { #category : #lockerGeneratorTests }
 RandomGeneratorTest >> testLockerGeneratorGeneratesACollectionOfDifferentLockersWithCorrectProportion [
 
-	| lockers effects probabilityDistribution |
-	effects := { 
-		           LockerNoEffect new.
-		           AtomicBombEffect new.
-		           (HyperJumpEffect with: { 2. 4. 8 }).
-		           (MoonWalkEffect with: 10).
-		           WormHoleEffect new.
-					  SpeedUpEffect new. 
-		           CardEffect new }.
-	probabilityDistribution := ProbabilityDistribution
-		                           withX: effects
-		                           andY: { 30. 2. 8. 10. 20. 20 . 10 }.
+	| lockers probabilityDistribution points |
+	points := { 
+		          (PointProbability withX: LockerNoEffect new andY: 30).
+		          (PointProbability withX: AtomicBombEffect new andY: 2).
+		          (PointProbability
+			           withX: (HyperJumpEffect with: { 2.4. 8 })
+			           andY: 8).
+		          (PointProbability
+			           withX: (MoonWalkEffect with: 10)
+			           andY: 10).
+		          (PointProbability withX: SpeedUpEffect new andY: 20).
+		          (PointProbability withX: WormHoleEffect new andY: 20).
+		          (PointProbability withX: CardEffect new andY: 10) }.
+		
+	probabilityDistribution := ProbabilityDistribution withPoints: points.
 
 	lockers := (RandomGenerator distributedBy: probabilityDistribution) 
 		           generateRandomObjectsWith: 100000.
@@ -130,26 +135,34 @@ RandomGeneratorTest >> testLockerGeneratorGeneratesACollectionOfDifferentLockers
 { #category : #lockerGeneratorTests }
 RandomGeneratorTest >> testLockerGeneratorGeneratesACollectionOfLockersWithDifferentInstancesOfEffects [
 
-	| lockers |
+	| lockers probabilityDistribution |
+	probabilityDistribution := ProbabilityDistribution withPoints:
+		                           { (PointProbability
+			                            withX: MoonWalkEffect new
+			                            andY: 100) }.
 	lockers := (RandomGenerator distributedBy:
-		            (ProbabilityDistribution withX: { MoonWalkEffect new } andY: { 100 })) 
-		           generateRandomObjectsWith: 3.
+		            probabilityDistribution) generateRandomObjectsWith: 3.
 	self deny: (lockers at: 2) identicalTo: (lockers at: 3)
 ]
 
 { #category : #lockerGeneratorTests }
 RandomGeneratorTest >> testLockerGeneratorGeneratesACollectionOfSizeTen [
 
-	| lockers effects probabilityDistribution |
-	effects := { 
-		           LockerNoEffect new.
-		           AtomicBombEffect new.
-		           (HyperJumpEffect with: { 2. 4. 8 }).
-		           (MoonWalkEffect with: 10).
-		           WormHoleEffect new.
-		           SpeedUpEffect new }.
-	probabilityDistribution := ProbabilityDistribution withX: effects  andY:{ 40. 2. 8. 10. 20. 20 }.
-		                           .
+	| lockers  probabilityDistribution points |
+	points := { 
+		          (PointProbability withX: LockerNoEffect new andY: 30).
+		          (PointProbability withX: AtomicBombEffect new andY: 2).
+		          (PointProbability
+			           withX: (HyperJumpEffect with: { 2.4. 8 })
+			           andY: 8).
+		          (PointProbability
+			           withX: (MoonWalkEffect with: 10)
+			           andY: 10).
+		          (PointProbability withX: SpeedUpEffect new andY: 20).
+		          (PointProbability withX: WormHoleEffect new andY: 20).
+		          (PointProbability withX: CardEffect new andY: 10) }.
+
+	probabilityDistribution := ProbabilityDistribution withPoints: points.
 	lockers := (RandomGenerator distributedBy: probabilityDistribution) 
 		           generateRandomObjectsWith: 10.
 

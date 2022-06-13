@@ -674,6 +674,48 @@ ZathuraTest >> testShipLandsOnAWormholeEffectAndGoesBackOneLap [
 ]
 
 { #category : #boardTests }
+ZathuraTest >> testShipsFallIntoAHyperJumpLockerAndMovesByTheLightYearsInASequence [
+
+	| die ships zathura  boardStructure lightYears |
+	die := LoadedDie with: 1.
+	ships := OrderedCollection
+		         with: 'BlueShip'
+		         with: 'RedShip'
+		         with: 'GreenShip'.
+
+	lightYears := OrderedCollection with: 75 with: 93 with: 33.
+	boardStructure := self
+		                  boardDefinitionWithOnly:
+		                  (HyperJumpEffect withLightYears: lightYears)
+		                  at: 2
+		                  of: 10
+		                  and: 100
+		                  played: 3.
+	zathura := ZathuraGame
+		           playBy: ships
+		           movedInBoardOf: boardStructure
+		           rolling: die.
+	zathura playTurn.
+	zathura playTurn.
+	zathura playTurn.
+	self
+		assert: 'BlueShip'
+		isAt: 4
+		with: 0
+		in: zathura.
+	self
+		assert: 'RedShip'
+		isAt: 3
+		with: 0
+		in: zathura.
+	self
+		assert: 'GreenShip'
+		isAt: 2
+		with: 0
+		in: zathura
+]
+
+{ #category : #boardTests }
 ZathuraTest >> testShipsFallIntoAHyperJumpLockerAndMovesByTheParsecsInASequence [
 
 	| die ships zathura parsecs boardStructure |
@@ -862,17 +904,22 @@ ZathuraTest >> testZathuraIsInitializedWithAllShipsInPositionZeroAndLapZero [
 { #category : #shipWithHandOfCardsTests }
 ZathuraTest >> testZathuraKnowsTheNameOfShipWithHandOfCards [
 
-	| aShipWithHandOfCards aShip effects probabilityDistribution boardDefinition die ships zathura |
+	| aShipWithHandOfCards aShip  probabilityDistribution boardDefinition die ships zathura points |
 	aShip := 'RedShip'.
-	effects := { 
-		           LockerNoEffect new.
-		           AtomicBombEffect new.
-		           (HyperJumpEffect with: { 2. 4. 8 }).
-		           (MoonWalkEffect with: 10).
-		           WormHoleEffect new.
-		           CardEffect new.
-		           SpeedUpEffect new }.
-	probabilityDistribution := ProbabilityDistribution withX: effects  andY: { 30. 2. 8. 10. 20. 10. 20 }.
+	points := { 
+		          (PointProbability withX: LockerNoEffect new andY: 30).
+		          (PointProbability withX: AtomicBombEffect new andY: 2).
+		          (PointProbability
+			           withX: (HyperJumpEffect with: { 2.4. 8 })
+			           andY: 8).
+		          (PointProbability
+			           withX: (MoonWalkEffect with: 10)
+			           andY: 10).
+		          (PointProbability withX: SpeedUpEffect new andY: 20).
+		          (PointProbability withX: WormHoleEffect new andY: 20).
+		          (PointProbability withX: CardEffect new andY: 10) }.
+
+	probabilityDistribution := ProbabilityDistribution withPoints: points.
 
 	boardDefinition := (BoardDefinitionGenerator with:
 		                    (RandomGenerator distributedBy:

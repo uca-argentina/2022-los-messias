@@ -8,9 +8,9 @@ Class {
 ProbabilityDistributionTest >> testProbabilityDistributionReceivesACollectionWithOneHundredAndZeroProbabilityAndGivesTheIndexOfAHundredAsResult [
 
 	| aProbabilityDistribution |
-	aProbabilityDistribution := ProbabilityDistribution
-		                            withX: { 'a'. 'b' }
-		                            andY: { 100. 0 }.
+	aProbabilityDistribution := ProbabilityDistribution withPoints: { 
+			                            (PointProbability withX: 'a' andY: 100).
+			                            (PointProbability withX: 'b' andY: 0) }.
 	self assert: aProbabilityDistribution generateRandom equals: 'a'
 ]
 
@@ -18,9 +18,10 @@ ProbabilityDistributionTest >> testProbabilityDistributionReceivesACollectionWit
 ProbabilityDistributionTest >> testProbabilityDistributionReceivesACollectionWithProbabilitiesAndDistributesThemCorrectly [
 
 	| aProbabilityDistribution aCollection |
-	aProbabilityDistribution := ProbabilityDistribution
-		                            withX: { 'a'. 'b'. 'c' }
-		                            andY: { 75. 20. 5 }.
+	aProbabilityDistribution := ProbabilityDistribution withPoints: { 
+			                            (PointProbability withX: 'a' andY: 75).
+			                            (PointProbability  withX: 'b' andY: 20).
+			                            (PointProbability  withX: 'c' andY: 5) }.
 
 	aCollection := OrderedCollection new.
 	1 to: 100000 do: [ :i | 
