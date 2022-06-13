@@ -12,17 +12,30 @@ ZathuraTest >> assert: aShip isAt: locker with: lap in: aGame [
 ]
 
 { #category : #boardSpecificDefinitions }
-ZathuraTest >> boardDefinitionWithNoEffectsOf: numberOfLockers and: parsecs played: laps [
+ZathuraTest >> boardDefinitionWithNoEffectsOf: numberOfLockers and: unitMeasure played: laps [
 
 	| lockers |
 	lockers := OrderedCollection new.
 	1 to: numberOfLockers do: [ :number | 
 	lockers add: LockerNoEffect new ].
-	^ BoardDefinition with: lockers and: parsecs played: laps
+	^ BoardDefinition
+		  with: lockers
+		  and: unitMeasure
+		  played: laps
 ]
 
 { #category : #boardSpecificDefinitions }
-ZathuraTest >> boardDefinitionWithOnly: effect at: effectLockerNumber of: numberOfLockers and: parsecs played: laps [
+ZathuraTest >> boardDefinitionWithNoEffectsOf: numberOfLockers andParsec: parsec played: laps [
+
+	| lockers |
+	lockers := OrderedCollection new.
+	1 to: numberOfLockers do: [ :number | 
+	lockers add: LockerNoEffect new ].
+	^ BoardDefinition with: lockers and: (Parsec with: parsec) played: laps
+]
+
+{ #category : #boardSpecificDefinitions }
+ZathuraTest >> boardDefinitionWithOnly: effect at: effectLockerNumber of: numberOfLockers andParsec: parsec played: laps [
 
 	| lockers |
 	lockers := OrderedCollection new.
@@ -30,7 +43,16 @@ ZathuraTest >> boardDefinitionWithOnly: effect at: effectLockerNumber of: number
 	lockers add: LockerNoEffect new ].
 	lockers at: effectLockerNumber put: effect.
 
-	^ BoardDefinition with: lockers and: parsecs  played: laps
+	^ BoardDefinition with: lockers and: (Parsec with: parsec) played: laps
+]
+
+{ #category : #tests }
+ZathuraTest >> testAnObjectIsEqualToAnotherObjectIfTheyHaveTheSameClass [
+
+	| anOverloadCard anotherOverLoadCard |
+	anOverloadCard := OverloadCard new.
+	anotherOverLoadCard := OverloadCard new.
+	self assert: (anOverloadCard hasEqualClass: anotherOverLoadCard)
 ]
 
 { #category : #shipWithHandOfCardsTests }
@@ -40,7 +62,7 @@ ZathuraTest >> testBlueShipAndRedShipStartsTheGameWithTwoCards [
 	die := LoadedDie with: 2.
 	ships := #( 'RedShip' 'BlueShip' ).
 	boardStructure := self
-		                  boardDefinitionWithNoEffectsOf: 10 and: 100  played: 1.
+		                  boardDefinitionWithNoEffectsOf: 10 andParsec: 100  played: 1.
 	zathura := ZathuraGame
 		           playBy: ships
 		           movedInBoardOf: boardStructure
@@ -65,7 +87,7 @@ ZathuraTest >> testBlueShipCantThrowCancellationCardIfNotCardsHaveBeenPlayed [
 		           movedInBoardOf:
 		           (self
 			            boardDefinitionWithNoEffectsOf: 15
-			            and: 100
+			            andParsec: 100
 			            played: 1)
 		           rolling: diceCup
 		           withCards: { 
@@ -95,7 +117,7 @@ ZathuraTest >> testBlueShipCantThrowCancellationCardToOverloadCardIfNotOverloadC
 		           movedInBoardOf:
 		           (self
 			            boardDefinitionWithNoEffectsOf: 15
-			            and: 100
+			            andParsec: 100
 			            played: 1)
 		           rolling: diceCup
 		           withCards: { 
@@ -124,7 +146,7 @@ ZathuraTest >> testBlueShipCantThrowOverloadCardIfNotInHand [
 		           movedInBoardOf:
 		           (self
 			            boardDefinitionWithNoEffectsOf: 10
-			            and: 100
+			            andParsec: 100
 			            played: 1)
 		           rolling: aDie
 		           withCards: { AccelerationCard new }.
@@ -149,7 +171,7 @@ ZathuraTest >> testBlueShipFallsIntoAAtomicBombAndAllShipsGoToFirstLockerOfTheSa
 	boardDefinition := self boardDefinitionWithOnly: AtomicBombEffect new
 		                  at: 7
 		                  of: 10
-		                  and: 50
+		                  andParsec: 50
 		                  played: 3.
 	zathura := ZathuraGame
 		           playBy: ships
@@ -188,7 +210,7 @@ ZathuraTest >> testBlueShipFallsIntoAMoonWalkLockerAndTheResultIsItMovesAllOther
 	boardStructure := self boardDefinitionWithOnly: (MoonWalkEffect with: 2)
 		                  at: 7
 		                  of: 10
-		                  and: 100
+		                  andParsec: 100
 		                  played: 3.
 	zathura := ZathuraGame
 		           playBy: ships
@@ -224,7 +246,7 @@ ZathuraTest >> testBlueShipFallsIntoASpeedUpLockerAndTheResultIsItAdvancesFourLo
 	boardStructure := self boardDefinitionWithOnly: SpeedUpEffect new
 		                  at: 4
 		                  of: 8
-		                  and: 100
+		                  andParsec: 100
 		                  played: 3.
 	zathura := ZathuraGame
 		           playBy: ships
@@ -247,7 +269,7 @@ ZathuraTest >> testBlueShipFallsIntoAWormHoleLockerAndTheResultIsItAdvancesFourL
 	boardStructure := self boardDefinitionWithOnly: WormHoleEffect new
 		                  at: 6
 		                  of: 9
-		                  and: 100
+		                  andParsec: 100
 		                  played: 3.
 	zathura := ZathuraGame
 		           playBy: ships
@@ -273,7 +295,7 @@ ZathuraTest >> testBlueShipThrowsASpeedCardToRedShipAndRedShipMovesRolledNumberP
 		           movedInBoardOf:
 		           (self
 			            boardDefinitionWithNoEffectsOf: 20
-			            and: 100
+			            andParsec: 100
 			            played: 1)
 		           rolling: diceCup
 		           withCards: { SpeedCard new }.
@@ -309,7 +331,7 @@ ZathuraTest >> testBlueShipThrowsAnAccelerationCardAndAfterTwoRoundsThrowsACance
 		           movedInBoardOf:
 		           (self
 			            boardDefinitionWithNoEffectsOf: 30
-			            and: 100
+			            andParsec: 100
 			            played: 1)
 		           rolling: diceCup
 		           withCards: { AccelerationCard new }.
@@ -358,7 +380,7 @@ ZathuraTest >> testBlueShipThrowsAnAccelerationCardAndAllShipMovesRolledNumberPl
 		           movedInBoardOf:
 		           (self
 			            boardDefinitionWithNoEffectsOf: 20
-			            and: 100
+			            andParsec: 100
 			            played: 1)
 		           rolling: diceCup
 		           withCards: { AccelerationCard  new }.
@@ -392,7 +414,7 @@ ZathuraTest >> testBlueShipThrowsAnOverloadCardToRedShipAndLosesOneOverloadCard 
 		           movedInBoardOf:
 		           (self
 			            boardDefinitionWithNoEffectsOf: 10
-			            and: 100
+			            andParsec: 100
 			            played: 1)
 		           rolling: aDie
 		           withCards: { OverloadCard new }.
@@ -415,7 +437,7 @@ ZathuraTest >> testBlueShipThrowsAnOverloadCardToRedShipAndRedShipMovesBackwards
 		           movedInBoardOf:
 		           (self
 			            boardDefinitionWithNoEffectsOf: 10
-			            and: 100
+			            andParsec: 100
 			            played: 1)
 		           rolling: aDie
 		           withCards: { OverloadCard new }.
@@ -441,7 +463,7 @@ ZathuraTest >> testBlueShipThrowsAnOverloadCardToRedShipAndRedShipMovesRolledNum
 	zathura := ZathuraGame
 		           playBy: { 'BlueShip'. 'RedShip' }
 		           movedInBoardOf:
-		           (self boardDefinitionWithNoEffectsOf: 15 and: 100 played: 1)
+		           (self boardDefinitionWithNoEffectsOf: 15 andParsec: 100 played: 1)
 		           rolling: diceCup
 		           withCards: { OverloadCard new }.
 	zBlueShip := zathura zathuraShip: 'BlueShip'.
@@ -476,7 +498,7 @@ ZathuraTest >> testBlueShipThrowsAnOverloadCardToRedShipThenRedShipsThrowsACance
 		           movedInBoardOf:
 		           (self
 			            boardDefinitionWithNoEffectsOf: 15
-			            and: 100
+			            andParsec: 100
 			            played: 1)
 		           rolling: diceCup
 		           withCards: { 
@@ -515,7 +537,7 @@ ZathuraTest >> testBlueShipThrowsErrorWhenUsesAnAccelerationCardAndItIsNotItsTur
 	ships := #( 'BlueShip' 'RedShip' ).
 	boardStructure := self
 		                  boardDefinitionWithNoEffectsOf: 10
-		                  and: 100
+		                  andParsec: 100
 		                  played: 1.
 
 	zathura := ZathuraGame
@@ -541,7 +563,7 @@ ZathuraTest >> testBlueShipThrowsErrorWhenUsesAnOverloadCardAndItIsNotItsTurn [
 	ships := #( 'BlueShip' 'RedShip' ).
 	boardStructure := self
 		                  boardDefinitionWithNoEffectsOf: 10
-		                  and: 100
+		                  andParsec: 100
 		                  played: 1.
 
 	zathura := ZathuraGame
@@ -567,7 +589,7 @@ ZathuraTest >> testBlueShipThrowsErrorWhenUsesAnSpeedCardAndItIsNotItsTurn [
 	ships := #( 'BlueShip' 'RedShip' ).
 	boardStructure := self
 		                  boardDefinitionWithNoEffectsOf: 10
-		                  and: 100
+		                  andParsec: 100
 		                  played: 1.
 
 	zathura := ZathuraGame
@@ -585,7 +607,19 @@ ZathuraTest >> testBlueShipThrowsErrorWhenUsesAnSpeedCardAndItIsNotItsTurn [
 		withMessage: 'Permanent cards can only be used when its your turn'
 ]
 
-{ #category : #boardStructureAssertionTests }
+{ #category : #boardTests }
+ZathuraTest >> testBoardCanBeInitializedWithLightyears [
+
+	| board |
+	board := self
+		         boardDefinitionWithNoEffectsOf: 20
+		         and: (LightYear with: 60)
+		         played: 3.
+
+	self assert: board parsecsPerLocker equals: 1
+]
+
+{ #category : #boardDefinitionAssertionTests }
 ZathuraTest >> testBoardStructureCannotHaveLessThanTwoLockers [
 
 	self
@@ -595,7 +629,7 @@ ZathuraTest >> testBoardStructureCannotHaveLessThanTwoLockers [
 		withMessage: 'Board Structure cannot have less than two lockers'
 ]
 
-{ #category : #boardStructureAssertionTests }
+{ #category : #boardDefinitionAssertionTests }
 ZathuraTest >> testBoardStructureCannotHaveLessThanZeroLaps [
 
 	self
@@ -604,7 +638,7 @@ ZathuraTest >> testBoardStructureCannotHaveLessThanZeroLaps [
 				with: { 
 						LockerNoEffect new.
 						LockerNoEffect new }
-				and: 10
+				and: (Parsec with: 10)
 				played: 0 ]
 		raise: Error
 		withMessage: 'Board Structure cannot have less than zero laps'.
@@ -615,13 +649,13 @@ ZathuraTest >> testBoardStructureCannotHaveLessThanZeroLaps [
 				with: { 
 						LockerNoEffect new.
 						LockerNoEffect new }
-				and: 10
+				and: (Parsec with: 10)
 				played: -3 ]
 		raise: Error
 		withMessage: 'Board Structure cannot have less than zero laps'
 ]
 
-{ #category : #boardStructureAssertionTests }
+{ #category : #boardDefinitionAssertionTests }
 ZathuraTest >> testBoardStructureCannotHaveLessThanZeroParsecs [
 
 	self
@@ -630,7 +664,7 @@ ZathuraTest >> testBoardStructureCannotHaveLessThanZeroParsecs [
 				with: { 
 						LockerNoEffect new.
 						LockerNoEffect new }
-				and: 0
+				and: (Parsec with: 0)
 				played: 3 ]
 		raise: Error
 		withMessage: 'Board Structure cannot have less than zero parsecs'.
@@ -641,7 +675,7 @@ ZathuraTest >> testBoardStructureCannotHaveLessThanZeroParsecs [
 				with: { 
 						LockerNoEffect new.
 						LockerNoEffect new }
-				and: -5
+				and: (Parsec with: -5)
 				played: 3 ]
 		raise: Error
 		withMessage: 'Board Structure cannot have less than zero parsecs'
@@ -659,7 +693,7 @@ ZathuraTest >> testGreenShipWinsAndFinishesInPositionZeroWithOneLapCompleted [
 
 	boardStructure := self
 		                  boardDefinitionWithNoEffectsOf: 10
-		                  and: 100
+		                  andParsec: 100
 		                  played: 1.
 	zathura := ZathuraGame
 		           playBy: ships
@@ -694,7 +728,42 @@ ZathuraTest >> testGreenShipWinsAndFinishesInPositionZeroWithOneLapCompleted [
 	self assert: zathura winner ship equals: 'GreenShip'
 ]
 
-{ #category : #boardStructureAssertionTests }
+{ #category : #boardTests }
+ZathuraTest >> testHyperJumpUnderstandBothLightYearsAndParsecsInTheSameSequence [
+
+	| sequence die ships boardDefinition zathura |
+	die := LoadedDie with: 1.
+
+	ships := OrderedCollection
+		         with: 'BlueShip'
+		         with: 'RedShip'
+		         with: 'GreenShip'.
+
+	sequence := { 
+		            (Parsec with: 6).
+		            (LightYear with: 3) }.
+
+	boardDefinition := self
+		                   boardDefinitionWithOnly:
+		                   (HyperJumpEffect with: sequence)
+		                   at: 2
+		                   of: 10
+		                   andParsec: 10
+		                   played: 3.
+
+	zathura := ZathuraGame
+		           playBy: ships
+		           movedInBoardOf: boardDefinition
+		           rolling: die.
+
+	zathura playTurn.
+	self assert: (zathura numberOfLockerOf: 'BlueShip') equals: 7.
+
+	zathura playTurn.
+	self assert: (zathura numberOfLockerOf: 'RedShip') equals: 2
+]
+
+{ #category : #boardDefinitionAssertionTests }
 ZathuraTest >> testHyperjumpCannotHaveANullParsecSequence [
 
 	self
@@ -703,17 +772,17 @@ ZathuraTest >> testHyperjumpCannotHaveANullParsecSequence [
 		withMessage: 'Hyperjump cannot have a null parsec sequence'
 ]
 
-{ #category : #boardStructureAssertionTests }
+{ #category : #boardDefinitionAssertionTests }
 ZathuraTest >> testHyperjumpCannotHaveLessThanZeroParsecsInTheSequence [
 
 	self
-		should: [ HyperJumpEffect with: { 5. -2. 10 } ]
+		should: [ HyperJumpEffect with: { (Parsec with: 5). (Parsec with: -2). (Parsec with: 10) } ]
 		raise: Error
 		withMessage:
 		'Hyperjump cannot have less than zero parsecs in the sequence'
 ]
 
-{ #category : #boardStructureAssertionTests }
+{ #category : #boardDefinitionAssertionTests }
 ZathuraTest >> testMoonwalkCannotHaveLessThanZeroLockers [
 
 	self
@@ -729,7 +798,7 @@ ZathuraTest >> testMoonwalkCannotHaveLessThanZeroLockers [
 		'MoonWalk cannot be created with less than zero lockers'
 ]
 
-{ #category : #shipWithHandOfCardsTests }
+{ #category : #boardTests }
 ZathuraTest >> testRedShipsFallsIntoaCardGetterLockerAndGetsARandomCard [
 
 	| redShipCardHand die ships boardStructure zathura |
@@ -739,7 +808,7 @@ ZathuraTest >> testRedShipsFallsIntoaCardGetterLockerAndGetsARandomCard [
 		                  boardDefinitionWithOnly: CardEffect
 		                  at: 2
 		                  of: 10
-		                  and: 100
+		                  andParsec: 100
 		                  played: 1.
 	zathura := ZathuraGame
 		           playBy: ships
@@ -760,7 +829,7 @@ ZathuraTest >> testShipLandsOnAWormholeEffectAndGoesBackOneLap [
 	boardStructure := self boardDefinitionWithOnly: WormHoleEffect new
 		                  at: 3
 		                  of: 10
-		                  and: 100
+		                  andParsec: 100
 		                  played: 3.
 	ships := OrderedCollection with: 'BlueShip' with: 'RedShip'.
 	zathura := ZathuraGame
@@ -786,20 +855,20 @@ ZathuraTest >> testShipLandsOnAWormholeEffectAndGoesBackOneLap [
 { #category : #boardTests }
 ZathuraTest >> testShipsFallIntoAHyperJumpLockerAndMovesByTheLightYearsInASequence [
 
-	| die ships zathura  boardStructure lightYears |
+	| die ships zathura  boardStructure lightYears sequence |
 	die := LoadedDie with: 1.
 	ships := OrderedCollection
 		         with: 'BlueShip'
 		         with: 'RedShip'
 		         with: 'GreenShip'.
 
-	lightYears := OrderedCollection with: 75 with: 93 with: 33.
+	sequence := { LightYear with: 75. LightYear with: 93. LightYear with: 33 }.
 	boardStructure := self
 		                  boardDefinitionWithOnly:
-		                  (HyperJumpEffect withLightYears: lightYears)
+		                  (HyperJumpEffect with: sequence)
 		                  at: 2
 		                  of: 10
-		                  and: 100
+		                  andParsec: 100
 		                  played: 3.
 	zathura := ZathuraGame
 		           playBy: ships
@@ -828,18 +897,23 @@ ZathuraTest >> testShipsFallIntoAHyperJumpLockerAndMovesByTheLightYearsInASequen
 { #category : #boardTests }
 ZathuraTest >> testShipsFallIntoAHyperJumpLockerAndMovesByTheParsecsInASequence [
 
-	| die ships zathura parsecs boardStructure |
+	| die ships zathura boardStructure sequence |
 	die := LoadedDie with: 1.
 	ships := OrderedCollection
 		         with: 'BlueShip'
 		         with: 'RedShip'
 		         with: 'GreenShip'.
 
-	parsecs := OrderedCollection with: 25 with: 31 with: 11.
-	boardStructure := self boardDefinitionWithOnly: (HyperJumpEffect with: parsecs)
+	sequence := { 
+		            (Parsec with: 25).
+		            (Parsec with: 31).
+		            (Parsec with: 11) }.
+	boardStructure := self
+		                  boardDefinitionWithOnly:
+		                  (HyperJumpEffect with: sequence)
 		                  at: 2
 		                  of: 10
-		                  and: 100
+		                  andParsec: 100
 		                  played: 3.
 	zathura := ZathuraGame
 		           playBy: ships
@@ -873,7 +947,7 @@ ZathuraTest >> testThePositionOfEachShipCanBeKnownWhenTheGameIsFinished [
 			           (LoadedDie with: 6).
 			           (LoadedDie with: 2) }.
 	boardStructure := self boardDefinitionWithNoEffectsOf: 10
-		                  and: 100
+		                  andParsec: 100
 		                  played: 1.
 	ships := OrderedCollection
 		         with: 'BlueShip'
@@ -910,7 +984,7 @@ ZathuraTest >> testWhenShipGoesBackwardsInTheFirstLapItStayesAtTheLapZero [
 	boardStructure := self boardDefinitionWithOnly: WormHoleEffect new
 		                  at: 2
 		                  of: 10
-		                  and: 50
+		                  andParsec: 50
 		                  played: 3.
 	ships := OrderedCollection
 		         with: 'BlueShip'
@@ -937,7 +1011,7 @@ ZathuraTest >> testZathuraCannotBePlayedMoreThanOnce [
 
 	boardStructure := self
 		                  boardDefinitionWithNoEffectsOf: 5
-		                  and: 100
+		                  andParsec: 100
 		                  played: 3.
 	zathura := ZathuraGame
 		           playBy: ships
@@ -961,7 +1035,7 @@ ZathuraTest >> testZathuraGamePlaysATurnAndDoNotFinish [
 		         with: 'RedShip'
 		         with: 'BlueShip'.
 	boardStructure := self boardDefinitionWithNoEffectsOf: 5
-		                  and: 100
+		                  andParsec: 100
 		                  played: 3.
 	zathura := ZathuraGame
 		           playBy: ships
@@ -993,7 +1067,7 @@ ZathuraTest >> testZathuraIsInitializedWithAllShipsInPositionZeroAndLapZero [
 	ships := OrderedCollection with: 'BlueShip' with: 'RedShip'.
 
 	boardStructure := self boardDefinitionWithNoEffectsOf: 5
-		                  and: 100
+		                  andParsec: 100
 		                  played: 3.
 	zathura := ZathuraGame
 		           playBy: ships
@@ -1014,13 +1088,14 @@ ZathuraTest >> testZathuraIsInitializedWithAllShipsInPositionZeroAndLapZero [
 { #category : #shipWithHandOfCardsTests }
 ZathuraTest >> testZathuraKnowsTheNameOfShipWithHandOfCards [
 
-	| aShipWithHandOfCards aShip  probabilityDistribution boardDefinition die ships zathura points |
+	| aShipWithHandOfCards aShip sequence probabilityDistribution boardDefinition die ships zathura points |
 	aShip := 'RedShip'.
+	sequence := { (Parsec with: 2). (Parsec with: 4). (Parsec with: 8) }.
 	points := { 
 		          (PointProbability withX: LockerNoEffect new andY: 30).
 		          (PointProbability withX: AtomicBombEffect new andY: 2).
 		          (PointProbability
-			           withX: (HyperJumpEffect with: { 2.4. 8 })
+			           withX: (HyperJumpEffect with: sequence)
 			           andY: 8).
 		          (PointProbability
 			           withX: (MoonWalkEffect with: 10)
@@ -1035,7 +1110,7 @@ ZathuraTest >> testZathuraKnowsTheNameOfShipWithHandOfCards [
 		                    (RandomGenerator distributedBy:
 			                     probabilityDistribution))
 		                   generatesWith: 100
-		                   and: 50
+		                   and: (Parsec with: 50)
 		                   played: 3.
 
 	die := RandomDie with: 6.
@@ -1063,7 +1138,7 @@ ZathuraTest >> testZathuraKnowsTheRankingOfAShip [
 		         with: 'BlueShip'.
 
 	boardStructure := self boardDefinitionWithNoEffectsOf: 7
-		                  and: 100
+		                  andParsec: 100
 		                  played: 3.
 	zathura := ZathuraGame
 		           playBy: ships
@@ -1101,7 +1176,7 @@ ZathuraTest >> testZathuraShipFallsIntoASpeedUpMovesFourLockersAndStaysThere [
 		           LockerNoEffect new.
 		           LockerNoEffect new.
 		           LockerNoEffect new }.
-	boardStructure := BoardDefinition with: lockers and: 100 played: 3.
+	boardStructure := BoardDefinition with: lockers and: (Parsec with: 100) played: 3.
 	zathura := ZathuraGame
 		           playBy: ships
 		           movedInBoardOf: boardStructure
@@ -1120,7 +1195,7 @@ ZathuraTest >> testZathuraWhenCrossingTheLastLockerTheShipsStartsAnotherLap [
 	ships := OrderedCollection with: 'BlueShip' with: 'RedShip'.
 
 	boardStructure := self boardDefinitionWithNoEffectsOf: 10
-		                  and: 100
+		                  andParsec: 100
 		                  played: 3.
 	zathura := ZathuraGame
 		           playBy: ships
@@ -1149,7 +1224,7 @@ ZathuraTest >> testZathuraWhileItHasNotFinishedAsksWinnerThrowsError [
 	ships := OrderedCollection with: 'GreenShip' with: 'BlueShip'.
 	boardStructure := self
 		                  boardDefinitionWithNoEffectsOf: 3
-		                  and: 100
+		                  andParsec: 100
 		                  played: 3.
 	zathura := ZathuraGame
 		           playBy: ships

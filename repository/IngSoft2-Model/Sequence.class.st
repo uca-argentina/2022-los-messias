@@ -35,8 +35,6 @@ Class {
 { #category : #'instance creation' }
 Sequence class >> withAll: aCollection [
 
-	"Esto hay que refactorizarlo, estaria bueno escribir en el dominio de nuestro paquete un asSequence en Collection"
-
 	^ self new initializeWithAll: aCollection
 ]
 

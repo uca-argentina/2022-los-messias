@@ -31,21 +31,19 @@ BoardDefinition class >> assertParsecsAreValid: parsecs [
 ]
 
 { #category : #'instance creation' }
-BoardDefinition class >> with: lockers and: parsecs played: laps [
+BoardDefinition class >> with: lockers and: unit played: laps [
 
 	self assertLockersAreValid: lockers size.
-	self assertParsecsAreValid: parsecs.
+	self assertParsecsAreValid: unit unitValueAsParsec .
 	self assertLapsAreValid: laps.
-	^ self new
-		  initializeWith: lockers
-		  and: parsecs
-		  played: laps
+	^ self new initializeWith: lockers and: unit played: laps
 ]
 
 { #category : #initialization }
-BoardDefinition >> initializeWith: aCollectionOfLockers and: aNumberParsecs played: aNumberLaps [ 
+BoardDefinition >> initializeWith: aCollectionOfLockers and: aNumberParsecs played: aNumberLaps [
+
 	lockers := aCollectionOfLockers.
-	parsecs := aNumberParsecs.
+	parsecs := aNumberParsecs unitValueAsParsec.
 	laps := aNumberLaps
 ]
 
@@ -67,7 +65,7 @@ BoardDefinition >> numberOfLockers [
 ]
 
 { #category : #accesing }
-BoardDefinition >> parsecsPerLocker [ 
+BoardDefinition >> parsecsPerLocker [
 
-^(lockers size / parsecs) asFloat
+	^ (lockers size / parsecs) asFloat
 ]

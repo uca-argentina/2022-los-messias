@@ -7,12 +7,13 @@ Class {
 { #category : #boardDefinitionGeneratorTests }
 RandomGeneratorTest >> testBoardDefinitionGeneratorGeneratesABoardDefinition [
 
-	| boardDefinition  probabilityDistribution points |
+	| boardDefinition  probabilityDistribution points sequence |
+	sequence := { Parsec with: 2. Parsec with: 4. Parsec with: 8 }.
 	points := { 
 		          (PointProbability withX: LockerNoEffect new andY: 40).
 		          (PointProbability withX: AtomicBombEffect new andY: 2).
 		          (PointProbability
-			           withX: (HyperJumpEffect with: { 2.4. 8 })
+			           withX: (HyperJumpEffect with: sequence )
 			           andY: 8).
 		          (PointProbability
 			           withX: (MoonWalkEffect with: 10)
@@ -24,7 +25,7 @@ RandomGeneratorTest >> testBoardDefinitionGeneratorGeneratesABoardDefinition [
 		                    (RandomGenerator distributedBy:
 			                     probabilityDistribution))
 		                   generatesWith: 10
-		                   and: 100
+		                   and: (Parsec with: 100)
 		                   played: 3.
 
 	self assert: boardDefinition laps equals: 3.
@@ -83,12 +84,13 @@ RandomGeneratorTest >> testCardGeneratorGeneratesACollectionOfDifferentCardsWith
 { #category : #lockerGeneratorTests }
 RandomGeneratorTest >> testLockerGeneratorGeneratesACollectionOfDifferentLockersWithCorrectProportion [
 
-	| lockers probabilityDistribution points |
+	| lockers probabilityDistribution points sequence |
+	sequence := { Parsec with: 2. Parsec with: 4. Parsec with: 8 }.
 	points := { 
 		          (PointProbability withX: LockerNoEffect new andY: 30).
 		          (PointProbability withX: AtomicBombEffect new andY: 2).
 		          (PointProbability
-			           withX: (HyperJumpEffect with: { 2.4. 8 })
+			           withX: (HyperJumpEffect with: sequence)
 			           andY: 8).
 		          (PointProbability
 			           withX: (MoonWalkEffect with: 10)
@@ -148,12 +150,16 @@ RandomGeneratorTest >> testLockerGeneratorGeneratesACollectionOfLockersWithDiffe
 { #category : #lockerGeneratorTests }
 RandomGeneratorTest >> testLockerGeneratorGeneratesACollectionOfSizeTen [
 
-	| lockers  probabilityDistribution points |
+	| lockers probabilityDistribution points sequence |
+	sequence := { 
+		            (Parsec with: 2).
+		            (Parsec with: 4).
+		            (Parsec with: 8) }.
 	points := { 
 		          (PointProbability withX: LockerNoEffect new andY: 30).
 		          (PointProbability withX: AtomicBombEffect new andY: 2).
 		          (PointProbability
-			           withX: (HyperJumpEffect with: { 2.4. 8 })
+			           withX: (HyperJumpEffect with: sequence)
 			           andY: 8).
 		          (PointProbability
 			           withX: (MoonWalkEffect with: 10)

@@ -44,7 +44,7 @@ CardHand >> cardsOf [
 { #category : #accesing }
 CardHand >> cardsOf: aCard [
 
-	^handOfCards select: [ :card | card isMemberOf: aCard class ].
+	^ handOfCards select: [ :card | card hasEqualClass: aCard ]
 ]
 
 { #category : #initialization }

@@ -77,16 +77,12 @@ ZathuraGame >> addCardToBoard: aCard [
 
 { #category : #adding }
 ZathuraGame >> addIntoGame: aCollectionOfShips [
-
-	| zShips |
-	zShips := OrderedCollection new.
+	zathuraShips := Sequence new.
 
 	aCollectionOfShips do: [ :ship | 
-		zShips add: (ZathuraShip with: ship and: (CardHand with: { 
+		zathuraShips  add: (ZathuraShip with: ship and: (CardHand with: { 
 						  aDeck next.
 						  aDeck next })) ].
-
-	zathuraShips := Sequence withAll: zShips
 ]
 
 { #category : #asserting }
@@ -204,7 +200,7 @@ ZathuraGame >> removeFromCardsOnTable: aCard of: aShip [
 	| theCard |
 	theCard := 0.
 	cardsOnTable do: [ :card | 
-		(card isMemberOf: aCard class) ifTrue: [ theCard := card ] ].
+		(aCard hasEqualClass: card) ifTrue: [ theCard := card ] ].
 	aCard disapplyEffectTo: aShip in: self.
 	cardsOnTable remove: theCard
 ]
