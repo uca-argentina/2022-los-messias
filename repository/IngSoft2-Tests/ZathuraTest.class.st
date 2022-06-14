@@ -78,7 +78,7 @@ ZathuraTest >> testBlueShipAndRedShipStartsTheGameWithTwoCards [
 { #category : #shipWithHandOfCardsTests }
 ZathuraTest >> testBlueShipCantThrowCancellationCardIfNotCardsHaveBeenPlayed [
 
-	| diceCup zathura zBlueShip    |
+	| diceCup zathura zBlueShip |
 	diceCup := DiceCup withAll: { 
 			           (LoadedDie with: 3).
 			           (LoadedDie with: 4) }.
@@ -102,7 +102,7 @@ ZathuraTest >> testBlueShipCantThrowCancellationCardIfNotCardsHaveBeenPlayed [
 				removing: OverloadCard new
 				in: zathura ]
 		raise: Error
-		withMessage: 'There are not cards in play'
+		withMessage: 'This card is not active in the table'
 ]
 
 { #category : #shipWithHandOfCardsTests }
@@ -121,10 +121,10 @@ ZathuraTest >> testBlueShipCantThrowCancellationCardToOverloadCardIfNotOverloadC
 			            played: 1)
 		           rolling: diceCup
 		           withCards: { 
-				           SpeedCard  new.
+				           SpeedCard new.
 				           CancellationCard new }.
 	zBlueShip := zathura zathuraShip: 'BlueShip'.
-	zBlueShip using: SpeedCard  new to: 'RedShip' in: zathura.
+	zBlueShip using: SpeedCard new to: 'RedShip' in: zathura.
 	self
 		should: [ 
 			zBlueShip
@@ -133,7 +133,7 @@ ZathuraTest >> testBlueShipCantThrowCancellationCardToOverloadCardIfNotOverloadC
 				removing: OverloadCard new
 				in: zathura ]
 		raise: Error
-		withMessage: 'There are not cards in play'
+		withMessage: 'This card is not active in the table'
 ]
 
 { #category : #shipWithHandOfCardsTests }
@@ -620,7 +620,8 @@ ZathuraTest >> testBlueShipThrowsAnOverloadCardToRedShipThenRedShipsThrowsACance
 		assert: lockersOfRedShip equals: 5.
 	zRedShip := zathura zathuraShip: 'BlueShip'.
 	zRedShip
-		using: CancellationCard new to: 'RedShip'
+		using: CancellationCard new
+		to: 'RedShip'
 		removing: OverloadCard new
 		in: zathura.
 	zathura
@@ -903,29 +904,6 @@ ZathuraTest >> testMoonwalkCannotHaveLessThanZeroLockers [
 ]
 
 { #category : #boardTests }
-ZathuraTest >> testNOTFINISHEDZathuraRedShipThrowsRepeatCardToBlueShip [
-
-"	| positionOfBlueShip zathura aDie redShip |
-	aDie := LoadedDie with: 2.
-	zathura := ZathuraGame
-		           playBy: { 'BlueShip'. 'RedShip' }
-		           movedInBoardOf: (self
-				            boardDefinitionWithOnly: SpeedUpEffect new
-				            at: 3
-				            of: 12
-				            andParsec: 100
-				            played: 1)
-		           rolling: aDie
-		           withCards: { RepeatCard new }.
-	zathura playTurn.
-	zathura playTurn.
-	redShip := zathura zathuraShip: 'RedShip'.
-	redShip throwRepeatTo: 'BlueShip' in: zathura.
-	positionOfBlueShip := zathura numberOfLockerOf: 'BlueShip'.
-	self assert: positionOfBlueShip equals: 10"
-]
-
-{ #category : #boardTests }
 ZathuraTest >> testRedShipsFallsIntoaCardGetterLockerAndGetsARandomCard [
 
 	| redShipCardHand die ships boardStructure zathura |
@@ -946,6 +924,47 @@ ZathuraTest >> testRedShipsFallsIntoaCardGetterLockerAndGetsARandomCard [
 	zathura playTurn.
 	redShipCardHand := zathura cardsOf: 'RedShip'.
 	self assert: redShipCardHand size equals: 3
+]
+
+{ #category : #shipWithHandOfCardsTests }
+ZathuraTest >> testShipCantThrowCancellationCardToCancelACardToTheWrongShip [
+
+	| diceCup zathura zBlueShip lockersOfBlueShip lockersOfRedShip zRedShip |
+	diceCup := DiceCup withAll: { 
+			           (LoadedDie with: 3).
+			           (LoadedDie with: 4) }.
+	zathura := ZathuraGame
+		           playBy: { 'BlueShip'. 'RedShip'. 'GreenShip' }
+		           movedInBoardOf:
+		           (self
+			            boardDefinitionWithNoEffectsOf: 15
+			            andParsec: 100
+			            played: 1)
+		           rolling: diceCup
+		           withCards: { 
+				           OverloadCard new.
+				           CancellationCard new }.
+	zBlueShip := zathura zathuraShip: 'BlueShip'.
+	zBlueShip using: OverloadCard new to: 'RedShip' in: zathura.
+	zathura
+		playTurn;
+		playTurn.
+	lockersOfBlueShip := zathura numberOfLockerOf: 'BlueShip'.
+	lockersOfRedShip := zathura numberOfLockerOf: 'RedShip'.
+	self
+		assert: lockersOfBlueShip equals: 7;
+		assert: lockersOfRedShip equals: 5.
+	zRedShip := zathura zathuraShip: 'BlueShip'.
+
+	self
+		should: [ 
+			zRedShip
+				using: CancellationCard new
+				to: 'RedShip'
+				removing: OverloadCard new
+				in: zathura ]
+		raise: Error
+		withMessage: 'This card is not active in the table'
 ]
 
 { #category : #boardTests }
@@ -1305,6 +1324,29 @@ ZathuraTest >> testZathuraKnowsTheRankingOfAShip [
 	self assert: (zathura rankingOf: 'GreenShip') equals: 2.
 	self assert: (zathura rankingOf: 'BlueShip') equals: 1.
 	self assert: (zathura rankingOf: 'RedShip') equals: 3
+]
+
+{ #category : #boardTests }
+ZathuraTest >> testZathuraRedShipThrowsRepeatCardToBlueShip [
+
+	| positionOfBlueShip zathura aDie redShip |
+	aDie := LoadedDie with: 2.
+	zathura := ZathuraGame
+		           playBy: { 'BlueShip'. 'RedShip' }
+		           movedInBoardOf: (self
+				            boardDefinitionWithOnly: SpeedUpEffect new
+				            at: 3
+				            of: 12
+				            andParsec: 100
+				            played: 1)
+		           rolling: aDie
+		           withCards: { RepeatCard new }.
+	zathura playTurn.
+	zathura playTurn.
+	redShip := zathura zathuraShip: 'RedShip'.
+	redShip throwRepeatTo: 'BlueShip' in: zathura.
+	positionOfBlueShip := zathura numberOfLockerOf: 'BlueShip'.
+	self assert: positionOfBlueShip equals: 10
 ]
 
 { #category : #boardTests }

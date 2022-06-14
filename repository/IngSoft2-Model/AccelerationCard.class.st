@@ -5,13 +5,21 @@ Class {
 }
 
 { #category : #action }
+AccelerationCard >> = card [
+
+	^(self hasEqualClass: card)
+]
+
+{ #category : #action }
 AccelerationCard >> applyEffectToAllShipsIn: aZathuraGame [
 
 	aZathuraGame changeRollOfAllShipsBy: 1.
-	aZathuraGame  addCardToBoard: AccelerationCard new.
+	aZathuraGame addCardToBoard: self
 ]
 
 { #category : #actions }
-AccelerationCard >> disapplyEffectTo: aShip in: aZathuraGame [ 
-	aZathuraGame changeRollOfAllShipsBy: -1.
+AccelerationCard >> disapplyEffectIn: aZathuraGame [
+
+	aZathuraGame removeFromCardsOnTable: self.
+	aZathuraGame changeRollOfAllShipsBy: -1
 ]

@@ -62,11 +62,6 @@ ZathuraShip >> ship [
 ]
 
 { #category : #actions }
-ZathuraShip >> throwRepeatTo: aString [ 
-	self shouldBeImplemented.
-]
-
-{ #category : #actions }
 ZathuraShip >> throwRepeatTo: aShip in: aZathuraGame [ 
 	cardHand using: RepeatCard new to: aShip in: aZathuraGame .
 ]

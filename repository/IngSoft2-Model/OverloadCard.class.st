@@ -6,13 +6,15 @@ Class {
 
 { #category : #action }
 OverloadCard >> applyEffectTo: ship in: zathuraGame [
-	zathuraGame addCardToBoard: self.
-	zathuraGame changeRollOf: ship by: -2
+
+	
+	zathuraGame changeRollOf: ship by: -2.
+	zathuraGame addCardToBoard: (ActiveCard with: self appliedTo: ship).
 ]
 
 { #category : #action }
 OverloadCard >> disapplyEffectTo: ship in: zathuraGame [
 
-	zathuraGame addCardToBoard: self.
+	zathuraGame removeFromCardsOnTable: (ActiveCard with: self appliedTo: ship).
 	zathuraGame changeRollOf: ship by: 2
 ]

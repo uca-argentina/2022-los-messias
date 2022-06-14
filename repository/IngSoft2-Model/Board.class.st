@@ -63,8 +63,7 @@ Board >> changePositionOf: aShip by: aNumberOfLockers [
 	self move: aShip by: aNumberOfLockers.
 	thisLocker := boardDefinition lockerAt:
 		              (self numberOfLockerOf: aShip) + 1.
-	(thisLocker = (LockerNoEffect new)) ifFalse: [ 
-		lastEffect := thisLocker ].
+	lastEffect := thisLocker.
 	(self hasCrossFinishLine: aShip) ifFalse: [ 
 		thisLocker applyFor: aShip on: self ].
 	self correctPositionIfFinishLineWasCrossedBy: aShip
@@ -104,7 +103,7 @@ Board >> initializeWith: aBoardStructure withAGroupOf: aCollectionOfShips withCa
 { #category : #moving }
 Board >> lastEffectOn: aZathuraShip [ 
 
-	(lastEffect = nil) ifTrue: (Error signal: 'Ship can not throw repeat card if no effects have been aplied').
+	(lastEffect = nil) ifTrue: [Error signal: 'Ship can not throw repeat card if no effects have been aplied'].
 	lastEffect applyFor: aZathuraShip on: self.
 ]
 

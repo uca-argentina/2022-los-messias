@@ -71,7 +71,8 @@ ZathuraGame class >> playBy: ships movedInBoardOf: boardStructure rolling: die w
 ]
 
 { #category : #adding }
-ZathuraGame >> addCardToBoard: aCard [ 
+ZathuraGame >> addCardToBoard: aCard [
+
 	cardsOnTable add: aCard
 ]
 
@@ -88,6 +89,13 @@ ZathuraGame >> addIntoGame: aCollectionOfShips [
 { #category : #actions }
 ZathuraGame >> applyLastEffectOn: aShip [ 
 	board lastEffectOn: (self zathuraShip: aShip).
+]
+
+{ #category : #asserting }
+ZathuraGame >> assertCardsOnTable: card [
+
+	(cardsOnTable anySatisfy: [ :aCard | aCard hasEqualClass: card ]) 
+		ifFalse: [ Error signal: 'This card is not active in the table' ]
 ]
 
 { #category : #asserting }
@@ -206,13 +214,14 @@ ZathuraGame >> rankingOf: aShip [
 ]
 
 { #category : #set }
-ZathuraGame >> removeFromCardsOnTable: aCard of: aShip [
+ZathuraGame >> removeFromCardsOnTable: aCard [
 
 	| theCard |
 	theCard := 0.
+	self assertCardsOnTable: aCard.
 	cardsOnTable do: [ :card | 
-		(aCard hasEqualClass: card) ifTrue: [ theCard := card ] ].
-	aCard disapplyEffectTo: aShip in: self.
+	(aCard = card) ifTrue: [ theCard := card ] ].
+	aCard disapplyEffectToIn: self.
 	cardsOnTable remove: theCard
 ]
 

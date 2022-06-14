@@ -25,6 +25,13 @@ CardHand >> assertCardIsInHand: aCard [
 		ifFalse: [ Error signal: 'Card is not in Hand' ]
 ]
 
+{ #category : #asserting }
+CardHand >> assertIsYourTurn: aShip in: zathuraGame [
+
+	(zathuraGame isTurnOf: aShip) ifFalse: [ 
+		Error signal: 'Permanent cards can only be used when its your turn' ]
+]
+
 { #category : #assertions }
 CardHand >> assertZathuraHasCardsOnTable [
 	self shouldBeImplemented.
@@ -74,12 +81,7 @@ CardHand >> using: card to: ship in: zathuraGame [
 CardHand >> using: cancellationCard to: aShip removing: aCard in: zathuraGame [
 
 	"Esto rompe si hay más de una OverLoad en el tablero, vamos a tener que identificar al ship en algunos casos y en otros no. El nombre applyEffectToACard: desp hay que cambiarlo"
-
-(zathuraGame cardsOnTableOf: aCard) = 0 ifTrue:[Error signal:'There are not cards in play' ].
-	cancellationCard
-		applyEffectTo: aShip
-		removing: aCard
-		in: zathuraGame
+	cancellationCard applyEffectTo: aShip removing: aCard in: zathuraGame
 ]
 
 { #category : #throwing }
