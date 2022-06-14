@@ -85,6 +85,11 @@ ZathuraGame >> addIntoGame: aCollectionOfShips [
 						  aDeck next })) ].
 ]
 
+{ #category : #actions }
+ZathuraGame >> applyLastEffectOn: aShip [ 
+	board lastEffectOn: (self zathuraShip: aShip).
+]
+
 { #category : #asserting }
 ZathuraGame >> assertZathuraHasFinished [
 

@@ -30,7 +30,8 @@ Class {
 	#instVars : [
 		'positionOfShips',
 		'boardDefinition',
-		'aDeck'
+		'aDeck',
+		'lastEffect'
 	],
 	#classInstVars : [
 		'ships'
@@ -58,11 +59,14 @@ Board >> addIntoGame: aCollectionOfShips [
 { #category : #moving }
 Board >> changePositionOf: aShip by: aNumberOfLockers [
 
+	| thisLocker |
 	self move: aShip by: aNumberOfLockers.
+	thisLocker := boardDefinition lockerAt:
+		              (self numberOfLockerOf: aShip) + 1.
+	(thisLocker = (LockerNoEffect new)) ifFalse: [ 
+		lastEffect := thisLocker ].
 	(self hasCrossFinishLine: aShip) ifFalse: [ 
-		(boardDefinition  lockerAt: (self numberOfLockerOf: aShip) + 1)
-			applyFor: aShip
-			on: self ].
+		thisLocker applyFor: aShip on: self ].
 	self correctPositionIfFinishLineWasCrossedBy: aShip
 ]
 
@@ -94,6 +98,14 @@ Board >> initializeWith: aBoardStructure withAGroupOf: aCollectionOfShips withCa
 	boardDefinition := aBoardStructure.
 	self addIntoGame: aCollectionOfShips.
 	aDeck := Sequence withAll: aCollectionOfCards.
+	lastEffect := nil.
+]
+
+{ #category : #moving }
+Board >> lastEffectOn: aZathuraShip [ 
+
+	(lastEffect = nil) ifTrue: (Error signal: 'Ship can not throw repeat card if no effects have been aplied').
+	lastEffect applyFor: aZathuraShip on: self.
 ]
 
 { #category : #private }

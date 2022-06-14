@@ -799,6 +799,29 @@ ZathuraTest >> testMoonwalkCannotHaveLessThanZeroLockers [
 ]
 
 { #category : #boardTests }
+ZathuraTest >> testNOTFINISHEDZathuraRedShipThrowsRepeatCardToBlueShip [
+
+"	| positionOfBlueShip zathura aDie redShip |
+	aDie := LoadedDie with: 2.
+	zathura := ZathuraGame
+		           playBy: { 'BlueShip'. 'RedShip' }
+		           movedInBoardOf: (self
+				            boardDefinitionWithOnly: SpeedUpEffect new
+				            at: 3
+				            of: 12
+				            andParsec: 100
+				            played: 1)
+		           rolling: aDie
+		           withCards: { RepeatCard new }.
+	zathura playTurn.
+	zathura playTurn.
+	redShip := zathura zathuraShip: 'RedShip'.
+	redShip throwRepeatTo: 'BlueShip' in: zathura.
+	positionOfBlueShip := zathura numberOfLockerOf: 'BlueShip'.
+	self assert: positionOfBlueShip equals: 10"
+]
+
+{ #category : #boardTests }
 ZathuraTest >> testRedShipsFallsIntoaCardGetterLockerAndGetsARandomCard [
 
 	| redShipCardHand die ships boardStructure zathura |
@@ -1000,6 +1023,28 @@ ZathuraTest >> testWhenShipGoesBackwardsInTheFirstLapItStayesAtTheLapZero [
 
 	self assert: (zathura numberOfLockerOf: 'BlueShip') equals: 0.
 	self assert: (zathura numberOfLapOf: 'BlueShip') equals: 0
+]
+
+{ #category : #boardTests }
+ZathuraTest >> testZathuraBlueShipCantThrowRepeatCardToRedShipIfNoEffectHasBeenAplied [
+
+	| zathura aDie blueShip |
+	aDie := LoadedDie with: 2.
+	zathura := ZathuraGame
+		           playBy: { 'BlueShip'. 'RedShip' }
+		           movedInBoardOf: (self
+				            boardDefinitionWithOnly: SpeedUpEffect new
+				            at: 3
+				            of: 12
+				            andParsec: 100
+				            played: 1)
+		           rolling: aDie
+		           withCards: { RepeatCard new }.
+	blueShip := zathura zathuraShip: 'BlueShip'.
+		self
+		should: [blueShip throwRepeatTo: 'RedShip' in: zathura]
+		raise: Error
+		withMessage: 'Ship can not throw repeat card if no effects have been aplied'.
 ]
 
 { #category : #zathuraAssertionTests }

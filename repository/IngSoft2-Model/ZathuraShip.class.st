@@ -62,6 +62,16 @@ ZathuraShip >> ship [
 ]
 
 { #category : #actions }
+ZathuraShip >> throwRepeatTo: aString [ 
+	self shouldBeImplemented.
+]
+
+{ #category : #actions }
+ZathuraShip >> throwRepeatTo: aShip in: aZathuraGame [ 
+	cardHand using: RepeatCard new to: aShip in: aZathuraGame .
+]
+
+{ #category : #actions }
 ZathuraShip >> using: aCancellationCard removing: aCard in: aZathuraGame [ 
 			cardHand
 		using: aCancellationCard
@@ -78,12 +88,12 @@ ZathuraShip >> using: card to: aShip in: zathuraGame [
 ]
 
 { #category : #action }
-ZathuraShip >> using: aCancellationCard to: aShip removing: anOverloadCard in: zathuraGame [
+ZathuraShip >> using: aCancellationCard to: aShip removing: aCard in: zathuraGame [
 
 	cardHand
 		using: aCancellationCard
 		to: aShip
-		removing: anOverloadCard
+		removing: aCard
 		in: zathuraGame
 ]
 
