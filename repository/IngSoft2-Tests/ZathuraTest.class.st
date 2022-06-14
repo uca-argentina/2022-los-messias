@@ -369,6 +369,53 @@ ZathuraTest >> testBlueShipThrowsAnAccelerationCardAndAfterTwoRoundsThrowsACance
 ]
 
 { #category : #shipWithHandOfCardsTests }
+ZathuraTest >> testBlueShipThrowsAnAccelerationCardAndAfterTwoRoundsThrowsARedoCard [
+
+	| diceCup zathura zBlueShip lockersOfBlueShip lockersOfRedShip |
+	diceCup := DiceCup withAll: { 
+			           (LoadedDie with: 3).
+			           (LoadedDie with: 4) }.
+	zathura := ZathuraGame
+		           playBy: { 'BlueShip'. 'RedShip' }
+		           movedInBoardOf:
+		           (self
+			            boardDefinitionWithNoEffectsOf: 30
+			            andParsec: 100
+			            played: 1)
+		           rolling: diceCup
+		           withCards: { 
+				           AccelerationCard new.
+				           RedoCard new }.
+	zBlueShip := zathura zathuraShip: 'BlueShip'.
+	zBlueShip using: AccelerationCard new toAllShipsin: zathura.
+	zathura
+		playTurn;
+		playTurn.
+	lockersOfBlueShip := zathura numberOfLockerOf: 'BlueShip'.
+	lockersOfRedShip := zathura numberOfLockerOf: 'RedShip'.
+	self
+		assert: lockersOfBlueShip equals: 8;
+		assert: lockersOfRedShip equals: 8.
+	zathura
+		playTurn;
+		playTurn.
+	lockersOfBlueShip := zathura numberOfLockerOf: 'BlueShip'.
+	lockersOfRedShip := zathura numberOfLockerOf: 'RedShip'.
+	self
+		assert: lockersOfBlueShip equals: 16;
+		assert: lockersOfRedShip equals: 16.
+	zBlueShip using: RedoCard new toAllShipsin: zathura.
+	zathura
+		playTurn;
+		playTurn.
+	lockersOfBlueShip := zathura numberOfLockerOf: 'BlueShip'.
+	lockersOfRedShip := zathura numberOfLockerOf: 'RedShip'.
+	self
+		assert: lockersOfBlueShip equals: 25;
+		assert: lockersOfRedShip equals: 25
+]
+
+{ #category : #shipWithHandOfCardsTests }
 ZathuraTest >> testBlueShipThrowsAnAccelerationCardAndAllShipMovesRolledNumberPlusOneAllGame [
 
 	| diceCup zathura zBlueShip lockersOfBlueShip lockersOfRedShip |
@@ -402,6 +449,63 @@ ZathuraTest >> testBlueShipThrowsAnAccelerationCardAndAllShipMovesRolledNumberPl
 	self
 		assert: lockersOfBlueShip equals: 16;
 		assert: lockersOfRedShip equals: 16
+]
+
+{ #category : #shipWithHandOfCardsTests }
+ZathuraTest >> testBlueShipThrowsAnOverloadCardToRedShipAndAfterTwoRoundsThrowsARedoCardToGreenShip [
+
+	| diceCup zathura zBlueShip lockersOfBlueShip lockersOfRedShip lockersOfGreenShip |
+	diceCup := DiceCup withAll: { 
+			           (LoadedDie with: 3).
+			           (LoadedDie with: 4) }.
+	zathura := ZathuraGame
+		           playBy: { 'BlueShip'. 'RedShip'. 'GreenShip' }
+		           movedInBoardOf:
+		           (self
+			            boardDefinitionWithNoEffectsOf: 30
+			            andParsec: 100
+			            played: 1)
+		           rolling: diceCup
+		           withCards: { 
+				           OverloadCard new.
+				           RedoCard new }.
+	zBlueShip := zathura zathuraShip: 'BlueShip'.
+	zathura
+		playTurn;
+		playTurn;
+		playTurn.
+	lockersOfBlueShip := zathura numberOfLockerOf: 'BlueShip'.
+	lockersOfRedShip := zathura numberOfLockerOf: 'RedShip'.
+	lockersOfGreenShip := zathura numberOfLockerOf: 'GreenShip'.
+	self
+		assert: lockersOfBlueShip equals: 7;
+		assert: lockersOfRedShip equals: 7;
+		assert: lockersOfGreenShip equals: 7.
+
+	zBlueShip using: OverloadCard new to: 'RedShip' in: zathura.
+	zathura
+		playTurn;
+		playTurn;
+		playTurn.
+	lockersOfBlueShip := zathura numberOfLockerOf: 'BlueShip'.
+	lockersOfRedShip := zathura numberOfLockerOf: 'RedShip'.
+	lockersOfGreenShip := zathura numberOfLockerOf: 'GreenShip'.
+	self
+		assert: lockersOfBlueShip equals: 14;
+		assert: lockersOfRedShip equals: 12;
+		assert: lockersOfGreenShip equals: 14.
+	zBlueShip using: RedoCard new to: 'GreenShip' in: zathura.
+	zathura
+		playTurn;
+		playTurn;
+		playTurn.
+	lockersOfBlueShip := zathura numberOfLockerOf: 'BlueShip'.
+	lockersOfRedShip := zathura numberOfLockerOf: 'RedShip'.
+	lockersOfGreenShip := zathura numberOfLockerOf: 'GreenShip'.
+	self
+		assert: lockersOfBlueShip equals: 21;
+		assert: lockersOfRedShip equals: 17;
+		assert: lockersOfGreenShip equals: 19
 ]
 
 { #category : #shipWithHandOfCardsTests }
@@ -844,7 +948,7 @@ ZathuraTest >> testRedShipsFallsIntoaCardGetterLockerAndGetsARandomCard [
 	self assert: redShipCardHand size equals: 3
 ]
 
-{ #category : #tests }
+{ #category : #boardTests }
 ZathuraTest >> testShipLandsOnAWormholeEffectAndGoesBackOneLap [
 
 	| zathura sequencialDie ships boardStructure |
@@ -1203,7 +1307,7 @@ ZathuraTest >> testZathuraKnowsTheRankingOfAShip [
 	self assert: (zathura rankingOf: 'RedShip') equals: 3
 ]
 
-{ #category : #tests }
+{ #category : #boardTests }
 ZathuraTest >> testZathuraShipFallsIntoASpeedUpMovesFourLockersAndStaysThere [
 
 	| die ships zathura lockers boardStructure |

@@ -163,6 +163,12 @@ ZathuraGame >> isTurnOf: aShip [
 	^ zathuraShips first ship == aShip
 ]
 
+{ #category : #accessing }
+ZathuraGame >> lastCardThrewOnTable [
+
+	^ cardsOnTable first
+]
+
 { #category : #positioning }
 ZathuraGame >> numberOfLapOf: aShip [
 
