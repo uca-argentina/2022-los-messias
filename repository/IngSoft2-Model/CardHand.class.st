@@ -60,6 +60,11 @@ CardHand >> cardsOf: aCard [
 	^ handOfCards select: [ :card | card hasEqualClass: aCard ]
 ]
 
+{ #category : #'accessing - arguments' }
+CardHand >> handOfCards [
+	^ handOfCards
+]
+
 { #category : #initalization }
 CardHand >> initializeCardHandOf: aShip with: cards [ 
 	handOfCards := cards asOrderedCollection.

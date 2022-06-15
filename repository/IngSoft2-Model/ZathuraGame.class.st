@@ -39,7 +39,8 @@ Class {
 		'aDeck',
 		'cardsOnTable',
 		'ships',
-		'shipsHand'
+		'shipsHand',
+		'cardManager'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -80,12 +81,11 @@ ZathuraGame >> addCardToBoard: aCard [
 { #category : #adding }
 ZathuraGame >> addIntoGame: aCollectionOfShips [
 
-	shipsHand := Sequence new.
-	ships:= (aCollectionOfShips asOrderedCollection) asSequence   .
-	aCollectionOfShips do: [ :ship | 
+	ships := (aCollectionOfShips asOrderedCollection) asSequence
+	"aCollectionOfShips do: [ :ship | 
 		shipsHand add: (CardHand of: ship with: { 
 					 aDeck next.
-					 aDeck next }) ]
+					 aDeck next }) ]"
 ]
 
 { #category : #actions }
@@ -113,6 +113,11 @@ ZathuraGame >> assertZathuraHasNotBeenPlayed [
 		Error signal: 'Zathura cannot be played more than once' ]
 ]
 
+{ #category : #attributes }
+ZathuraGame >> cardManager [
+	^ cardManager
+]
+
 { #category : #accessing }
 ZathuraGame >> cardsOf: spaceship [
 
@@ -134,6 +139,11 @@ ZathuraGame >> checkIfWon: aShip [
 	finished := true
 ]
 
+{ #category : #actions }
+ZathuraGame >> getCard [
+	^aDeck random.
+]
+
 { #category : #accesing }
 ZathuraGame >> getCardHandOf: aShip [ 
 	^(shipsHand select: [ :aCardHand | aCardHand ship = aShip ]) first
@@ -151,14 +161,17 @@ ZathuraGame >> initializePlayingBy: aCollectionOfShips movedInBoardOf: boardStru
 
 	diceCup := aDiceCup.
 	aDeck := Sequence withAll: aCollectionOfCards.
-	self addIntoGame: aCollectionOfShips.
+	"self addIntoGame: aCollectionOfShips."
+	ships := aCollectionOfShips asOrderedCollection asSequence.
+	cardManager := CardManager intializeIn: self.
 	board := Board
 		         of: boardStructure
 		         withAll: ships
-		         withCards: aCollectionOfCards.
+		         withCards: aCollectionOfCards
+		andCardManager: cardManager .
 	cardsOnTable := OrderedCollection new.
 	finished := false.
-	timesPlayed := 0
+	timesPlayed := 0.
 ]
 
 { #category : #testing }
@@ -236,7 +249,7 @@ ZathuraGame >> winner [
 	| winner |
 	self assertZathuraHasFinished.
 	winner := ships select: [ :ship | 
-		          (self rankingOf: (ship ship)) == 1].
+		          (self rankingOf: (ship)) == 1].
 	^ winner at: 1
 ]
 

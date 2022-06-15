@@ -49,10 +49,10 @@ ZathuraFunctionalTest >> testZathuraAfterBeingPlayedHasOnlyOneWinnerOfTheShips [
 		           withCards: { OverloadCard new }.
 
 	zathura play.
-	aWinner := ships select: [ :aShip | aShip == zathura winner ship ].
-	notWinner := ships select: [ :aShip | aShip ~= zathura winner ship ].
-	self assert: (aWinner at: 1) equals: zathura winner ship.
-	self deny: (notWinner at: 1) equals: zathura winner ship
+	aWinner := ships select: [ :aShip | aShip == zathura winner  ].
+	notWinner := ships select: [ :aShip | aShip ~= zathura winner  ].
+	self assert: (aWinner at: 1) equals: zathura winner .
+	self deny: (notWinner at: 1) equals: zathura winner 
 ]
 
 { #category : #tests }

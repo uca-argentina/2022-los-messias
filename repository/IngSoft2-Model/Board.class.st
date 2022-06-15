@@ -31,7 +31,8 @@ Class {
 		'positionOfShips',
 		'boardDefinition',
 		'aDeck',
-		'lastEffect'
+		'lastEffect',
+		'cardManager'
 	],
 	#classInstVars : [
 		'ships'
@@ -46,6 +47,15 @@ Board class >> of: boardStructure withAll: aCollectionOfShips withCards: aCollec
 		  initializeWith: boardStructure
 		  withAGroupOf: aCollectionOfShips
 		withCards: aCollectionOfCards
+]
+
+{ #category : #initialization }
+Board class >> of: aBoardStructure withAll: aCollectionOfShips withCards: aCollectionOfCards andCardManager: aCardManager [ 
+	^ self new
+		  initializeWith: aBoardStructure
+		  withAGroupOf: aCollectionOfShips
+		  withCards: aCollectionOfCards
+		withCardManager: aCardManager 
 ]
 
 { #category : #private }
@@ -80,7 +90,7 @@ Board >> correctPositionIfFinishLineWasCrossedBy: aShip [
 
 { #category : #private }
 Board >> giveRandomCardTo: aShip [
-	aShip addCardToHand: aDeck random.
+	cardManager addTo: aShip ToHandCard: aDeck random.
 ]
 
 { #category : #moving }
@@ -98,6 +108,15 @@ Board >> initializeWith: aBoardStructure withAGroupOf: aCollectionOfShips withCa
 	self addIntoGame: aCollectionOfShips.
 	aDeck := Sequence withAll: aCollectionOfCards.
 	lastEffect := nil.
+]
+
+{ #category : #initalization }
+Board >> initializeWith: aBoardDefinition withAGroupOf: aCollectionOfShips withCards: aCollectionOfCards withCardManager: aCardManager [ 
+		boardDefinition := aBoardDefinition .
+	self addIntoGame: aCollectionOfShips.
+	aDeck := Sequence withAll: aCollectionOfCards.
+	lastEffect := nil.
+	cardManager := aCardManager 
 ]
 
 { #category : #moving }

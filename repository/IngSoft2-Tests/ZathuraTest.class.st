@@ -58,7 +58,7 @@ ZathuraTest >> testAnObjectIsEqualToAnotherObjectIfTheyHaveTheSameClass [
 { #category : #shipWithHandOfCardsTests }
 ZathuraTest >> testBlueShipAndRedShipStartsTheGameWithTwoCards [
 
-	| redShipCardHand blueShipCardHand die ships boardStructure zathura |
+	| redShipCardHand blueShipCardHand die ships boardStructure zathura cardManager |
 	die := LoadedDie with: 2.
 	ships := #( 'RedShip' 'BlueShip' ).
 	boardStructure := self
@@ -69,8 +69,9 @@ ZathuraTest >> testBlueShipAndRedShipStartsTheGameWithTwoCards [
 		           rolling: die
 		           withCards: { OverloadCard new }.
 
-	redShipCardHand := zathura cardsOf: 'RedShip'.
-	blueShipCardHand := zathura cardsOf: 'BlueShip'.
+	cardManager:= CardManager intializeIn: zathura .
+	redShipCardHand := cardManager cardsOf: 'RedShip'.
+	blueShipCardHand := cardManager  cardsOf: 'BlueShip'.
 	self assert: redShipCardHand size equals: 2.
 	self assert: blueShipCardHand size equals: 2.
 ]
@@ -909,7 +910,7 @@ ZathuraTest >> testMoonwalkCannotHaveLessThanZeroLockers [
 { #category : #boardTests }
 ZathuraTest >> testRedShipsFallsIntoaCardGetterLockerAndGetsARandomCard [
 
-	| redShipCardHand die ships boardStructure zathura |
+	| redShipCardHand die ships boardStructure zathura cardManager |
 	die := LoadedDie with: 1.
 	ships := #( 'RedShip' 'BlueShip' ).
 	boardStructure := self
@@ -923,9 +924,9 @@ ZathuraTest >> testRedShipsFallsIntoaCardGetterLockerAndGetsARandomCard [
 		           movedInBoardOf: boardStructure
 		           rolling: die
 		           withCards: { OverloadCard new }.
-
 	zathura playTurn.
-	redShipCardHand := zathura cardsOf: 'RedShip'.
+	cardManager := zathura cardManager.
+	redShipCardHand := cardManager cardsOf: 'RedShip'.
 	self assert: redShipCardHand size equals: 3
 ]
 
@@ -1256,47 +1257,6 @@ ZathuraTest >> testZathuraIsInitializedWithAllShipsInPositionZeroAndLapZero [
 		in: zathura
 ]
 
-{ #category : #shipWithHandOfCardsTests }
-ZathuraTest >> testZathuraKnowsTheNameOfShipWithHandOfCards [
-
-	| aShipWithHandOfCards aShip sequence probabilityDistribution boardDefinition die ships zathura points |
-	aShip := 'RedShip'.
-	sequence := { (Parsec with: 2). (Parsec with: 4). (Parsec with: 8) }.
-	points := { 
-		          (PointProbability withX: LockerNoEffect new andY: 30).
-		          (PointProbability withX: AtomicBombEffect new andY: 2).
-		          (PointProbability
-			           withX: (HyperJumpEffect with: sequence)
-			           andY: 8).
-		          (PointProbability
-			           withX: (MoonWalkEffect with: 10)
-			           andY: 10).
-		          (PointProbability withX: SpeedUpEffect new andY: 20).
-		          (PointProbability withX: WormHoleEffect new andY: 20).
-		          (PointProbability withX: CardEffect new andY: 10) }.
-
-	probabilityDistribution := ProbabilityDistribution withPoints: points.
-
-	boardDefinition := (BoardDefinitionGenerator with:
-		                    (RandomGenerator distributedBy:
-			                     probabilityDistribution))
-		                   generatesWith: 100
-		                   and: (Parsec with: 50)
-		                   played: 3.
-
-	die := RandomDie with: 6.
-	ships := OrderedCollection with: 'BlueShip' with: 'RedShip'.
-	zathura := ZathuraGame
-		           playBy: ships
-		           movedInBoardOf: boardDefinition
-		           rolling: die
-		           withCards: { OverloadCard new }.
-
-	aShipWithHandOfCards := zathura zathuraShip: aShip.
-
-	self assert: aShipWithHandOfCards ship equals: aShip
-]
-
 { #category : #tests }
 ZathuraTest >> testZathuraKnowsTheRankingOfAShip [
 
@@ -1332,7 +1292,7 @@ ZathuraTest >> testZathuraKnowsTheRankingOfAShip [
 { #category : #boardTests }
 ZathuraTest >> testZathuraRedShipThrowsRepeatCardToBlueShip [
 
-	| positionOfBlueShip zathura aDie redShip |
+	| positionOfBlueShip zathura aDie redShip cardManager |
 	aDie := LoadedDie with: 2.
 	zathura := ZathuraGame
 		           playBy: { 'BlueShip'. 'RedShip' }
@@ -1346,8 +1306,8 @@ ZathuraTest >> testZathuraRedShipThrowsRepeatCardToBlueShip [
 		           withCards: { RepeatCard new }.
 	zathura playTurn.
 	zathura playTurn.
-	redShip := zathura zathuraShip: 'RedShip'.
-	redShip throwRepeatTo: 'BlueShip' in: zathura.
+	cardManager:= zathura cardManager .
+	cardManager ship: 'RedShip' throws: RepeatCard new to: 'BlueShip'.
 	positionOfBlueShip := zathura numberOfLockerOf: 'BlueShip'.
 	self assert: positionOfBlueShip equals: 10
 ]
