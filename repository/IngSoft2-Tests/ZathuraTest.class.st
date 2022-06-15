@@ -79,7 +79,7 @@ ZathuraTest >> testBlueShipAndRedShipStartsTheGameWithTwoCards [
 { #category : #shipWithHandOfCardsTests }
 ZathuraTest >> testBlueShipCantThrowCancellationCardIfNotCardsHaveBeenPlayed [
 
-	| diceCup zathura zBlueShip cardManager |
+	| diceCup zathura  cardManager |
 	diceCup := DiceCup withAll: { 
 			           (LoadedDie with: 3).
 			           (LoadedDie with: 4) }.
@@ -358,9 +358,9 @@ ZathuraTest >> testBlueShipThrowsAnAccelerationCardAndAfterTwoRoundsThrowsACance
 		assert: lockersOfRedShip equals: 16.
 	cardManager
 		throw: CancellationCard new
-		to: 'RedShip'
+		to: ''
 		removing: AccelerationCard new
-		from: ''.
+		from: 'BlueShip'.
 	zathura
 		playTurn;
 		playTurn.
@@ -835,7 +835,7 @@ ZathuraTest >> testGreenShipWinsAndFinishesInPositionZeroWithOneLapCompleted [
 		isAt: 0
 		with: 1
 		in: zathura.
-	self assert: zathura winner ship equals: 'GreenShip'
+	self assert: zathura winner  equals: 'GreenShip'
 ]
 
 { #category : #boardTests }
@@ -950,7 +950,7 @@ ZathuraTest >> testShipCantThrowCancellationCardToCancelACardToTheWrongShip [
 				           OverloadCard new.
 				           CancellationCard new }.
 	cardManager := zathura cardManager.
-	zBlueShip throw: OverloadCard new to: 'RedShip' in: zathura.
+	cardManager throws: OverloadCard new to: 'RedShip' from: 'BlueShip'.
 	zathura
 		playTurn;
 		playTurn.
@@ -959,15 +959,10 @@ ZathuraTest >> testShipCantThrowCancellationCardToCancelACardToTheWrongShip [
 	self
 		assert: lockersOfBlueShip equals: 7;
 		assert: lockersOfRedShip equals: 5.
-	zRedShip := zathura zathuraShip: 'BlueShip'.
 
 	self
 		should: [ 
-			zRedShip
-				throw: CancellationCard new
-				to: 'RedShip'
-				removing: OverloadCard new
-				in: zathura ]
+			cardManager throw: CancellationCard new to: 'BlueShip' removing: OverloadCard new from: 'RedShip' ]
 		raise: Error
 		withMessage: 'This card is not active in the table'
 ]
@@ -1169,16 +1164,8 @@ ZathuraTest >> testZathuraBlueShipThrowsARepeatCardToRedShipWhenNobodyHasPlayedA
 		           rolling: aDie
 		           withCards: { RepeatCard new }.
 	cardManager := zathura cardManager.
-	cardManager throw: RepeatCard new to: 'BlueShip' in: zathura.
 
-	self assert: (zathura numberOfLockerOf: 'BlueShip') equals: 0.
-	self assert: (zathura numberOfLockerOf: 'BlueShip') equals: 0.
-
-	zathura playTurn.
-	zathura playTurn.
-
-	self assert: (zathura numberOfLockerOf: 'BlueShip') equals: 6.
-	self assert: (zathura numberOfLockerOf: 'BlueShip') equals: 6
+	self should: [cardManager throws: RepeatCard new to: 'RedShip' from: 'BlueShip'  ] raise:Error  withMessage: 'Ship can not throw repeat card if no effects have been aplied'
 ]
 
 { #category : #zathuraAssertionTests }

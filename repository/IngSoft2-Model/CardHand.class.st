@@ -109,7 +109,7 @@ CardHand >> throw: cancellationCard to: aShip removing: aCard in: zathuraGame [
 
 	"Esto rompe si hay más de una OverLoad en el tablero, vamos a tener que identificar al ship en algunos casos y en otros no. El nombre applyEffectToACard: desp hay que cambiarlo"
 
-	cancellationCard applyEffectToAllShipsRemoving: aCard in: zathuraGame
+	cancellationCard applyEffectTo:aShip removing: aCard in: zathuraGame
 ]
 
 { #category : #throwing }

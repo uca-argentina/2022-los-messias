@@ -45,7 +45,7 @@ CardManager >> initializeWith: aZathuraGame [
 { #category : #action }
 CardManager >> throw: cancellationCard to: destinationShip removing: aCard from: sourceShip [
 
-	(self cardHandOf: destinationShip)
+	(self cardHandOf: sourceShip)
 		throw: cancellationCard
 		to: destinationShip
 		removing: aCard

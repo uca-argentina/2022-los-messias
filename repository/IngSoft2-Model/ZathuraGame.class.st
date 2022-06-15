@@ -90,13 +90,15 @@ ZathuraGame >> addIntoGame: aCollectionOfShips [
 
 { #category : #actions }
 ZathuraGame >> applyLastEffectOn: aShip [ 
-	board lastEffectOn: (self zathuraShip: aShip).
+	board lastEffectOn: (aShip).
 ]
 
 { #category : #asserting }
 ZathuraGame >> assertCardsOnTable: card [
 
-	(cardsOnTable anySatisfy: [ :aCard | aCard card = card ]) 
+	| onTable |
+	onTable := cardsOnTable select: [ :aCard | aCard = (card first)].
+	((onTable size) > 0) 
 		ifFalse: [ Error signal: 'This card is not active in the table' ]
 ]
 
@@ -219,7 +221,7 @@ ZathuraGame >> playTurn [
 { #category : #positioning }
 ZathuraGame >> rankingOf: aShip [
 
-	^ board rankingOf: (self zathuraShip: aShip).
+	^ board rankingOf: aShip.
 ]
 
 { #category : #set }
@@ -227,9 +229,9 @@ ZathuraGame >> removeFromCardsOnTable: aCard [
 
 	| theCard |
 	theCard := 0.
-	self assertCardsOnTable: aCard.
+	self assertCardsOnTable: {aCard}.
 	cardsOnTable do: [ :card | 
-	(aCard = card card) ifTrue: [ theCard := card ] ].
+	(aCard = card) ifTrue: [ theCard := card ] ].
 	cardsOnTable remove: theCard
 ]
 

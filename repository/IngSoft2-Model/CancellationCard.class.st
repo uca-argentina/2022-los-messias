@@ -7,7 +7,7 @@ Class {
 { #category : #'as yet unclassified' }
 CancellationCard >> applyEffectTo: aShip removing: aCard in: zathuraGame [
 
-	zathuraGame removeFromCardsOnTable: (ActiveCard with: aCard appliedTo: aShip)
+	(aShip = '') ifTrue: [ zathuraGame removeFromCardsOnTable: (ActiveCard with: aCard appliedTo: (zathuraGame ships))] ifFalse: [ zathuraGame removeFromCardsOnTable: (ActiveCard with: aCard appliedTo: {aShip})].
 ]
 
 { #category : #action }
