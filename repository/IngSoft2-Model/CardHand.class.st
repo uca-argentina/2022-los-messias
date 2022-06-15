@@ -92,12 +92,12 @@ CardHand >> ship [
 ]
 
 { #category : #actions }
-CardHand >> using: aCancelationCard removingToAll: aCard in: aZathuraGame [ 
-	aCancelationCard  applyEffectRemoving: aCard in: aZathuraGame 
+CardHand >> throw: aCancelationCard removingToAll: aCard in: aZathuraGame [ 
+	aCancelationCard  applyEffectToAllShipsRemoving: aCard in: aZathuraGame 
 ]
 
 { #category : #throwing }
-CardHand >> using: card to: ship in: zathuraGame [
+CardHand >> throw: card to: ship in: zathuraGame [
 
 	self assertCardIsInHand: card.
 	card applyEffectTo: ship in: zathuraGame.
@@ -105,15 +105,15 @@ CardHand >> using: card to: ship in: zathuraGame [
 ]
 
 { #category : #action }
-CardHand >> using: cancellationCard to: aShip removing: aCard in: zathuraGame [
+CardHand >> throw: cancellationCard to: aShip removing: aCard in: zathuraGame [
 
 	"Esto rompe si hay más de una OverLoad en el tablero, vamos a tener que identificar al ship en algunos casos y en otros no. El nombre applyEffectToACard: desp hay que cambiarlo"
 
-	cancellationCard applyEffectRemoving: aCard in: zathuraGame
+	cancellationCard applyEffectToAllShipsRemoving: aCard in: zathuraGame
 ]
 
 { #category : #throwing }
-CardHand >> using: card toAllShipsin: zathuraGame [
+CardHand >> throw: card toAllShipsin: zathuraGame [
 
 	self assertCardIsInHand: card.
 	card applyEffectToAllShipsIn: zathuraGame.

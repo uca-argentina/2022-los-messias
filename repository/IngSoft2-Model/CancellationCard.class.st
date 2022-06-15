@@ -4,8 +4,14 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
+{ #category : #'as yet unclassified' }
+CancellationCard >> applyEffectTo: aShip removing: aCard in: zathuraGame [
+
+	zathuraGame removeFromCardsOnTable: (ActiveCard with: aCard appliedTo: aShip)
+]
+
 { #category : #action }
-CancellationCard >> applyEffectRemoving: aCard in: aZathuraGame [
+CancellationCard >> applyEffectToAllShipsRemoving: aCard in: aZathuraGame [
 
 	aZathuraGame removeFromCardsOnTable: aCard
 ]

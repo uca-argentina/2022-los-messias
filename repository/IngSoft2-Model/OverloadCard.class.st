@@ -7,6 +7,10 @@ Class {
 { #category : #action }
 OverloadCard >> applyEffectTo: ship in: zathuraGame [
 
-	zathuraGame changeRollOf: ship by: -2.
 	zathuraGame addCardToBoard: (ActiveCard with: self appliedTo: {ship})
+]
+
+{ #category : #action }
+OverloadCard >> changeOfRoll [
+	^-2
 ]

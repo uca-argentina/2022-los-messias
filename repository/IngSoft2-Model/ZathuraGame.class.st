@@ -96,7 +96,7 @@ ZathuraGame >> applyLastEffectOn: aShip [
 { #category : #asserting }
 ZathuraGame >> assertCardsOnTable: card [
 
-	(cardsOnTable anySatisfy: [ :aCard | aCard card hasEqualClass: card ]) 
+	(cardsOnTable anySatisfy: [ :aCard | aCard card = card ]) 
 		ifFalse: [ Error signal: 'This card is not active in the table' ]
 ]
 
@@ -125,10 +125,11 @@ ZathuraGame >> cardsOf: spaceship [
 ]
 
 { #category : #'accessing - attributes' }
-ZathuraGame >> cardsOnTableOf: aCard [ 
+ZathuraGame >> cardsOnTableOf: aCard [
+
 	| cards |
-	cards:= cardsOnTable select: [:card | card isMemberOf: (aCard class)].
-	^(cards size)
+	cards := cardsOnTable select: [ :card | card isMemberOf: aCard class ].
+	^ cards size
 ]
 
 { #category : #private }
@@ -141,13 +142,8 @@ ZathuraGame >> checkIfWon: aShip [
 
 { #category : #actions }
 ZathuraGame >> getCard [
-	^aDeck random.
-]
 
-{ #category : #accesing }
-ZathuraGame >> getCardHandOf: aShip [ 
-	^(shipsHand select: [ :aCardHand | aCardHand ship = aShip ]) first
-	
+	^ aDeck next
 ]
 
 { #category : #state }
@@ -189,13 +185,13 @@ ZathuraGame >> lastCardThrewOnTable [
 { #category : #positioning }
 ZathuraGame >> numberOfLapOf: aShip [
 
-	^ (board positionOf: (self zathuraShip: aShip)) numberOfLap 
+	^ (board positionOf: aShip) numberOfLap 
 ]
 
 { #category : #positioning }
 ZathuraGame >> numberOfLockerOf: aShip [
 
-	^ board numberOfLockerOf: (self zathuraShip: aShip)
+	^ board numberOfLockerOf: aShip
 ]
 
 { #category : #playing }
@@ -251,13 +247,4 @@ ZathuraGame >> winner [
 	winner := ships select: [ :ship | 
 		          (self rankingOf: (ship)) == 1].
 	^ winner at: 1
-]
-
-{ #category : #accesing }
-ZathuraGame >> zathuraShip: aShip [
-
-	| zathuraShip |
-	zathuraShip := ships select: [ :zShip | 
-		               (zShip) = aShip ].
-	^ zathuraShip first
 ]

@@ -8,7 +8,7 @@ Class {
 RedoCard >> applyEffectTo: ship in: zathuraGame [
 
 	| aCard |
-	aCard := zathuraGame lastCardThrewOnTable.
+	aCard := (zathuraGame lastCardThrewOnTable) card.
 	aCard applyEffectTo: ship in: zathuraGame
 ]
 
@@ -16,6 +16,6 @@ RedoCard >> applyEffectTo: ship in: zathuraGame [
 RedoCard >> applyEffectToAllShipsIn: aZathuraGame [
 
 	| aCard |
-	aCard := aZathuraGame lastCardThrewOnTable.
+	aCard := (aZathuraGame lastCardThrewOnTable) card.
 	aCard applyEffectToAllShipsIn: aZathuraGame
 ]

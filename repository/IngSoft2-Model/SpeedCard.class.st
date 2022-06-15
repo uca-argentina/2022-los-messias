@@ -13,3 +13,8 @@ SpeedCard >> applyEffectTo: ship in: zathuraGame [
 	aaa := ActiveCard with: self appliedTo: ship.
 	zathuraGame addCardToBoard: (ActiveCard with: self appliedTo: {ship})
 ]
+
+{ #category : #action }
+SpeedCard >> changeOfRoll [
+	^1
+]
