@@ -5,7 +5,7 @@ Class {
 }
 
 { #category : #action }
-CancellationCard >> applyEffectTo: aShip removing: aCard in: aZathuraGame [
+CancellationCard >> applyEffectRemoving: aCard in: aZathuraGame [
 
 	aZathuraGame removeFromCardsOnTable: aCard
 ]

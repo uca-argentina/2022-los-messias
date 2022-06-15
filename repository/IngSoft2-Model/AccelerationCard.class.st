@@ -13,13 +13,10 @@ AccelerationCard >> = card [
 { #category : #action }
 AccelerationCard >> applyEffectToAllShipsIn: aZathuraGame [
 
-	aZathuraGame changeRollOfAllShipsBy: 1.
-	aZathuraGame addCardToBoard: self
+	aZathuraGame addCardToBoard: (ActiveCard with: self appliedTo: aZathuraGame ships)
 ]
 
-{ #category : #actions }
-AccelerationCard >> disapplyEffectIn: aZathuraGame [
-
-	aZathuraGame removeFromCardsOnTable: self.
-	aZathuraGame changeRollOfAllShipsBy: -1
+{ #category : #accesing }
+AccelerationCard >> changeOfRoll [
+	^1
 ]

@@ -2,10 +2,16 @@ Class {
 	#name : #CardHand,
 	#superclass : #Object,
 	#instVars : [
-		'handOfCards'
+		'handOfCards',
+		'ship'
 	],
 	#category : #'IngSoft2-Model'
 }
+
+{ #category : #'instance creation' }
+CardHand class >> of: aShip with: aCollectionOfCards [ 
+	^ self new initializeCardHandOf: aShip with: aCollectionOfCards .
+]
 
 { #category : #'class initialization' }
 CardHand class >> with: cards [
@@ -54,6 +60,12 @@ CardHand >> cardsOf: aCard [
 	^ handOfCards select: [ :card | card hasEqualClass: aCard ]
 ]
 
+{ #category : #initalization }
+CardHand >> initializeCardHandOf: aShip with: cards [ 
+	handOfCards := cards asOrderedCollection.
+	ship:= aShip
+]
+
 { #category : #initialization }
 CardHand >> initializeWith: cards [
 
@@ -69,6 +81,16 @@ CardHand >> remove: aCard [
 	handOfCards remove: theCard
 ]
 
+{ #category : #'accessing - attributes' }
+CardHand >> ship [
+	^ ship
+]
+
+{ #category : #actions }
+CardHand >> using: aCancelationCard removingToAll: aCard in: aZathuraGame [ 
+	aCancelationCard  applyEffectRemoving: aCard in: aZathuraGame 
+]
+
 { #category : #throwing }
 CardHand >> using: card to: ship in: zathuraGame [
 
@@ -81,7 +103,8 @@ CardHand >> using: card to: ship in: zathuraGame [
 CardHand >> using: cancellationCard to: aShip removing: aCard in: zathuraGame [
 
 	"Esto rompe si hay más de una OverLoad en el tablero, vamos a tener que identificar al ship en algunos casos y en otros no. El nombre applyEffectToACard: desp hay que cambiarlo"
-	cancellationCard applyEffectTo: aShip removing: aCard in: zathuraGame
+
+	cancellationCard applyEffectRemoving: aCard in: zathuraGame
 ]
 
 { #category : #throwing }

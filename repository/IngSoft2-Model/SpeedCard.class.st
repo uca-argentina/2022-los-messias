@@ -7,6 +7,9 @@ Class {
 { #category : #action }
 SpeedCard >> applyEffectTo: ship in: zathuraGame [
 
-	zathuraGame changeRollOf: ship by: 1.
-	zathuraGame addCardToBoard: (ActiveCard with: self appliedTo: ship)
+	"zathuraGame changeRollOf: ship by: 1."
+
+	| aaa |
+	aaa := ActiveCard with: self appliedTo: ship.
+	zathuraGame addCardToBoard: (ActiveCard with: self appliedTo: {ship})
 ]

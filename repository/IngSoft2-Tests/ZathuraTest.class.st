@@ -322,7 +322,7 @@ ZathuraTest >> testBlueShipThrowsASpeedCardToRedShipAndRedShipMovesRolledNumberP
 { #category : #shipWithHandOfCardsTests }
 ZathuraTest >> testBlueShipThrowsAnAccelerationCardAndAfterTwoRoundsThrowsACancellationCard [
 
-	| diceCup zathura zBlueShip lockersOfBlueShip lockersOfRedShip |
+	| diceCup zathura zBlueShip lockersOfBlueShip lockersOfRedShip cardManager |
 	diceCup := DiceCup withAll: { 
 			           (LoadedDie with: 3).
 			           (LoadedDie with: 4) }.
@@ -335,8 +335,10 @@ ZathuraTest >> testBlueShipThrowsAnAccelerationCardAndAfterTwoRoundsThrowsACance
 			            played: 1)
 		           rolling: diceCup
 		           withCards: { AccelerationCard new }.
-	zBlueShip := zathura zathuraShip: 'BlueShip'.
-	zBlueShip using: AccelerationCard new toAllShipsin: zathura.
+	"zBlueShip := zathura zathuraShip: 'BlueShip'.
+	zBlueShip using: AccelerationCard new toAllShipsin: zathura."
+	cardManager := CardManager intializeIn: zathura .
+	cardManager throws: AccelerationCard new from: 'BlueShip'.
 	zathura
 		playTurn;
 		playTurn.
@@ -353,10 +355,11 @@ ZathuraTest >> testBlueShipThrowsAnAccelerationCardAndAfterTwoRoundsThrowsACance
 	self
 		assert: lockersOfBlueShip equals: 16;
 		assert: lockersOfRedShip equals: 16.
-	zBlueShip
+	cardManager cancel: AccelerationCard new from: 'BlueShip'.
+	"zBlueShip
 		using: CancellationCard new
 		removing: AccelerationCard new
-		in: zathura.
+		in: zathura."
 	zathura
 		playTurn;
 		playTurn.
