@@ -92,30 +92,38 @@ CardHand >> ship [
 ]
 
 { #category : #actions }
-CardHand >> throw: aCancelationCard removingToAll: aCard in: aZathuraGame [ 
+CardHand >> throwInstant: aCancelationCard removingToAll: aCard in: aZathuraGame [ 
 	aCancelationCard  applyEffectToAllShipsRemoving: aCard in: aZathuraGame 
 ]
 
-{ #category : #throwing }
-CardHand >> throw: card to: ship in: zathuraGame [
+{ #category : #action }
+CardHand >> throwInstant: aCard to: aShip in: zathuraGame [ 
 
-	self assertCardIsInHand: card.
-	card applyEffectTo: ship in: zathuraGame.
-	self remove: card
+	self assertCardIsInHand: aCard.
+	aCard applyEffectTo: aShip in: zathuraGame.
+	self remove: aCard
 ]
 
 { #category : #action }
-CardHand >> throw: cancellationCard to: aShip removing: aCard in: zathuraGame [
+CardHand >> throwInstant: cancellationCard to: aShip removing: aCard in: zathuraGame [
 
-	"Esto rompe si hay más de una OverLoad en el tablero, vamos a tener que identificar al ship en algunos casos y en otros no. El nombre applyEffectToACard: desp hay que cambiarlo"
-
-	cancellationCard applyEffectTo:aShip removing: aCard in: zathuraGame
+	cancellationCard applyEffectTo: aShip removing: aCard in: zathuraGame
 ]
 
 { #category : #throwing }
-CardHand >> throw: card toAllShipsin: zathuraGame [
+CardHand >> throwPermanent: card to: aShip in: zathuraGame [
 
 	self assertCardIsInHand: card.
+	self assertIsYourTurn: (self ship) in: zathuraGame. 
+	card applyEffectTo: aShip in: zathuraGame.
+	self remove: card
+]
+
+{ #category : #throwing }
+CardHand >> throwPermanent: card toAllShipsin: zathuraGame [
+
+	self assertCardIsInHand: card.
+	self assertIsYourTurn: self ship in: zathuraGame. 
 	card applyEffectToAllShipsIn: zathuraGame.
 	self remove: card
 ]

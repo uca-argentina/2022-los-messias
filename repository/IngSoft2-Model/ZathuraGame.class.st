@@ -94,15 +94,6 @@ ZathuraGame >> applyLastEffectOn: aShip [
 ]
 
 { #category : #asserting }
-ZathuraGame >> assertCardsOnTable: card [
-
-	| onTable |
-	onTable := cardsOnTable select: [ :aCard | aCard = (card first)].
-	((onTable size) > 0) 
-		ifFalse: [ Error signal: 'This card is not active in the table' ]
-]
-
-{ #category : #asserting }
 ZathuraGame >> assertZathuraHasFinished [
 
 	finished ifFalse: [ Error signal: 'Zathura has not finished yet' ]
@@ -142,8 +133,17 @@ ZathuraGame >> checkIfWon: aShip [
 	finished := true
 ]
 
+{ #category : #asserting }
+ZathuraGame >> findCardOnTable: aCard [
+
+	| theCard |
+	theCard := cardsOnTable select: [ :card | card = aCard ].
+	theCard ifEmpty: [ Error signal: 'This card is not active in the table' ].
+	^ theCard first
+]
+
 { #category : #actions }
-ZathuraGame >> getCard [
+ZathuraGame >> giveCard [
 
 	^ aDeck next
 ]
@@ -159,23 +159,22 @@ ZathuraGame >> initializePlayingBy: aCollectionOfShips movedInBoardOf: boardStru
 
 	diceCup := aDiceCup.
 	aDeck := Sequence withAll: aCollectionOfCards.
-	"self addIntoGame: aCollectionOfShips."
 	ships := aCollectionOfShips asOrderedCollection asSequence.
 	cardManager := CardManager intializeIn: self.
 	board := Board
 		         of: boardStructure
 		         withAll: ships
 		         withCards: aCollectionOfCards
-		andCardManager: cardManager .
+		         andCardManager: cardManager.
 	cardsOnTable := OrderedCollection new.
 	finished := false.
-	timesPlayed := 0.
+	timesPlayed := 0
 ]
 
 { #category : #testing }
 ZathuraGame >> isTurnOf: aShip [
 
-	^ ships first ship == aShip
+	^ ((ships first) == aShip)
 ]
 
 { #category : #accessing }
@@ -228,10 +227,7 @@ ZathuraGame >> rankingOf: aShip [
 ZathuraGame >> removeFromCardsOnTable: aCard [
 
 	| theCard |
-	theCard := 0.
-	self assertCardsOnTable: {aCard}.
-	cardsOnTable do: [ :card | 
-	(aCard = card) ifTrue: [ theCard := card ] ].
+	theCard := self findCardOnTable: aCard.
 	cardsOnTable remove: theCard
 ]
 

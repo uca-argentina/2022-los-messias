@@ -16,7 +16,8 @@ ActiveCard class >> with: card appliedTo: ship [
 
 { #category : #comparing }
 ActiveCard >> = activeCard [
-	^(self ship = (activeCard ship))
+
+	^ ((self ship = activeCard ship) and: [ self card hasEqualClass:  activeCard card ])
 ]
 
 { #category : #accesing }
