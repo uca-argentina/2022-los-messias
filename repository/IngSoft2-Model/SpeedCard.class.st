@@ -11,7 +11,7 @@ SpeedCard >> applyEffectTo: ship in: zathuraGame [
 
 	| aaa |
 	aaa := ActiveCard with: self appliedTo: ship.
-	zathuraGame addCardToBoard: (ActiveCard with: self appliedTo: {ship})
+	zathuraGame addCardToTable: (ActiveCard with: self appliedTo: {ship})
 ]
 
 { #category : #action }

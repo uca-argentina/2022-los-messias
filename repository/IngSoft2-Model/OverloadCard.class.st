@@ -7,7 +7,7 @@ Class {
 { #category : #action }
 OverloadCard >> applyEffectTo: ship in: zathuraGame [
 
-	zathuraGame addCardToBoard: (ActiveCard with: self appliedTo: {ship})
+	zathuraGame addCardToTable: (ActiveCard with: self appliedTo: {ship})
 ]
 
 { #category : #action }

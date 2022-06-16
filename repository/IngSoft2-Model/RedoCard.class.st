@@ -7,9 +7,15 @@ Class {
 { #category : #action }
 RedoCard >> applyEffectTo: ship in: zathuraGame [
 
-	| aCard |
-	aCard := (zathuraGame lastCardThrewOnTable) card.
-	aCard applyEffectTo: ship in: zathuraGame
+	| aCard  |
+	aCard := zathuraGame lastCardThrewOnTable card.
+	(aCard isMemberOf: CancellationCard new class)
+		ifFalse: [ aCard applyEffectTo: ship in: zathuraGame ]
+		ifTrue: [ 
+			aCard
+				applyEffectTo: ship
+				removing: zathuraGame lastCardCancelled
+				in: zathuraGame ]
 ]
 
 { #category : #action }

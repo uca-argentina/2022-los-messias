@@ -13,7 +13,7 @@ AccelerationCard >> = card [
 { #category : #action }
 AccelerationCard >> applyEffectToAllShipsIn: aZathuraGame [
 
-	aZathuraGame addCardToBoard:
+	aZathuraGame addCardToTable:
 		(ActiveCard with: self appliedTo: (aZathuraGame ships))
 ]
 

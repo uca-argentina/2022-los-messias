@@ -38,16 +38,6 @@ CardHand >> assertIsYourTurn: aShip in: zathuraGame [
 		Error signal: 'Permanent cards can only be used when its your turn' ]
 ]
 
-{ #category : #assertions }
-CardHand >> assertZathuraHasCardsOnTable [
-	self shouldBeImplemented.
-]
-
-{ #category : #assertion }
-CardHand >> assertZathuraHasCardsOnTableIn: aZathuraGame [ 
-	self shouldBeImplemented.
-]
-
 { #category : #accesing }
 CardHand >> cardsOf [
 
@@ -114,7 +104,7 @@ CardHand >> throwInstant: cancellationCard to: aShip removing: aCard in: zathura
 CardHand >> throwPermanent: card to: aShip in: zathuraGame [
 
 	self assertCardIsInHand: card.
-	self assertIsYourTurn: (self ship) in: zathuraGame. 
+	self assertIsYourTurn: (self ship) in: zathuraGame.
 	card applyEffectTo: aShip in: zathuraGame.
 	self remove: card
 ]

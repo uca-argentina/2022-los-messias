@@ -40,7 +40,9 @@ Class {
 		'cardsOnTable',
 		'ships',
 		'shipsHand',
-		'cardManager'
+		'cardManager',
+		'lastCard',
+		'lastCancelledCard'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -73,9 +75,10 @@ ZathuraGame class >> playBy: ships movedInBoardOf: boardStructure rolling: die w
 ]
 
 { #category : #adding }
-ZathuraGame >> addCardToBoard: aCard [
+ZathuraGame >> addCardToTable: aCard [
 
-	cardsOnTable add: aCard
+	cardsOnTable add: aCard.
+	lastCard := aCard
 ]
 
 { #category : #adding }
@@ -91,6 +94,11 @@ ZathuraGame >> addIntoGame: aCollectionOfShips [
 { #category : #actions }
 ZathuraGame >> applyLastEffectOn: aShip [ 
 	board lastEffectOn: (aShip).
+]
+
+{ #category : #asserting }
+ZathuraGame >> assertIsOnTable: aCard [
+		aCard ifEmpty: [ Error signal: 'This card is not active in the table' ].
 ]
 
 { #category : #asserting }
@@ -138,7 +146,7 @@ ZathuraGame >> findCardOnTable: aCard [
 
 	| theCard |
 	theCard := cardsOnTable select: [ :card | card = aCard ].
-	theCard ifEmpty: [ Error signal: 'This card is not active in the table' ].
+	self assertIsOnTable: theCard.
 	^ theCard first
 ]
 
@@ -168,7 +176,8 @@ ZathuraGame >> initializePlayingBy: aCollectionOfShips movedInBoardOf: boardStru
 		         andCardManager: cardManager.
 	cardsOnTable := OrderedCollection new.
 	finished := false.
-	timesPlayed := 0
+	timesPlayed := 0.
+	lastCard := nil.
 ]
 
 { #category : #testing }
@@ -177,10 +186,15 @@ ZathuraGame >> isTurnOf: aShip [
 	^ ((ships first) == aShip)
 ]
 
+{ #category : #accesing }
+ZathuraGame >> lastCardCancelled [
+	^lastCancelledCard card .
+]
+
 { #category : #accessing }
 ZathuraGame >> lastCardThrewOnTable [
 
-	^ cardsOnTable first
+	^ lastCard
 ]
 
 { #category : #positioning }
@@ -228,7 +242,9 @@ ZathuraGame >> removeFromCardsOnTable: aCard [
 
 	| theCard |
 	theCard := self findCardOnTable: aCard.
-	cardsOnTable remove: theCard
+	cardsOnTable remove: theCard.
+	lastCancelledCard := aCard.
+	lastCard:= ActiveCard with: CancellationCard new appliedTo:''. 
 ]
 
 { #category : #accessing }
