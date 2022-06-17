@@ -120,20 +120,6 @@ ZathuraGame >> checkIfWon: aShip [
 	finished := true ].
 ]
 
-{ #category : #initalization }
-ZathuraGame >> createBoardWith: aCollectionOfShips WithStructure: boardStructure rolling: aDiceCup withCards: aCollectionOfCards [
-
-	diceCup := aDiceCup.
-	aDeck := Sequence withAll: aCollectionOfCards.
-	ships := aCollectionOfShips asOrderedCollection asSequence.
-	cardManager := CardApplicator intializeIn: self.
-	board := Board
-		         of: boardStructure
-		         withAll: ships
-		         withCards: aCollectionOfCards
-		         andCardManager: cardManager
-]
-
 { #category : #asserting }
 ZathuraGame >> findCardOnTable: aCard [
 
@@ -178,15 +164,22 @@ ZathuraGame >> hasFinished [
 { #category : #initalization }
 ZathuraGame >> initializePlayingBy: aCollectionOfShips movedInBoardOf: boardStructure rolling: aDiceCup withCards: aCollectionOfCards [
 
-	self
-		createBoardWith: aCollectionOfShips
-		WithStructure: boardStructure
-		rolling: aDiceCup
-		withCards: aCollectionOfCards.
-	cardsOnTable := OrderedCollection new.
+	| cardApplicator |
+	diceCup := aDiceCup.
+	cardManager := CardManager
+		               with: aCollectionOfShips
+		               and: aCollectionOfCards.
+	ships := aCollectionOfShips asOrderedCollection asSequence.
+	cardApplicator := CardApplicator intializeIn: self.
+	board := Board
+		         of: boardStructure
+		         withAll: ships
+		         withCards: aCollectionOfCards
+		         andCardManager: cardManager.
+	
 	finished := false.
 	timesPlayed := 0.
-	thrownCardsStack := OrderedCollection new
+	
 ]
 
 { #category : #accessing }
