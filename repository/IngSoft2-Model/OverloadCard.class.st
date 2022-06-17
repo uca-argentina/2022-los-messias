@@ -5,9 +5,18 @@ Class {
 }
 
 { #category : #action }
-OverloadCard >> applyEffectTo: ship in: zathuraGame [
+OverloadCard >> applyEffectTo: ship in: zathuraGame by: sourceShip [
 
-	zathuraGame addCardToTable: (ActiveCard with: self appliedTo: {ship})
+	self assertIsYourTurn: sourceShip  in: zathuraGame. 
+	zathuraGame addCardToTable:
+		(ActiveCard with: self appliedTo: { ship })
+]
+
+{ #category : #action }
+OverloadCard >> assertIsYourTurn: aShip in: zathuraGame [
+
+	(zathuraGame isTurnOf: aShip) ifFalse: [ 
+		Error signal: 'Permanent cards can only be used when its your turn' ] 
 ]
 
 { #category : #action }

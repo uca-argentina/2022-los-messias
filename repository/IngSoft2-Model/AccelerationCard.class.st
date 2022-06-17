@@ -11,15 +11,18 @@ AccelerationCard >> = card [
 ]
 
 { #category : #action }
-AccelerationCard >> applyEffectToAllShipsIn: aZathuraGame [
+AccelerationCard >> applyEffectToAllShipsIn: aZathuraGame by: sourceShip [
 
+	self assertIsYourTurn: sourceShip  in: aZathuraGame. 
 	aZathuraGame addCardToTable:
-		(ActiveCard with: self appliedTo: (aZathuraGame ships))
+		(ActiveCard with: self appliedTo: aZathuraGame ships)
 ]
 
-{ #category : #action }
-AccelerationCard >> card [
-	^ self
+{ #category : #asserting }
+AccelerationCard >> assertIsYourTurn: aShip in: zathuraGame [
+
+	(zathuraGame isTurnOf: aShip) ifFalse: [ 
+		Error signal: 'Permanent cards can only be used when its your turn' ]
 ]
 
 { #category : #accesing }

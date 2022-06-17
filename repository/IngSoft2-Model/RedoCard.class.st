@@ -5,23 +5,25 @@ Class {
 }
 
 { #category : #action }
-RedoCard >> applyEffectTo: ship in: zathuraGame [
+RedoCard >> applyEffectTo: ship in: zathuraGame by: sourceShip [
 
-	| aCard  |
-	aCard := zathuraGame lastCardThrewOnTable card.
-	(aCard isMemberOf: CancellationCard new class)
-		ifFalse: [ aCard applyEffectTo: ship in: zathuraGame ]
-		ifTrue: [ 
-			aCard
-				applyEffectTo: ship
-				removing: zathuraGame lastCardCancelled
-				in: zathuraGame ]
+	| aCard |
+	aCard := zathuraGame lastCardThrownOnTheGame.
+	aCard applyEffectTo: ship in: zathuraGame by: sourceShip 
 ]
 
 { #category : #action }
-RedoCard >> applyEffectToAllShipsIn: aZathuraGame [
+RedoCard >> applyEffectTo: ship removing: card in: zathuraGame [
 
 	| aCard |
-	aCard := (aZathuraGame lastCardThrewOnTable) card.
-	aCard applyEffectToAllShipsIn: aZathuraGame
+	aCard := zathuraGame lastCardThrownOnTheGame card.
+	aCard applyEffectTo: ship  removing: card in: zathuraGame 
+]
+
+{ #category : #action }
+RedoCard >> applyEffectToAllShipsIn: aZathuraGame by: sourceShip [
+
+	| aCard |
+	aCard := aZathuraGame lastCardThrownOnTheGame card.
+	aCard applyEffectToAllShipsIn: aZathuraGame by: sourceShip 
 ]

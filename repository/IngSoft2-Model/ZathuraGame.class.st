@@ -41,8 +41,7 @@ Class {
 		'ships',
 		'shipsHand',
 		'cardManager',
-		'lastCard',
-		'lastCancelledCard'
+		'stackOfThrownCards'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -78,17 +77,12 @@ ZathuraGame class >> playBy: ships movedInBoardOf: boardStructure rolling: die w
 ZathuraGame >> addCardToTable: aCard [
 
 	cardsOnTable add: aCard.
-	lastCard := aCard
 ]
 
 { #category : #adding }
 ZathuraGame >> addIntoGame: aCollectionOfShips [
 
-	ships := (aCollectionOfShips asOrderedCollection) asSequence
-	"aCollectionOfShips do: [ :ship | 
-		shipsHand add: (CardHand of: ship with: { 
-					 aDeck next.
-					 aDeck next }) ]"
+	ships := aCollectionOfShips asOrderedCollection asSequence
 ]
 
 { #category : #actions }
@@ -119,17 +113,11 @@ ZathuraGame >> cardManager [
 	^ cardManager
 ]
 
-{ #category : #accessing }
-ZathuraGame >> cardsOf: spaceship [
-
-	^ (self zathuraShip: spaceship) cardsOf
-]
-
 { #category : #'accessing - attributes' }
 ZathuraGame >> cardsOnTableOf: aCard [
 
 	| cards |
-	cards := cardsOnTable select: [ :card | card isMemberOf: aCard class ].
+	cards := cardsOnTable select: [ :card | card hasEqualClass: aCard ].
 	^ cards size
 ]
 
@@ -168,7 +156,7 @@ ZathuraGame >> initializePlayingBy: aCollectionOfShips movedInBoardOf: boardStru
 	diceCup := aDiceCup.
 	aDeck := Sequence withAll: aCollectionOfCards.
 	ships := aCollectionOfShips asOrderedCollection asSequence.
-	cardManager := CardManager intializeIn: self.
+	cardManager := CardApplicator intializeIn: self.
 	board := Board
 		         of: boardStructure
 		         withAll: ships
@@ -177,7 +165,7 @@ ZathuraGame >> initializePlayingBy: aCollectionOfShips movedInBoardOf: boardStru
 	cardsOnTable := OrderedCollection new.
 	finished := false.
 	timesPlayed := 0.
-	lastCard := nil.
+	stackOfThrownCards := OrderedCollection new.
 ]
 
 { #category : #testing }
@@ -186,15 +174,10 @@ ZathuraGame >> isTurnOf: aShip [
 	^ ((ships first) == aShip)
 ]
 
-{ #category : #accesing }
-ZathuraGame >> lastCardCancelled [
-	^lastCancelledCard card .
-]
-
 { #category : #accessing }
-ZathuraGame >> lastCardThrewOnTable [
+ZathuraGame >> lastCardThrownOnTheGame [
 
-	^ lastCard
+	^ stackOfThrownCards last
 ]
 
 { #category : #positioning }
@@ -243,14 +226,18 @@ ZathuraGame >> removeFromCardsOnTable: aCard [
 	| theCard |
 	theCard := self findCardOnTable: aCard.
 	cardsOnTable remove: theCard.
-	lastCancelledCard := aCard.
-	lastCard:= ActiveCard with: CancellationCard new appliedTo:''. 
 ]
 
 { #category : #accessing }
 ZathuraGame >> ships [
 
 	^ ships
+]
+
+{ #category : #positioning }
+ZathuraGame >> throw: aCard [
+	
+	stackOfThrownCards add: aCard.
 ]
 
 { #category : #ending }

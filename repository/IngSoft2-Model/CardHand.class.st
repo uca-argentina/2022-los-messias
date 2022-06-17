@@ -31,13 +31,6 @@ CardHand >> assertCardIsInHand: aCard [
 		ifFalse: [ Error signal: 'Card is not in Hand' ]
 ]
 
-{ #category : #asserting }
-CardHand >> assertIsYourTurn: aShip in: zathuraGame [
-
-	(zathuraGame isTurnOf: aShip) ifFalse: [ 
-		Error signal: 'Permanent cards can only be used when its your turn' ]
-]
-
 { #category : #accesing }
 CardHand >> cardsOf [
 
@@ -82,38 +75,35 @@ CardHand >> ship [
 ]
 
 { #category : #actions }
-CardHand >> throwInstant: aCancelationCard removingToAll: aCard in: aZathuraGame [ 
-	aCancelationCard  applyEffectToAllShipsRemoving: aCard in: aZathuraGame 
+CardHand >> throw: aCancelationCard removingToAll: aCard in: aZathuraGame [
+
+	aZathuraGame throw: aCancelationCard.
+	aCancelationCard
+		applyEffectToAllShipsRemoving: aCard
+		in: aZathuraGame
+]
+
+{ #category : #throwing }
+CardHand >> throw: card to: aShip in: zathuraGame [
+
+	self assertCardIsInHand: card.
+	zathuraGame throw: card.
+	card applyEffectTo: aShip in: zathuraGame by: self ship.
+	self remove: card
 ]
 
 { #category : #action }
-CardHand >> throwInstant: aCard to: aShip in: zathuraGame [ 
+CardHand >> throw: cancellationCard to: aShip removing: aCard in: zathuraGame [
 
-	self assertCardIsInHand: aCard.
-	aCard applyEffectTo: aShip in: zathuraGame.
-	self remove: aCard
-]
-
-{ #category : #action }
-CardHand >> throwInstant: cancellationCard to: aShip removing: aCard in: zathuraGame [
-
+	zathuraGame throw: cancellationCard.
 	cancellationCard applyEffectTo: aShip removing: aCard in: zathuraGame
 ]
 
 { #category : #throwing }
-CardHand >> throwPermanent: card to: aShip in: zathuraGame [
+CardHand >> throw: card toAllShipsin: zathuraGame [
 
 	self assertCardIsInHand: card.
-	self assertIsYourTurn: (self ship) in: zathuraGame.
-	card applyEffectTo: aShip in: zathuraGame.
-	self remove: card
-]
-
-{ #category : #throwing }
-CardHand >> throwPermanent: card toAllShipsin: zathuraGame [
-
-	self assertCardIsInHand: card.
-	self assertIsYourTurn: self ship in: zathuraGame. 
-	card applyEffectToAllShipsIn: zathuraGame.
+	zathuraGame throw: card.
+	card applyEffectToAllShipsIn: zathuraGame by: self ship.
 	self remove: card
 ]
