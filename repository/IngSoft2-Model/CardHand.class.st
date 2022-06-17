@@ -77,17 +77,16 @@ CardHand >> ship [
 { #category : #actions }
 CardHand >> throw: aCancelationCard removingToAll: aCard in: aZathuraGame [
 
-	aZathuraGame throw: aCancelationCard.
 	aCancelationCard
 		applyEffectToAllShipsRemoving: aCard
-		in: aZathuraGame
+		in: aZathuraGame.
+	self remove: aCancelationCard
 ]
 
 { #category : #throwing }
 CardHand >> throw: card to: aShip in: zathuraGame [
 
 	self assertCardIsInHand: card.
-	zathuraGame throw: card.
 	card applyEffectTo: aShip in: zathuraGame by: self ship.
 	self remove: card
 ]
@@ -95,15 +94,14 @@ CardHand >> throw: card to: aShip in: zathuraGame [
 { #category : #action }
 CardHand >> throw: cancellationCard to: aShip removing: aCard in: zathuraGame [
 
-	zathuraGame throw: cancellationCard.
-	cancellationCard applyEffectTo: aShip removing: aCard in: zathuraGame
+	cancellationCard applyEffectTo: aShip removing: aCard in: zathuraGame.
+	self remove: cancellationCard
 ]
 
 { #category : #throwing }
 CardHand >> throw: card toAllShipsin: zathuraGame [
 
 	self assertCardIsInHand: card.
-	zathuraGame throw: card.
 	card applyEffectToAllShipsIn: zathuraGame by: self ship.
 	self remove: card
 ]

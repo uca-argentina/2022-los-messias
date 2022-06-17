@@ -13,9 +13,10 @@ AccelerationCard >> = card [
 { #category : #action }
 AccelerationCard >> applyEffectToAllShipsIn: aZathuraGame by: sourceShip [
 
-	self assertIsYourTurn: sourceShip  in: aZathuraGame. 
+	self assertIsYourTurn: sourceShip in: aZathuraGame.
 	aZathuraGame addCardToTable:
-		(ActiveCard with: self appliedTo: aZathuraGame ships)
+		(ActiveCard with: self appliedTo: aZathuraGame ships).
+	aZathuraGame throw: self.
 ]
 
 { #category : #asserting }

@@ -311,7 +311,7 @@ ZathuraTest >> testBlueShipThrowsARedoCardAfterARepeatCardHasBeenPlayed [
 	cardManager throws: RepeatCard new to: 'BlueShip' from: 'BlueShip'.
 	cardManager throws: RedoCard new to: 'GreenShip' from: 'GreenShip'.
 	
-	self assert: 'GreenShip' isAt: 3 with: 0 in: zathura 
+	self assert: 'GreenShip' isAt: 4 with: 0 in: zathura 
 ]
 
 { #category : #redoCard }
@@ -744,6 +744,50 @@ ZathuraTest >> testBlueShipThrowsAnOverloadCardToRedShipThenRedShipsThrowsACance
 		assert: lockersOfRedShip equals: 12
 ]
 
+{ #category : #redoCard }
+ZathuraTest >> testBlueShipThrowsAnOverloadsCardsToRedShipAndGreenShipThrowsACancellationCardAndARedoCardToRedShipThrowsError [
+
+	| diceCup zathura lockersOfBlueShip lockersOfRedShip lockersOfGreenShip cardManager |
+	diceCup := DiceCup withAll: { 
+			           (LoadedDie with: 3).
+			           (LoadedDie with: 4) }.
+	zathura := ZathuraGame
+		           playBy: { 'BlueShip'. 'RedShip'. 'GreenShip' }
+		           movedInBoardOf:
+		           (self
+			            boardDefinitionWithNoEffectsOf: 30
+			            andParsec: 100
+			            played: 1)
+		           rolling: diceCup
+		           withCards: { 
+				           OverloadCard new.
+				           OverloadCard new.
+				           OverloadCard new.
+				           OverloadCard new.
+				           CancellationCard new.
+				           RedoCard new }.
+
+	cardManager := zathura cardManager.
+
+	cardManager throws: OverloadCard new to: 'RedShip' from: 'BlueShip'.
+
+	cardManager
+		throws: CancellationCard new
+		to: 'RedShip'
+		removing: OverloadCard new
+		from: 'GreenShip'.
+
+	self
+		should: [ 
+			cardManager
+				throws: RedoCard new
+				to: 'RedShip'
+				removing: OverloadCard new
+				from: 'GreenShip' ]
+		raise: Error
+		withMessage: 'This card is not active in the table'
+]
+
 { #category : #accelerationCard }
 ZathuraTest >> testBlueShipThrowsErrorWhenUsesAnAccelerationCardAndItIsNotItsTurn [
 
@@ -1102,6 +1146,34 @@ ZathuraTest >> testRedShipsFallsIntoaCardGetterLockerAndGetsARandomCard [
 	cardManager := zathura cardManager.
 	redShipCardHand := cardManager cardsOf: 'RedShip'.
 	self assert: redShipCardHand size equals: 3
+]
+
+{ #category : #redoCard }
+ZathuraTest >> testRedoCardThrowsErrorWhenBlueShipThrowsItBeforeAnyOtherCardHasBeenThrownInTheGame [
+
+	| diceCup zathura cardManager |
+	diceCup := DiceCup withAll: { 
+			           (LoadedDie with: 3).
+			           (LoadedDie with: 4) }.
+	zathura := ZathuraGame
+		           playBy: { 'BlueShip'. 'RedShip'. 'GreenShip' }
+		           movedInBoardOf:
+		           (self
+			            boardDefinitionWithNoEffectsOf: 30
+			            andParsec: 100
+			            played: 1)
+		           rolling: diceCup
+		           withCards: { 
+				           SpeedCard new.
+				           RedoCard new }.
+
+	cardManager := zathura cardManager.
+
+	self
+		should: [ 
+		cardManager throws: RedoCard new to: 'RedShip' from: 'RedShip' ]
+		raise: Error
+		withMessage: 'Redo card must be thrown before another card has been played'
 ]
 
 { #category : #cancellationCard }
@@ -1488,14 +1560,15 @@ ZathuraTest >> testZathuraRedShipThrowsRepeatCardToBlueShip [
 { #category : #repeatCard }
 ZathuraTest >> testZathuraRedShipThrowsRepeatCardToHimselfWhenTheLastLockerWasANoEffectLockerAndNothingHappens [
 
-	| positionOfBlueShip zathura aDie redShip cardManager |
+	| zathura aDie cardManager |
 	aDie := LoadedDie with: 2.
 	zathura := ZathuraGame
 		           playBy: { 'BlueShip'. 'RedShip' }
-		           movedInBoardOf: (self
-				            boardDefinitionWithNoEffectsOf: 12
-				            andParsec: 100
-				            played: 1)
+		           movedInBoardOf:
+		           (self
+			            boardDefinitionWithNoEffectsOf: 12
+			            andParsec: 100
+			            played: 1)
 		           rolling: aDie
 		           withCards: { RepeatCard new }.
 
@@ -1514,16 +1587,13 @@ ZathuraTest >> testZathuraRedShipThrowsRepeatCardToHimselfWhenTheLastLockerWasAN
 		in: zathura.
 
 	cardManager := zathura cardManager.
-	cardManager
-		throws: RepeatCard new
-		to: 'RedShip'
-		from: 'RedShip'.
+	cardManager throws: RepeatCard new to: 'RedShip' from: 'RedShip'.
 
 	self
 		assert: 'RedShip'
 		isAt: 2
 		with: 0
-		in: zathura.
+		in: zathura
 ]
 
 { #category : #boardTests }

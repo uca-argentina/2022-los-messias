@@ -5,6 +5,8 @@ Class {
 }
 
 { #category : #actions }
-RepeatCard >> applyEffectTo: aShip in: aZathuraGame by: sourceShip [ 
+RepeatCard >> applyEffectTo: aShip in: aZathuraGame by: sourceShip [
+
 	aZathuraGame applyLastEffectOn: aShip.
+	aZathuraGame throw: self.
 ]

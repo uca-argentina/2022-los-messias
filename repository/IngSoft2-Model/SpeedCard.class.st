@@ -7,9 +7,10 @@ Class {
 { #category : #action }
 SpeedCard >> applyEffectTo: ship in: zathuraGame by: sourceShip [
 
-	self assertIsYourTurn: sourceShip in: zathuraGame. 
+	self assertIsYourTurn: sourceShip in: zathuraGame.
 	zathuraGame addCardToTable:
-		(ActiveCard with: self appliedTo: { ship })
+		(ActiveCard with: self appliedTo: { ship }).
+	zathuraGame throw: self.
 ]
 
 { #category : #action }

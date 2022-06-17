@@ -7,7 +7,8 @@ Class {
 { #category : #action }
 OverloadCard >> applyEffectTo: ship in: zathuraGame by: sourceShip [
 
-	self assertIsYourTurn: sourceShip  in: zathuraGame. 
+	zathuraGame throw: self.
+	self assertIsYourTurn: sourceShip in: zathuraGame.
 	zathuraGame addCardToTable:
 		(ActiveCard with: self appliedTo: { ship })
 ]

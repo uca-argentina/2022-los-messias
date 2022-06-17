@@ -41,7 +41,7 @@ Class {
 		'ships',
 		'shipsHand',
 		'cardManager',
-		'stackOfThrownCards'
+		'thrownCardsStack'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -93,6 +93,14 @@ ZathuraGame >> applyLastEffectOn: aShip [
 { #category : #asserting }
 ZathuraGame >> assertIsOnTable: aCard [
 		aCard ifEmpty: [ Error signal: 'This card is not active in the table' ].
+]
+
+{ #category : #'as yet unclassified' }
+ZathuraGame >> assertThrownCardStackIsNotEmpty [
+
+	thrownCardsStack ifEmpty: [ 
+		Error signal:
+			'Redo card must be thrown before another card has been played' ]
 ]
 
 { #category : #asserting }
@@ -165,7 +173,7 @@ ZathuraGame >> initializePlayingBy: aCollectionOfShips movedInBoardOf: boardStru
 	cardsOnTable := OrderedCollection new.
 	finished := false.
 	timesPlayed := 0.
-	stackOfThrownCards := OrderedCollection new.
+	thrownCardsStack := OrderedCollection new.
 ]
 
 { #category : #testing }
@@ -177,7 +185,16 @@ ZathuraGame >> isTurnOf: aShip [
 { #category : #accessing }
 ZathuraGame >> lastCardThrownOnTheGame [
 
-	^ stackOfThrownCards last
+	thrownCardsStack ifEmpty: [ Error signal: 'Redo card must be thrown before another card has been played' ].
+	^ thrownCardsStack last
+]
+
+{ #category : #'as yet unclassified' }
+ZathuraGame >> methodSelectorAndArgumentNames [
+
+thrownCardsStack ifEmpty: [ 
+		Error signal:
+			'Redo card must be thrown before another card has been played' ].
 ]
 
 { #category : #positioning }
@@ -234,10 +251,10 @@ ZathuraGame >> ships [
 	^ ships
 ]
 
-{ #category : #positioning }
+{ #category : #adding }
 ZathuraGame >> throw: aCard [
-	
-	stackOfThrownCards add: aCard.
+
+	thrownCardsStack add: aCard
 ]
 
 { #category : #ending }
