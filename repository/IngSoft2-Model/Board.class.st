@@ -107,23 +107,23 @@ Board >> initializeWith: aBoardStructure withAGroupOf: aCollectionOfShips withCa
 	boardDefinition := aBoardStructure.
 	self addIntoGame: aCollectionOfShips.
 	aDeck := Sequence withAll: aCollectionOfCards.
-	lastEffect := nil.
+	lastEffect := LockerNoEffect new.
 ]
 
 { #category : #initalization }
-Board >> initializeWith: aBoardDefinition withAGroupOf: aCollectionOfShips withCards: aCollectionOfCards withCardManager: aCardManager [ 
-		boardDefinition := aBoardDefinition .
+Board >> initializeWith: aBoardDefinition withAGroupOf: aCollectionOfShips withCards: aCollectionOfCards withCardManager: aCardManager [
+
+	boardDefinition := aBoardDefinition.
 	self addIntoGame: aCollectionOfShips.
 	aDeck := Sequence withAll: aCollectionOfCards.
-	lastEffect := nil.
-	cardManager := aCardManager 
+	lastEffect := LockerNoEffect new.
+	cardManager := aCardManager
 ]
 
 { #category : #moving }
-Board >> lastEffectOn: aZathuraShip [ 
+Board >> lastEffectOn: aZathuraShip [
 
-	(lastEffect = nil) ifTrue: [Error signal: 'Ship can not throw repeat card if no effects have been aplied'].
-	lastEffect applyFor: aZathuraShip on: self.
+	lastEffect applyFor: aZathuraShip on: self
 ]
 
 { #category : #private }

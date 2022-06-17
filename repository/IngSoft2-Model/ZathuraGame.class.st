@@ -53,24 +53,14 @@ ZathuraGame class >> assertNumberOfShipsIsValid: aCollectionOfShips [
 ]
 
 { #category : #'instance creation' }
-ZathuraGame class >> playBy: ships movedInBoardOf: boardStructure rolling: die [
+ZathuraGame class >> playBy: ships movedInBoardOf: boardStructure rolling: die withCards: cards [
 
 	self assertNumberOfShipsIsValid: ships.
 	^ self new
 		  initializePlayingBy: ships
 		  movedInBoardOf: boardStructure
 		  rolling: die
-		  withCards: { OverloadCard new }.
-]
-
-{ #category : #'class initialization' }
-ZathuraGame class >> playBy: ships movedInBoardOf: boardStructure rolling: die withCards: aCollectionOfCards [
-
-	self assertNumberOfShipsIsValid: ships.
-	^ self new
-		  initializePlayingBy: ships
-		  movedInBoardOf: boardStructure
-		  rolling: die withCards: aCollectionOfCards
+		  withCards: cards
 ]
 
 { #category : #adding }
