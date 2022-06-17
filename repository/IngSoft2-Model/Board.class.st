@@ -40,15 +40,6 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #'instance creation' }
-Board class >> of: boardStructure withAll: aCollectionOfShips withCards: aCollectionOfCards [
-
-	^ self new
-		  initializeWith: boardStructure
-		  withAGroupOf: aCollectionOfShips
-		withCards: aCollectionOfCards
-]
-
 { #category : #initialization }
 Board class >> of: aBoardStructure withAll: aCollectionOfShips withCards: aCollectionOfCards andCardManager: aCardManager [ 
 	^ self new
@@ -99,15 +90,6 @@ Board >> hasCrossFinishLine: aShip [
 	| positionOfShip |
 	positionOfShip := self positionOf: aShip.
 	^ positionOfShip numberOfLap >= boardDefinition laps
-]
-
-{ #category : #initialization }
-Board >> initializeWith: aBoardStructure withAGroupOf: aCollectionOfShips withCards: aCollectionOfCards [
-
-	boardDefinition := aBoardStructure.
-	self addIntoGame: aCollectionOfShips.
-	aDeck := Sequence withAll: aCollectionOfCards.
-	lastEffect := LockerNoEffect new.
 ]
 
 { #category : #initalization }

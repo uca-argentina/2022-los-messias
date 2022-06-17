@@ -32,12 +32,6 @@ CardHand >> assertCardIsInHand: aCard [
 ]
 
 { #category : #accesing }
-CardHand >> cardsOf [
-
-	^ handOfCards
-]
-
-{ #category : #accesing }
 CardHand >> cardsOf: aCard [
 
 	^ handOfCards select: [ :card | card hasEqualClass: aCard ]

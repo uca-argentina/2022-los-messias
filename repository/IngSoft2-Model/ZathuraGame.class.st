@@ -69,12 +69,6 @@ ZathuraGame >> addCardToTable: aCard [
 	cardsOnTable add: aCard.
 ]
 
-{ #category : #adding }
-ZathuraGame >> addIntoGame: aCollectionOfShips [
-
-	ships := aCollectionOfShips asOrderedCollection asSequence
-]
-
 { #category : #actions }
 ZathuraGame >> applyLastEffectOn: aShip [ 
 	board lastEffectOn: (aShip).
