@@ -58,16 +58,22 @@ Board >> addIntoGame: aCollectionOfShips [
 ]
 
 { #category : #moving }
-Board >> changePositionOf: aShip by: aNumberOfLockers [
+Board >> applyEffectOnLockerTo: aShip [
 
 	| thisLocker |
-	self move: aShip by: aNumberOfLockers.
 	thisLocker := boardDefinition lockerAt:
 		              (self numberOfLockerOf: aShip) + 1.
 	lastEffect := thisLocker.
 	(self hasCrossFinishLine: aShip) ifFalse: [ 
 		thisLocker applyFor: aShip on: self ].
 	self correctPositionIfFinishLineWasCrossedBy: aShip
+]
+
+{ #category : #moving }
+Board >> changePositionOf: aShip by: aNumberOfLockers [
+
+	self move: aShip by: aNumberOfLockers.
+	self applyEffectOnLockerTo: aShip
 ]
 
 { #category : #private }

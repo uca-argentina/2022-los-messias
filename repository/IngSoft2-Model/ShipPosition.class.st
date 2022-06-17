@@ -44,9 +44,7 @@ ShipPosition class >> for: aShip at: lap and: locker [
 { #category : #'logical operations' }
 ShipPosition >> > aSpaceshipPosition [
 
-	| condition |
-	condition := self compareTo: aSpaceshipPosition.
-	^ condition
+	^ self compareTo: aSpaceshipPosition
 ]
 
 { #category : #'logical operations' }

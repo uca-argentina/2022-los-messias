@@ -26,15 +26,18 @@ RandomGenerator class >> distributedByRandom: aCollection [
 ]
 
 { #category : #generating }
-RandomGenerator >> generateRandomObjectsWith: numberOfObjects [
+RandomGenerator >> generate [
 
-	"Como que le falta declaratividad pero no se me ocurre otra forma de poder reutilizarlo para las cartas también"
+	^ probabilityDistribution generateRandom deepCopy
+]
+
+{ #category : #generating }
+RandomGenerator >> generateRandomObjectsWith: numberOfObjects [
 
 	| objectsGenerated |
 	objectsGenerated := OrderedCollection new.
 	1 to: numberOfObjects do: [ :number | 
-		objectsGenerated add:
-			((probabilityDistribution generateRandom) deepCopy) ].
+	objectsGenerated add: self generate ].
 	^ objectsGenerated
 ]
 

@@ -5,12 +5,18 @@ Class {
 }
 
 { #category : #action }
+SpeedCard >> addCardTo: ship appliedTo: zathuraGame [
+
+	zathuraGame addCardToTable:
+		(ActiveCard with: self appliedTo: { ship })
+]
+
+{ #category : #action }
 SpeedCard >> applyEffectTo: ship in: zathuraGame by: sourceShip [
 
 	self assertIsYourTurn: sourceShip in: zathuraGame.
-	zathuraGame addCardToTable:
-		(ActiveCard with: self appliedTo: { ship }).
-	zathuraGame throw: self.
+	self addCardTo: ship appliedTo: zathuraGame.
+	zathuraGame throw: self
 ]
 
 { #category : #action }

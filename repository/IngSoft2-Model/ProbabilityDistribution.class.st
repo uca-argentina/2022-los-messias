@@ -44,8 +44,15 @@ ProbabilityDistribution class >> withPoints: aCollectionOfPoints [
 { #category : #generating }
 ProbabilityDistribution >> generateRandom [
 
-	| result sum prob |
+	| result |
 	result := 100 atRandom.
+	^ self getGeneratedObjectWith: result
+]
+
+{ #category : #generating }
+ProbabilityDistribution >> getGeneratedObjectWith: result [
+
+	| prob sum |
 	sum := 0.
 	points do: [ :aPoint | 
 		prob := aPoint y.

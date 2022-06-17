@@ -13,12 +13,6 @@ CardHand class >> of: aShip with: aCollectionOfCards [
 	^ self new initializeCardHandOf: aShip with: aCollectionOfCards .
 ]
 
-{ #category : #'class initialization' }
-CardHand class >> with: cards [
-
-	^ self new initializeWith: cards
-]
-
 { #category : #actions }
 CardHand >> add: aCard [
 	handOfCards add: aCard.
@@ -31,12 +25,6 @@ CardHand >> assertCardIsInHand: aCard [
 		ifFalse: [ Error signal: 'Card is not in Hand' ]
 ]
 
-{ #category : #accesing }
-CardHand >> cardsOf: aCard [
-
-	^ handOfCards select: [ :card | card hasEqualClass: aCard ]
-]
-
 { #category : #'accessing - arguments' }
 CardHand >> handOfCards [
 	^ handOfCards
@@ -46,12 +34,6 @@ CardHand >> handOfCards [
 CardHand >> initializeCardHandOf: aShip with: cards [ 
 	handOfCards := cards asOrderedCollection.
 	ship:= aShip
-]
-
-{ #category : #initialization }
-CardHand >> initializeWith: cards [
-
-	handOfCards := cards asOrderedCollection 
 ]
 
 { #category : #removing }
@@ -72,7 +54,8 @@ CardHand >> ship [
 CardHand >> throw: aCancelationCard removingToAll: aCard in: aZathuraGame [
 
 	aCancelationCard
-		applyEffectToAllShipsRemoving: aCard
+		applyEffectTo: (aZathuraGame ships )
+		removing: aCard
 		in: aZathuraGame.
 	self remove: aCancelationCard
 ]
@@ -88,7 +71,7 @@ CardHand >> throw: card to: aShip in: zathuraGame [
 { #category : #action }
 CardHand >> throw: cancellationCard to: aShip removing: aCard in: zathuraGame [
 
-	cancellationCard applyEffectTo: aShip removing: aCard in: zathuraGame.
+	cancellationCard applyEffectTo: {aShip} removing: aCard in: zathuraGame.
 	self remove: cancellationCard
 ]
 

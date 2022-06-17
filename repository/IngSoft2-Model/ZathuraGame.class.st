@@ -63,28 +63,29 @@ ZathuraGame class >> playBy: ships movedInBoardOf: boardStructure rolling: die w
 		  withCards: cards
 ]
 
-{ #category : #adding }
+{ #category : #private }
 ZathuraGame >> addCardToTable: aCard [
 
 	cardsOnTable add: aCard.
 ]
 
-{ #category : #actions }
+{ #category : #private }
 ZathuraGame >> applyLastEffectOn: aShip [ 
 	board lastEffectOn: (aShip).
 ]
 
-{ #category : #asserting }
-ZathuraGame >> assertIsOnTable: aCard [
-		aCard ifEmpty: [ Error signal: 'This card is not active in the table' ].
-]
-
-{ #category : #'as yet unclassified' }
-ZathuraGame >> assertThrownCardStackIsNotEmpty [
+{ #category : #accessing }
+ZathuraGame >> assertCardHasBeenThrown [
 
 	thrownCardsStack ifEmpty: [ 
 		Error signal:
 			'Redo card must be thrown before another card has been played' ]
+]
+
+{ #category : #asserting }
+ZathuraGame >> assertIsOnTable: aCard [
+
+	aCard ifEmpty: [ Error signal: 'This card is not active in the table' ]
 ]
 
 { #category : #asserting }
@@ -100,20 +101,18 @@ ZathuraGame >> assertZathuraHasNotBeenPlayed [
 		Error signal: 'Zathura cannot be played more than once' ]
 ]
 
-{ #category : #attributes }
+{ #category : #accessing }
 ZathuraGame >> cardManager [
 	^ cardManager
 ]
 
-{ #category : #'accessing - attributes' }
+{ #category : #accessing }
 ZathuraGame >> cardsOnTableOf: aCard [
 
-	| cards |
-	cards := cardsOnTable select: [ :card | card hasEqualClass: aCard ].
-	^ cards size
+	^ (cardsOnTable select: [ :card | card hasEqualClass: aCard ]) size
 ]
 
-{ #category : #private }
+{ #category : #accessing }
 ZathuraGame >> checkIfWon: aShip [
 
 	(board hasCrossFinishLine: aShip ) ifFalse: [ ^ self ].
@@ -121,16 +120,50 @@ ZathuraGame >> checkIfWon: aShip [
 	finished := true
 ]
 
+{ #category : #initalization }
+ZathuraGame >> createBoardWith: aCollectionOfShips WithStructure: boardStructure rolling: aDiceCup withCards: aCollectionOfCards [
+
+	diceCup := aDiceCup.
+	aDeck := Sequence withAll: aCollectionOfCards.
+	ships := aCollectionOfShips asOrderedCollection asSequence.
+	cardManager := CardApplicator intializeIn: self.
+	board := Board
+		         of: boardStructure
+		         withAll: ships
+		         withCards: aCollectionOfCards
+		         andCardManager: cardManager
+]
+
 { #category : #asserting }
 ZathuraGame >> findCardOnTable: aCard [
 
 	| theCard |
-	theCard := cardsOnTable select: [ :card | card = aCard ].
+	theCard := (cardsOnTable select: [ :card | card = aCard ]).
 	self assertIsOnTable: theCard.
 	^ theCard first
 ]
 
-{ #category : #actions }
+{ #category : #playing }
+ZathuraGame >> findChangeOfRoll: aShip [
+
+	| cardsThatApplyEffectOnShip changeOfRoll |
+	cardsThatApplyEffectOnShip := cardsOnTable select: [ :aCard | 
+		                              aCard ship includes: aShip ].
+	changeOfRoll := cardsThatApplyEffectOnShip sum: [ :aCard | 
+		                aCard changeOfRoll ].
+	^ changeOfRoll
+]
+
+{ #category : #ending }
+ZathuraGame >> findWinnerShip [
+
+	| winnerShip winner |
+	winner := ships select: [ :ship | (self rankingOf: ship) == 1 ].
+	winnerShip := winner at: 1.
+	^ winnerShip
+]
+
+{ #category : #private }
 ZathuraGame >> giveCard [
 
 	^ aDeck next
@@ -145,22 +178,18 @@ ZathuraGame >> hasFinished [
 { #category : #initalization }
 ZathuraGame >> initializePlayingBy: aCollectionOfShips movedInBoardOf: boardStructure rolling: aDiceCup withCards: aCollectionOfCards [
 
-	diceCup := aDiceCup.
-	aDeck := Sequence withAll: aCollectionOfCards.
-	ships := aCollectionOfShips asOrderedCollection asSequence.
-	cardManager := CardApplicator intializeIn: self.
-	board := Board
-		         of: boardStructure
-		         withAll: ships
-		         withCards: aCollectionOfCards
-		         andCardManager: cardManager.
+	self
+		createBoardWith: aCollectionOfShips
+		WithStructure: boardStructure
+		rolling: aDiceCup
+		withCards: aCollectionOfCards.
 	cardsOnTable := OrderedCollection new.
 	finished := false.
 	timesPlayed := 0.
-	thrownCardsStack := OrderedCollection new.
+	thrownCardsStack := OrderedCollection new
 ]
 
-{ #category : #testing }
+{ #category : #accessing }
 ZathuraGame >> isTurnOf: aShip [
 
 	^ ((ships first) == aShip)
@@ -169,16 +198,8 @@ ZathuraGame >> isTurnOf: aShip [
 { #category : #accessing }
 ZathuraGame >> lastCardThrownOnTheGame [
 
-	thrownCardsStack ifEmpty: [ Error signal: 'Redo card must be thrown before another card has been played' ].
+	self assertCardHasBeenThrown.
 	^ thrownCardsStack last
-]
-
-{ #category : #'as yet unclassified' }
-ZathuraGame >> methodSelectorAndArgumentNames [
-
-thrownCardsStack ifEmpty: [ 
-		Error signal:
-			'Redo card must be thrown before another card has been played' ].
 ]
 
 { #category : #positioning }
@@ -204,14 +225,12 @@ ZathuraGame >> play [
 { #category : #playing }
 ZathuraGame >> playTurn [
 
-	| aShip cardsThatApplyEffectOnShip changeOfRoll |
+	| aShip |
 	self assertZathuraHasNotBeenPlayed.
 	aShip := ships next.
-	cardsThatApplyEffectOnShip := cardsOnTable select: [ :aCard | 
-		                              aCard ship includes: aShip ].
-	changeOfRoll := cardsThatApplyEffectOnShip sum: [ :aCard | 
-		                aCard changeOfRoll ].
-	board changePositionOf: aShip by: diceCup roll + changeOfRoll.
+	board
+		changePositionOf: aShip
+		by: diceCup roll + (self findChangeOfRoll: aShip).
 	self checkIfWon: aShip
 ]
 
@@ -235,7 +254,7 @@ ZathuraGame >> ships [
 	^ ships
 ]
 
-{ #category : #adding }
+{ #category : #private }
 ZathuraGame >> throw: aCard [
 
 	thrownCardsStack add: aCard
@@ -244,9 +263,6 @@ ZathuraGame >> throw: aCard [
 { #category : #ending }
 ZathuraGame >> winner [
 
-	| winner |
 	self assertZathuraHasFinished.
-	winner := ships select: [ :ship | 
-		          (self rankingOf: (ship)) == 1].
-	^ winner at: 1
+	^ self findWinnerShip
 ]

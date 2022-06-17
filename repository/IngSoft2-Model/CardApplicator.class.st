@@ -13,12 +13,21 @@ CardApplicator class >> intializeIn: aZathuraGame [
 	^self new initializeWith: aZathuraGame .
 ]
 
+{ #category : #initalization }
+CardApplicator >> addCardHands [
+
+	game ships do: [ :aShip | 
+		cardHands add: (CardHand of: aShip with: { 
+					 game giveCard.
+					 game giveCard }) ]
+]
+
 { #category : #actions }
-CardApplicator >> addTo: aShip ToHandCard: aCard [ 
-	 | cards |
-cards:= cardHands select: [ :aCardHand | aCardHand ship = aShip ].
-^(cards first) add: aCard .
-	
+CardApplicator >> addTo: aShip ToHandCard: aCard [
+
+	|  cardHand |
+	cardHand := self cardHandOf: aShip.
+	^ cardHand add: aCard
 ]
 
 { #category : #accesing }
@@ -28,18 +37,19 @@ CardApplicator >> cardHandOf: aShip [
 ]
 
 { #category : #accesing }
-CardApplicator >> cardsOf: aShip [ 
+CardApplicator >> cardsOf: aShip [
+
 	| cards |
-	cards:= cardHands select: [ :cardHand | cardHand ship = aShip ].
-	^(cards next) handOfCards
+	cards := self cardHandOf: aShip.
+	^ cards handOfCards
 ]
 
 { #category : #initalization }
 CardApplicator >> initializeWith: aZathuraGame [
 
 	game := aZathuraGame.
-	cardHands:= Sequence new.
-	game ships do:[:aShip | cardHands add: (CardHand of: aShip with: {(game giveCard).  (game giveCard)})]
+	cardHands := Sequence new.
+	self addCardHands
 ]
 
 { #category : #action }
