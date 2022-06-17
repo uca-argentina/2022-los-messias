@@ -5,12 +5,6 @@ Class {
 }
 
 { #category : #action }
-AccelerationCard >> = card [
-
-	^(self hasEqualClass: card)
-]
-
-{ #category : #action }
 AccelerationCard >> applyEffectToAllShipsIn: aZathuraGame by: sourceShip [
 
 	self assertIsYourTurn: sourceShip in: aZathuraGame.

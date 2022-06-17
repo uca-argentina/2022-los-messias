@@ -58,26 +58,32 @@ Board >> addIntoGame: aCollectionOfShips [
 ]
 
 { #category : #moving }
-Board >> applyEffectOnLockerTo: aShip [
+Board >> applyEffectOnLockerOrCorrectThePositionOfWinnerTo: aShip [
 
 	| thisLocker |
 	thisLocker := boardDefinition lockerAt:
 		              (self numberOfLockerOf: aShip) + 1.
 	lastEffect := thisLocker.
 	(self hasCrossFinishLine: aShip) ifFalse: [ 
-		thisLocker applyFor: aShip on: self ].
-	self correctPositionIfFinishLineWasCrossedBy: aShip
+		thisLocker applyFor: aShip on: self] ifTrue: [ self correctPositionOfWinner: aShip ]
+	
+]
+
+{ #category : #moving }
+Board >> applyLastEffectOn: aShip [
+
+	lastEffect applyFor: aShip on: self
 ]
 
 { #category : #moving }
 Board >> changePositionOf: aShip by: aNumberOfLockers [
 
 	self move: aShip by: aNumberOfLockers.
-	self applyEffectOnLockerTo: aShip
+	self applyEffectOnLockerOrCorrectThePositionOfWinnerTo: aShip
 ]
 
 { #category : #private }
-Board >> correctPositionIfFinishLineWasCrossedBy: aShip [
+Board >> correctPositionOfWinner: aShip [
 
 	(self hasCrossFinishLine: aShip) ifTrue: [ 
 	positionOfShips
@@ -87,7 +93,8 @@ Board >> correctPositionIfFinishLineWasCrossedBy: aShip [
 
 { #category : #private }
 Board >> giveRandomCardTo: aShip [
-	cardManager addTo: aShip ToHandCard: aDeck random.
+
+	cardManager addTo: aShip ToHandCard: aDeck random
 ]
 
 { #category : #moving }
@@ -106,12 +113,6 @@ Board >> initializeWith: aBoardDefinition withAGroupOf: aCollectionOfShips withC
 	aDeck := Sequence withAll: aCollectionOfCards.
 	lastEffect := LockerNoEffect new.
 	cardManager := aCardManager
-]
-
-{ #category : #moving }
-Board >> lastEffectOn: aZathuraShip [
-
-	lastEffect applyFor: aZathuraShip on: self
 ]
 
 { #category : #private }
@@ -148,7 +149,7 @@ Board >> moveAllToLockerZero [
 	positionOfShips do: [ :aShip | self moveToLockerZero: aShip ship ]
 ]
 
-{ #category : #creating }
+{ #category : #private }
 Board >> moveToFinalPosition: aShip [
 
 	^ ShipPosition for: aShip at: boardDefinition laps and: 0
@@ -160,7 +161,7 @@ Board >> moveToLockerZero: aShip [
 self move: aShip by: ((self numberOfLockerOf: aShip) * -1 )
 ]
 
-{ #category : #accessing }
+{ #category : #private }
 Board >> newPositionStartingAt: oldPosition movingBy: aNumberOfLockers [
 
 	| newNumberOfLockers aLap aLocker |

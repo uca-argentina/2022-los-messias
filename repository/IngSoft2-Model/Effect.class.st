@@ -26,7 +26,7 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #'instance creation' }
+{ #category : #action }
 Effect >> applyFor: aShip on: aBoard [
 
 	self subclassResponsibility

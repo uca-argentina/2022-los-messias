@@ -1141,7 +1141,7 @@ ZathuraTest >> testRedShipsFallsIntoaCardGetterLockerAndGetsARandomCard [
 	die := LoadedDie with: 1.
 	ships := #( 'RedShip' 'BlueShip' ).
 	boardStructure := self
-		                  boardDefinitionWithOnly: CardEffect
+		                  boardDefinitionWithOnly: CardEffect new
 		                  at: 2
 		                  of: 10
 		                  andParsec: 100

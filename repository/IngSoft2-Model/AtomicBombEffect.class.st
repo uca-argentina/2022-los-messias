@@ -26,7 +26,7 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #'instance creation' }
+{ #category : #action }
 AtomicBombEffect >> applyFor: aShip on: aBoard [
 aBoard moveAllToLockerZero
 ]

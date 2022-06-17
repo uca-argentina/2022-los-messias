@@ -71,7 +71,7 @@ ZathuraGame >> addCardToTable: aCard [
 
 { #category : #private }
 ZathuraGame >> applyLastEffectOn: aShip [ 
-	board lastEffectOn: (aShip).
+	board applyLastEffectOn: (aShip).
 ]
 
 { #category : #accessing }
@@ -115,9 +115,9 @@ ZathuraGame >> cardsOnTableOf: aCard [
 { #category : #accessing }
 ZathuraGame >> checkIfWon: aShip [
 
-	(board hasCrossFinishLine: aShip ) ifFalse: [ ^ self ].
+	(board hasCrossFinishLine: aShip) ifTrue: [ 
 	timesPlayed := 1.
-	finished := true
+	finished := true ].
 ]
 
 { #category : #initalization }
