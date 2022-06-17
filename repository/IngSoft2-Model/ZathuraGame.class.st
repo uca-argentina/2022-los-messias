@@ -85,20 +85,29 @@ ZathuraGame >> cardApplicator [
 ]
 
 { #category : #accessing }
+ZathuraGame >> cardsOf: aShip [
+
+	^ cardManager cardsOf: aShip
+]
+
+{ #category : #accessing }
 ZathuraGame >> checkIfWon: aShip [
 
-	(board hasCrossFinishLine: aShip) ifTrue: [ 
-	timesPlayed := 1.
-	finished := true ].
+	(board hasCrossFinishLine: aShip) ifFalse: [ ^ self ].
+	self finishGame
 ]
 
 { #category : #ending }
 ZathuraGame >> findWinnerShip [
 
-	| winnerShip winner |
-	winner := ships select: [ :ship | (self rankingOf: ship) == 1 ].
-	winnerShip := winner at: 1.
-	^ winnerShip
+	^ (ships select: [ :ship | (self rankingOf: ship) == 1 ]) first
+]
+
+{ #category : #private }
+ZathuraGame >> finishGame [
+
+	timesPlayed := 1.
+	finished := true
 ]
 
 { #category : #state }
@@ -111,7 +120,7 @@ ZathuraGame >> hasFinished [
 ZathuraGame >> initializePlayingBy: aCollectionOfShips movedInBoardOf: boardStructure rolling: aDiceCup withCards: aCollectionOfCards [
 
 	diceCup := aDiceCup.
-	cardManager := CardManager
+	cardManager := CardHandController
 		               with: aCollectionOfShips
 		               and: aCollectionOfCards
 		               from: self.

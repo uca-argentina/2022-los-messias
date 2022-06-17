@@ -30,7 +30,6 @@ Class {
 	#instVars : [
 		'positionOfShips',
 		'boardDefinition',
-		'aDeck',
 		'lastEffect',
 		'cardManager'
 	],
@@ -94,7 +93,7 @@ Board >> correctPositionOfWinner: aShip [
 { #category : #private }
 Board >> giveRandomCardTo: aShip [
 
-	cardManager addTo: aShip ToHandCard: aDeck random
+	cardManager addToHandCardOf: aShip card: (cardManager giveCard )
 ]
 
 { #category : #moving }
@@ -110,7 +109,6 @@ Board >> initializeWith: aBoardDefinition withAGroupOf: aCollectionOfShips withC
 
 	boardDefinition := aBoardDefinition.
 	self addIntoGame: aCollectionOfShips.
-	aDeck := Sequence withAll: aCollectionOfCards.
 	lastEffect := LockerNoEffect new.
 	cardManager := aCardManager
 ]

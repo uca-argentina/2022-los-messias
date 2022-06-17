@@ -21,8 +21,8 @@ CardHand >> add: aCard [
 { #category : #asserting }
 CardHand >> assertCardIsInHand: aCard [
 
-	(handOfCards anySatisfy: [ :card | aCard isMemberOf: (card class) ]) 
-		ifFalse: [ Error signal: 'Card is not in Hand' ]
+	(handOfCards anySatisfy: [ :card | aCard isKindOf: card class ]) ifFalse: [ 
+		Error signal: 'Card is not in Hand' ]
 ]
 
 { #category : #'accessing - arguments' }
@@ -41,7 +41,8 @@ CardHand >> remove: aCard [
 
 	| theCard |
 	theCard := 0.
-	handOfCards do: [ :card | (card isMemberOf: aCard class) ifTrue: [ theCard := card ] ].
+	handOfCards do: [ :card | 
+		(card isKindOf:  aCard class) ifTrue: [ theCard := card ] ].
 	handOfCards remove: theCard
 ]
 

@@ -13,12 +13,6 @@ CardApplicator class >> with: aCardManager [
 	^ self new initializeWith: aCardManager
 ]
 
-{ #category : #accessing }
-CardApplicator >> cardsOf: aShip [
-
-	^ (cardManager cardsOf: aShip)
-]
-
 { #category : #initalization }
 CardApplicator >> initializeWith: aCardManager [
 	cardManager := aCardManager

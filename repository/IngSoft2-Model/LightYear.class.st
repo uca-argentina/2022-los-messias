@@ -21,7 +21,5 @@ LightYear >> initializeWith: lightYear [
 { #category : #accesing }
 LightYear >> unitValueAsParsec [
 
-	| parsec |
-	parsec := lightYears // 3.
-	^ parsec
+	^ lightYears // 3
 ]
