@@ -5,18 +5,18 @@ Class {
 }
 
 { #category : #action }
-AccelerationCard >> applyEffectToAllShipsIn: aZathuraGame by: sourceShip [
+AccelerationCard >> applyEffectToAllShipsOn: aCardManager by: sourceShip [
 
-	self assertIsYourTurn: sourceShip in: aZathuraGame.
-	aZathuraGame addCardToTable:
-		(ActiveCard with: self appliedTo: aZathuraGame ships).
-	aZathuraGame throw: self.
+	self assertIsYourTurn: sourceShip in: aCardManager.
+	aCardManager addCardToTable:
+		(ActiveCard with: self appliedTo: aCardManager ships).
+	aCardManager throw: self
 ]
 
 { #category : #asserting }
-AccelerationCard >> assertIsYourTurn: aShip in: zathuraGame [
+AccelerationCard >> assertIsYourTurn: aShip in: aCardManager [
 
-	(zathuraGame isTurnOf: aShip) ifFalse: [ 
+	(aCardManager isTurnOf: aShip) ifFalse: [ 
 		Error signal: 'Permanent cards can only be used when its your turn' ]
 ]
 

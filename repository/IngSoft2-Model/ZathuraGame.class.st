@@ -35,13 +35,10 @@ Class {
 		'diceCup',
 		'board',
 		'timesPlayed',
-		'cardGenerator',
-		'aDeck',
-		'cardsOnTable',
 		'ships',
 		'shipsHand',
 		'cardManager',
-		'thrownCardsStack'
+		'cardApplicator'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -64,28 +61,8 @@ ZathuraGame class >> playBy: ships movedInBoardOf: boardStructure rolling: die w
 ]
 
 { #category : #private }
-ZathuraGame >> addCardToTable: aCard [
-
-	cardsOnTable add: aCard.
-]
-
-{ #category : #private }
 ZathuraGame >> applyLastEffectOn: aShip [ 
 	board applyLastEffectOn: (aShip).
-]
-
-{ #category : #accessing }
-ZathuraGame >> assertCardHasBeenThrown [
-
-	thrownCardsStack ifEmpty: [ 
-		Error signal:
-			'Redo card must be thrown before another card has been played' ]
-]
-
-{ #category : #asserting }
-ZathuraGame >> assertIsOnTable: aCard [
-
-	aCard ifEmpty: [ Error signal: 'This card is not active in the table' ]
 ]
 
 { #category : #asserting }
@@ -102,14 +79,9 @@ ZathuraGame >> assertZathuraHasNotBeenPlayed [
 ]
 
 { #category : #accessing }
-ZathuraGame >> cardManager [
-	^ cardManager
-]
+ZathuraGame >> cardApplicator [
 
-{ #category : #accessing }
-ZathuraGame >> cardsOnTableOf: aCard [
-
-	^ (cardsOnTable select: [ :card | card hasEqualClass: aCard ]) size
+	^ cardApplicator
 ]
 
 { #category : #accessing }
@@ -118,26 +90,6 @@ ZathuraGame >> checkIfWon: aShip [
 	(board hasCrossFinishLine: aShip) ifTrue: [ 
 	timesPlayed := 1.
 	finished := true ].
-]
-
-{ #category : #asserting }
-ZathuraGame >> findCardOnTable: aCard [
-
-	| theCard |
-	theCard := (cardsOnTable select: [ :card | card = aCard ]).
-	self assertIsOnTable: theCard.
-	^ theCard first
-]
-
-{ #category : #playing }
-ZathuraGame >> findChangeOfRoll: aShip [
-
-	| cardsThatApplyEffectOnShip changeOfRoll |
-	cardsThatApplyEffectOnShip := cardsOnTable select: [ :aCard | 
-		                              aCard ship includes: aShip ].
-	changeOfRoll := cardsThatApplyEffectOnShip sum: [ :aCard | 
-		                aCard changeOfRoll ].
-	^ changeOfRoll
 ]
 
 { #category : #ending }
@@ -149,12 +101,6 @@ ZathuraGame >> findWinnerShip [
 	^ winnerShip
 ]
 
-{ #category : #private }
-ZathuraGame >> giveCard [
-
-	^ aDeck next
-]
-
 { #category : #state }
 ZathuraGame >> hasFinished [
 
@@ -164,35 +110,27 @@ ZathuraGame >> hasFinished [
 { #category : #initalization }
 ZathuraGame >> initializePlayingBy: aCollectionOfShips movedInBoardOf: boardStructure rolling: aDiceCup withCards: aCollectionOfCards [
 
-	| cardApplicator |
 	diceCup := aDiceCup.
 	cardManager := CardManager
 		               with: aCollectionOfShips
-		               and: aCollectionOfCards.
+		               and: aCollectionOfCards
+		               from: self.
 	ships := aCollectionOfShips asOrderedCollection asSequence.
-	cardApplicator := CardApplicator intializeIn: self.
+	cardApplicator := CardApplicator with: cardManager.
 	board := Board
 		         of: boardStructure
 		         withAll: ships
 		         withCards: aCollectionOfCards
 		         andCardManager: cardManager.
-	
+
 	finished := false.
-	timesPlayed := 0.
-	
+	timesPlayed := 0
 ]
 
 { #category : #accessing }
 ZathuraGame >> isTurnOf: aShip [
 
 	^ ((ships first) == aShip)
-]
-
-{ #category : #accessing }
-ZathuraGame >> lastCardThrownOnTheGame [
-
-	self assertCardHasBeenThrown.
-	^ thrownCardsStack last
 ]
 
 { #category : #positioning }
@@ -223,7 +161,7 @@ ZathuraGame >> playTurn [
 	aShip := ships next.
 	board
 		changePositionOf: aShip
-		by: diceCup roll + (self findChangeOfRoll: aShip).
+		by: diceCup roll + (cardManager findChangeOfRoll: aShip).
 	self checkIfWon: aShip
 ]
 
@@ -233,24 +171,10 @@ ZathuraGame >> rankingOf: aShip [
 	^ board rankingOf: aShip.
 ]
 
-{ #category : #set }
-ZathuraGame >> removeFromCardsOnTable: aCard [
-
-	| theCard |
-	theCard := self findCardOnTable: aCard.
-	cardsOnTable remove: theCard.
-]
-
 { #category : #accessing }
 ZathuraGame >> ships [
 
 	^ ships
-]
-
-{ #category : #private }
-ZathuraGame >> throw: aCard [
-
-	thrownCardsStack add: aCard
 ]
 
 { #category : #ending }

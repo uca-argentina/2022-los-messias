@@ -2,86 +2,49 @@ Class {
 	#name : #CardApplicator,
 	#superclass : #Object,
 	#instVars : [
-		'game',
-		'cardHands'
+		'cardManager'
 	],
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #'class initialization' }
-CardApplicator class >> intializeIn: aZathuraGame [ 
-	^self new initializeWith: aZathuraGame .
+CardApplicator class >> with: aCardManager [
+
+	^ self new initializeWith: aCardManager
 ]
 
-{ #category : #initalization }
-CardApplicator >> addCardHands [
-
-	game ships do: [ :aShip | 
-		cardHands add: (CardHand of: aShip with: { 
-					 game giveCard.
-					 game giveCard }) ]
-]
-
-{ #category : #actions }
-CardApplicator >> addTo: aShip ToHandCard: aCard [
-
-	|  cardHand |
-	cardHand := self cardHandOf: aShip.
-	^ cardHand add: aCard
-]
-
-{ #category : #accesing }
-CardApplicator >> cardHandOf: aShip [
-
-	^ (cardHands select: [ :aCardHand | aCardHand ship = aShip ]) first
-]
-
-{ #category : #accesing }
+{ #category : #accessing }
 CardApplicator >> cardsOf: aShip [
 
-	| cards |
-	cards := self cardHandOf: aShip.
-	^ cards handOfCards
+	^ (cardManager cardsOf: aShip)
 ]
 
 { #category : #initalization }
-CardApplicator >> initializeWith: aZathuraGame [
+CardApplicator >> initializeWith: aCardManager [
+	cardManager := aCardManager
 
-	game := aZathuraGame.
-	cardHands := Sequence new.
-	self addCardHands
 ]
 
 { #category : #action }
-CardApplicator >> throws: aCancellationCard removing: aCard from: sourceShip [ 
-	(self cardHandOf: sourceShip)
-		throw: aCancellationCard
-		removingToAll: aCard
-		in: game
+CardApplicator >> throws: aCancellationCard removing: aCard from: sourceShip [
+
+	cardManager throws: aCancellationCard removing: aCard from: sourceShip
 ]
 
 { #category : #actions }
 CardApplicator >> throws: aCard to: destinationShip from: sourceShip [
 
-	| cardHand |
-	cardHand := self cardHandOf: sourceShip. 
-	cardHand throw: aCard to: destinationShip in: game
+	cardManager throws: aCard to: destinationShip from: sourceShip
 ]
 
 { #category : #action }
 CardApplicator >> throws: cancellationCard to: destinationShip removing: aCard from: sourceShip [
 
-	(self cardHandOf: sourceShip)
-		throw: cancellationCard
-		to: destinationShip
-		removing: aCard
-		in: game
+	cardManager throws: cancellationCard to: destinationShip removing: aCard from: sourceShip
 ]
 
 { #category : #actions }
 CardApplicator >> throws: aCard toAllShipsFrom: aShip [
 
-	| cardHand |
-	cardHand := self cardHandOf: aShip.
-	cardHand throw: aCard toAllShipsin: game
+	cardManager throws: aCard toAllShipsFrom: aShip
 ]

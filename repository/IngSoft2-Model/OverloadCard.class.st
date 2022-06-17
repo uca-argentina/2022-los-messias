@@ -12,18 +12,18 @@ OverloadCard >> addIn: zathuraGame appliedTo: ship [
 ]
 
 { #category : #action }
-OverloadCard >> applyEffectTo: ship in: zathuraGame by: sourceShip [
+OverloadCard >> applyEffectTo: ship on: aCardManager by: sourceShip [
 
-	zathuraGame throw: self.
-	self assertIsYourTurn: sourceShip in: zathuraGame.
-	self addIn: zathuraGame appliedTo: ship
+	aCardManager throw: self.
+	self assertIsYourTurn: sourceShip in: aCardManager.
+	self addIn: aCardManager appliedTo: ship
 ]
 
 { #category : #action }
-OverloadCard >> assertIsYourTurn: aShip in: zathuraGame [
+OverloadCard >> assertIsYourTurn: aShip in: aCardManager [
 
-	(zathuraGame isTurnOf: aShip) ifFalse: [ 
-		Error signal: 'Permanent cards can only be used when its your turn' ] 
+	(aCardManager isTurnOf: aShip) ifFalse: [ 
+		Error signal: 'Permanent cards can only be used when its your turn' ]
 ]
 
 { #category : #action }

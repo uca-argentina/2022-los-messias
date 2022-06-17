@@ -5,12 +5,12 @@ Class {
 }
 
 { #category : #action }
-RedoCard >> applyEffectTo: ship in: zathuraGame by: sourceShip [
+RedoCard >> applyEffectTo: ship on: aCardManager by: sourceShip [
 
 	| aCard |
-	aCard := zathuraGame lastCardThrownOnTheGame.
-	aCard applyEffectTo: ship in: zathuraGame by: sourceShip.
-	zathuraGame throw: aCard.
+	aCard := aCardManager lastCardThrownOnTheGame.
+	aCard applyEffectTo: ship on: aCardManager by: sourceShip.
+	aCardManager throw: aCard
 ]
 
 { #category : #action }
@@ -23,10 +23,10 @@ RedoCard >> applyEffectTo: ship removing: card in: zathuraGame [
 ]
 
 { #category : #action }
-RedoCard >> applyEffectToAllShipsIn: aZathuraGame by: sourceShip [
+RedoCard >> applyEffectToAllShipsOn: aCardManager by: sourceShip [
 
 	| aCard |
-	aCard := aZathuraGame lastCardThrownOnTheGame.
-	aCard applyEffectToAllShipsIn: aZathuraGame by: sourceShip.
-	aZathuraGame throw: aCard
+	aCard := aCardManager lastCardThrownOnTheGame.
+	aCard applyEffectToAllShipsOn: aCardManager by: sourceShip.
+	aCardManager throw: aCard
 ]

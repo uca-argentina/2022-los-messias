@@ -64,7 +64,7 @@ CardHand >> throw: aCancelationCard removingToAll: aCard in: aZathuraGame [
 CardHand >> throw: card to: aShip in: zathuraGame [
 
 	self assertCardIsInHand: card.
-	card applyEffectTo: aShip in: zathuraGame by: self ship.
+	card applyEffectTo: aShip on: zathuraGame by: self ship.
 	self remove: card
 ]
 
@@ -79,6 +79,6 @@ CardHand >> throw: cancellationCard to: aShip removing: aCard in: zathuraGame [
 CardHand >> throw: card toAllShipsin: zathuraGame [
 
 	self assertCardIsInHand: card.
-	card applyEffectToAllShipsIn: zathuraGame by: self ship.
+	card applyEffectToAllShipsOn: zathuraGame by: self ship.
 	self remove: card
 ]

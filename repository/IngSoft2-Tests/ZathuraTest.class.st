@@ -58,7 +58,7 @@ ZathuraTest >> testAnObjectIsEqualToAnotherObjectIfTheyHaveTheSameClass [
 { #category : #shipWithHandOfCardsTests }
 ZathuraTest >> testBlueShipAndRedShipStartsTheGameWithTwoCards [
 
-	| redShipCardHand blueShipCardHand die ships boardStructure zathura cardManager |
+	| redShipCardHand blueShipCardHand die ships boardStructure zathura cardApplicator |
 	die := LoadedDie with: 2.
 	ships := #( 'RedShip' 'BlueShip' ).
 	boardStructure := self
@@ -69,9 +69,9 @@ ZathuraTest >> testBlueShipAndRedShipStartsTheGameWithTwoCards [
 		           rolling: die
 		           withCards: { OverloadCard new }.
 
-	cardManager:= CardApplicator intializeIn: zathura .
-	redShipCardHand := cardManager cardsOf: 'RedShip'.
-	blueShipCardHand := cardManager  cardsOf: 'BlueShip'.
+	cardApplicator:= zathura cardApplicator.
+	redShipCardHand := cardApplicator cardsOf: 'RedShip'.
+	blueShipCardHand := cardApplicator  cardsOf: 'BlueShip'.
 	self assert: redShipCardHand size equals: 2.
 	self assert: blueShipCardHand size equals: 2.
 ]
@@ -94,7 +94,7 @@ ZathuraTest >> testBlueShipCantThrowCancellationCardIfNoCardsHaveBeenPlayed [
 		           withCards: { 
 				           OverloadCard new.
 				           CancellationCard new }.
-	cardManager := zathura cardManager.
+	cardManager := zathura cardApplicator.
 	self
 		should: [ 
 			cardManager
@@ -124,7 +124,7 @@ ZathuraTest >> testBlueShipCantThrowCancellationCardToOverloadCardIfNoOverloadCa
 		           withCards: { 
 				           SpeedCard new.
 				           CancellationCard new }.
-	cardManager := zathura cardManager.
+	cardManager := zathura cardApplicator.
 	cardManager throws: SpeedCard new to: 'RedShip' from: 'BlueShip'.
 	self
 		should: [ 
@@ -151,7 +151,7 @@ ZathuraTest >> testBlueShipCantThrowOverloadCardIfNotInHand [
 			            played: 1)
 		           rolling: aDie
 		           withCards: { AccelerationCard new }.
-	cardManager := zathura cardManager.
+	cardManager := zathura cardApplicator.
 	self
 		should: [ 
 		cardManager throws: OverloadCard new   to: 'RedShip' from: 'BlueShip' ]
@@ -312,7 +312,7 @@ ZathuraTest >> testBlueShipThrowsARedoCardAfterARepeatCardHasBeenPlayed [
 				           RepeatCard new.
 				           RedoCard new }.
 
-	cardManager := zathura cardManager.
+	cardManager := zathura cardApplicator.
 
 	zathura playTurn.
 
@@ -325,7 +325,7 @@ ZathuraTest >> testBlueShipThrowsARedoCardAfterARepeatCardHasBeenPlayed [
 { #category : #redoCard }
 ZathuraTest >> testBlueShipThrowsARedoCardToAPermanentCardWhenItsNotHisTurn [
 
-	| diceCup zathura cardManager |
+	| diceCup zathura cardApplicator |
 	diceCup := DiceCup withAll: { 
 			           (LoadedDie with: 3).
 			           (LoadedDie with: 4) }.
@@ -341,12 +341,12 @@ ZathuraTest >> testBlueShipThrowsARedoCardToAPermanentCardWhenItsNotHisTurn [
 				           SpeedCard new.
 				           RedoCard new }.
 
-	cardManager := zathura cardManager.
-	cardManager throws: SpeedCard new to: 'BlueShip' from: 'BlueShip'.
+	cardApplicator := zathura cardApplicator.
+	cardApplicator throws: SpeedCard new to: 'BlueShip' from: 'BlueShip'.
 
 	self
 		should: [ 
-		cardManager throws: RedoCard new to: 'BlueShip' from: 'GreenShip' ]
+		cardApplicator throws: RedoCard new to: 'BlueShip' from: 'GreenShip' ]
 		raise: Error
 		withMessage: 'Permanent cards can only be used when its your turn'
 ]
@@ -370,7 +370,7 @@ ZathuraTest >> testBlueShipThrowsARedoCardToRepeatAnotherRedoCardThrownToASpeedC
 				           SpeedCard new.
 				           RedoCard new }.
 
-	cardManager := zathura cardManager.
+	cardManager := zathura cardApplicator.
 	cardManager throws: SpeedCard new to: 'BlueShip' from: 'BlueShip'.
 
 	zathura playTurn.
@@ -413,7 +413,7 @@ ZathuraTest >> testBlueShipThrowsASpeedCardToRedShipAndRedShipMovesRolledNumberP
 			            played: 1)
 		           rolling: diceCup
 		           withCards: { SpeedCard new }.
-	cardManager := zathura cardManager.
+	cardManager := zathura cardApplicator.
 	cardManager throws: SpeedCard new to: 'RedShip' from: 'BlueShip'.
 	zathura
 		playTurn;
@@ -451,7 +451,7 @@ ZathuraTest >> testBlueShipThrowsAnAccelerationCardAndAfterTwoRoundsThrowsACance
 		           withCards: { 
 				           AccelerationCard new.
 				           CancellationCard new }.
-	cardManager := zathura cardManager.
+	cardManager := zathura cardApplicator.
 	cardManager throws: AccelerationCard new toAllShipsFrom: 'BlueShip'.
 	zathura
 		playTurn;
@@ -480,8 +480,7 @@ ZathuraTest >> testBlueShipThrowsAnAccelerationCardAndAfterTwoRoundsThrowsACance
 	lockersOfRedShip := zathura numberOfLockerOf: 'RedShip'.
 	self
 		assert: lockersOfBlueShip equals: 23;
-		assert: lockersOfRedShip equals: 23;
-		assert: (zathura cardsOnTableOf: AccelerationCard new) equals: 0
+		assert: lockersOfRedShip equals: 23.
 ]
 
 { #category : #redoCard }
@@ -502,7 +501,7 @@ ZathuraTest >> testBlueShipThrowsAnAccelerationCardAndAfterTwoRoundsThrowsARedoC
 		           withCards: { 
 				           AccelerationCard new.
 				           RedoCard new }.
-	cardManager := zathura cardManager.
+	cardManager := zathura cardApplicator.
 	cardManager throws: AccelerationCard new toAllShipsFrom: 'BlueShip'.
 	zathura
 		playTurn;
@@ -547,7 +546,7 @@ ZathuraTest >> testBlueShipThrowsAnAccelerationCardAndAllShipMovesRolledNumberPl
 			            played: 1)
 		           rolling: diceCup
 		           withCards: { AccelerationCard new }.
-	cardManager := zathura cardManager.
+	cardManager := zathura cardApplicator.
 	cardManager throws: AccelerationCard new toAllShipsFrom: 'BlueShip'.
 	zathura
 		playTurn;
@@ -585,7 +584,7 @@ ZathuraTest >> testBlueShipThrowsAnOverloadCardToRedShipAndAfterTwoRoundsThrowsA
 		           withCards: { 
 				           OverloadCard new.
 				           RedoCard new }.
-	cardManager := zathura cardManager.
+	cardManager := zathura cardApplicator.
 	zathura
 		playTurn;
 		playTurn;
@@ -638,7 +637,7 @@ ZathuraTest >> testBlueShipThrowsAnOverloadCardToRedShipAndLosesOneOverloadCard 
 			            played: 1)
 		           rolling: aDie
 		           withCards: { OverloadCard new }.
-	cardManager := zathura cardManager.
+	cardManager := zathura cardApplicator.
 	zathura playTurn.
 	zathura playTurn.
 	cardManager throws: OverloadCard new to: 'RedShip' from: 'BlueShip'.
@@ -661,7 +660,7 @@ ZathuraTest >> testBlueShipThrowsAnOverloadCardToRedShipAndRedShipMovesBackwards
 			            played: 1)
 		           rolling: aDie
 		           withCards: { OverloadCard new }.
-	cardManager := zathura cardManager.
+	cardManager := zathura cardApplicator.
 	zathura playTurn.
 	zathura playTurn.
 	cardManager throws: OverloadCard new to: 'RedShip' from: 'BlueShip'.
@@ -689,7 +688,7 @@ ZathuraTest >> testBlueShipThrowsAnOverloadCardToRedShipAndRedShipMovesRolledNum
 			            played: 1)
 		           rolling: diceCup
 		           withCards: { OverloadCard new }.
-	cardManager := zathura cardManager.
+	cardManager := zathura cardApplicator.
 	cardManager throws: OverloadCard new to: 'RedShip' from: 'BlueShip'.
 	zathura
 		playTurn;
@@ -727,7 +726,7 @@ ZathuraTest >> testBlueShipThrowsAnOverloadCardToRedShipThenRedShipsThrowsACance
 		           withCards: { 
 				           OverloadCard new.
 				           CancellationCard new }.
-	cardManager := zathura cardManager.
+	cardManager := zathura cardApplicator.
 	cardManager throws: OverloadCard new to: 'RedShip' from: 'BlueShip'.
 	zathura
 		playTurn;
@@ -775,7 +774,7 @@ ZathuraTest >> testBlueShipThrowsAnOverloadsCardsToRedShipAndGreenShipThrowsACan
 				           CancellationCard new.
 				           RedoCard new }.
 
-	cardManager := zathura cardManager.
+	cardManager := zathura cardApplicator.
 
 	cardManager throws: OverloadCard new to: 'RedShip' from: 'BlueShip'.
 
@@ -813,7 +812,7 @@ ZathuraTest >> testBlueShipThrowsErrorWhenUsesAnAccelerationCardAndItIsNotItsTur
 		           rolling: die
 		           withCards: { AccelerationCard new }.
 
-	cardManager := zathura cardManager.
+	cardManager := zathura cardApplicator.
 	zathura playTurn.
 
 	self
@@ -840,7 +839,7 @@ ZathuraTest >> testBlueShipThrowsErrorWhenUsesAnOverloadCardAndItIsNotItsTurn [
 		           rolling: die
 		           withCards: { OverloadCard new }.
 	zathura playTurn.
-	cardManager := zathura cardManager.
+	cardManager := zathura cardApplicator.
 
 	self
 		should: [ 
@@ -866,7 +865,7 @@ ZathuraTest >> testBlueShipThrowsErrorWhenUsesAnSpeedCardAndItIsNotItsTurn [
 		           rolling: die
 		           withCards: { SpeedCard new }.
 	zathura playTurn.
-	cardManager := zathura cardManager.
+	cardManager := zathura cardApplicator.
 
 	self
 		should: [ 
@@ -897,7 +896,7 @@ ZathuraTest >> testBlueShipThrowsTwoOverloadsCardsToRedShipAndGreenShipThrowsACa
 				           OverloadCard new.
 				           CancellationCard new.
 				           RedoCard new }.
-	cardManager := zathura cardManager.
+	cardManager := zathura cardApplicator.
 	zathura
 		playTurn;
 		playTurn;
@@ -1152,7 +1151,7 @@ ZathuraTest >> testRedShipsFallsIntoaCardGetterLockerAndGetsARandomCard [
 		           rolling: die
 		           withCards: { OverloadCard new }.
 	zathura playTurn.
-	cardManager := zathura cardManager.
+	cardManager := zathura cardApplicator.
 	redShipCardHand := cardManager cardsOf: 'RedShip'.
 	self assert: redShipCardHand size equals: 3
 ]
@@ -1176,7 +1175,7 @@ ZathuraTest >> testRedoCardThrowsErrorWhenBlueShipThrowsItBeforeAnyOtherCardHasB
 				           SpeedCard new.
 				           RedoCard new }.
 
-	cardManager := zathura cardManager.
+	cardManager := zathura cardApplicator.
 
 	self
 		should: [ 
@@ -1203,7 +1202,7 @@ ZathuraTest >> testShipCantThrowCancellationCardToCancelACardToTheWrongShip [
 		           withCards: { 
 				           OverloadCard new.
 				           CancellationCard new }.
-	cardManager := zathura cardManager.
+	cardManager := zathura cardApplicator.
 	cardManager throws: OverloadCard new to: 'RedShip' from: 'BlueShip'.
 	zathura
 		playTurn;
@@ -1562,7 +1561,7 @@ ZathuraTest >> testZathuraRedShipThrowsRepeatCardToBlueShip [
 	self assert: 'BlueShip' isAt: 6 with: 0 in: zathura.
 	self assert: 'RedShip' isAt: 6 with: 0 in: zathura.
 	
-	cardManager := zathura cardManager.
+	cardManager := zathura cardApplicator.
 	cardManager throws: RepeatCard new to: 'RedShip' from: 'RedShip'.
 	
 	self assert: 'RedShip' isAt: 10 with: 0 in: zathura.
@@ -1598,7 +1597,7 @@ ZathuraTest >> testZathuraRedShipThrowsRepeatCardToHimselfWhenTheLastLockerWasAN
 		with: 0
 		in: zathura.
 
-	cardManager := zathura cardManager.
+	cardManager := zathura cardApplicator.
 	cardManager throws: RepeatCard new to: 'RedShip' from: 'RedShip'.
 
 	self
