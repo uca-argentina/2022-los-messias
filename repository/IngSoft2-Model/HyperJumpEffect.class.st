@@ -1,3 +1,28 @@
+"
+Please comment me using the following template inspired by Class Responsibility Collaborator (CRC) design:
+!
+For the Class part:  State a one line summary. For example, ""I represent a paragraph of text"".
+
+For the Responsibility part: Three sentences about my main responsibilities - what I do, what I know.
+
+For the Collaborators Part: State my main collaborators and one line about how I interact with them. 
+
+Public API and Key Messages
+
+- message one   
+- message two 
+- (for bonus points) how to create instances.
+
+   One simple example is simply gorgeous.
+ 
+Internal Representation and Key Implementation Points.
+
+    Instance Variables
+	parsecsSequence:		<Object>
+
+
+    Implementation Points
+"
 Class {
 	#name : #HyperJumpEffect,
 	#superclass : #Effect,
@@ -13,33 +38,31 @@ HyperJumpEffect class >> assertSequenceIsValid: parsecSequence [
 	parsecSequence isEmpty ifTrue: [ 
 		Error signal: 'Hyperjump cannot have a null parsec sequence' ].
 
-	(parsecSequence anySatisfy: [ :parsec | parsec <= 0 ]) ifTrue: [ 
+	(parsecSequence anySatisfy: [ :parsec | parsec valueAsParsec <= 0 ]) ifTrue: [ 
 		Error signal: 'Hyperjump cannot have less than zero parsecs in the sequence' ]
 ]
 
 { #category : #'instance creation' }
 HyperJumpEffect class >> with: parsecSequence [
-	
-	self assertSequenceIsValid: parsecSequence.
-	^ self new initializeWith: parsecSequence 
+
+	self assertSequenceIsValid: parsecSequence asOrderedCollection.
+	^ self new initializeWith: parsecSequence asOrderedCollection 
 ]
 
 { #category : #'instance creation' }
 HyperJumpEffect >> applyFor: aShip on: aBoard [
 
 	| parsecs |
-	parsecs := parsecsSequence value.
-	aBoard move: aShip byParsecs: parsecs.
-	parsecsSequence next
+	parsecs := parsecsSequence next.
+	aBoard move: aShip byParsecs: (parsecs valueAsParsec)
 ]
 
 { #category : #initialization }
 HyperJumpEffect >> initializeWith: aCollectionOfNumbers [
 
-	| aSortedCollectionOfNumbers |
-	aSortedCollectionOfNumbers := SortedCollection sortBlock: [ 
-		                              :positionA 
-		                              :positionB | positionA > positionB ].
-	aCollectionOfNumbers do: [ :number | aSortedCollectionOfNumbers add: number ].
-	parsecsSequence := Sequence with: aSortedCollectionOfNumbers
+	parsecsSequence := aCollectionOfNumbers
+		                                asOrderedCollection asSequence.
+	parsecsSequence sort: [ :positionA :positionB | 
+		positionA valueAsParsec > positionB valueAsParsec ].
+
 ]

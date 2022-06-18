@@ -5,27 +5,13 @@ Class {
 }
 
 { #category : #tests }
-SequenceTest >> testSequenceThrowsErrorWhenInitializedWithAnEmptyCollection [
-
-	self
-		should: [ Sequence with:  {  } ]
-		raise: Error
-		withMessage:
-		'Sequence should not be loaded with an empty Collection'
-]
-
-{ #category : #tests }
 SequenceTest >> testTheRotationOfTheSequenceWorksCorrectly [
 
-	| aCollection aSequence |
-	aCollection := OrderedCollection with: 1 with: 2 with: 3.
-	aSequence := Sequence with: aCollection.
+	| aSequence |
+	aSequence := Sequence with: 1 with: 2 with: 3.
 
-	self assert: aSequence value equals: 1.
-	aSequence next.
-	self assert: aSequence value equals: 2.
-	aSequence next.
-	self assert: aSequence value equals: 3.
-	aSequence next.
-	self assert: aSequence value equals: 1
+	self assert: aSequence next equals: 1.
+	self assert: aSequence next equals: 2.
+	self assert: aSequence next equals: 3.
+	self assert: aSequence next equals: 1
 ]

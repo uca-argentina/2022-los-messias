@@ -35,7 +35,9 @@ Class {
 		'diceCup',
 		'board',
 		'timesPlayed',
-		'sequenceOfShips'
+		'ships',
+		'cardManager',
+		'cardApplicator'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -47,13 +49,19 @@ ZathuraGame class >> assertNumberOfShipsIsValid: aCollectionOfShips [
 ]
 
 { #category : #'instance creation' }
-ZathuraGame class >> playBy: ships movedInBoardOf: boardStructure rolling: die [
+ZathuraGame class >> playBy: ships movedInBoardOf: boardStructure rolling: die withCards: cards [
 
 	self assertNumberOfShipsIsValid: ships.
 	^ self new
 		  initializePlayingBy: ships
 		  movedInBoardOf: boardStructure
 		  rolling: die
+		  withCards: cards
+]
+
+{ #category : #resendingToBoard }
+ZathuraGame >> applyLastEffectOn: aShip [ 
+	board applyLastEffectOn: (aShip).
 ]
 
 { #category : #asserting }
@@ -65,16 +73,22 @@ ZathuraGame >> assertZathuraHasFinished [
 { #category : #asserting }
 ZathuraGame >> assertZathuraHasNotBeenPlayed [
 
-	timesPlayed = 1 ifTrue: [ 
+	(timesPlayed == 1) ifTrue: [ 
 		Error signal: 'Zathura cannot be played more than once' ]
 ]
 
-{ #category : #private }
+{ #category : #accessing }
+ZathuraGame >> cardApplicator [
+
+	^ cardApplicator
+]
+
+{ #category : #accessing }
 ZathuraGame >> checkIfWon: aShip [
 
-	(board hasCrossFinishLine: aShip) ifFalse: [ ^ self ].
-	timesPlayed := 1.
-	finished := true
+	(board hasCrossFinishLine: aShip) ifTrue: [ 
+		timesPlayed := 1.
+		finished := true ]
 ]
 
 { #category : #state }
@@ -83,14 +97,29 @@ ZathuraGame >> hasFinished [
 	^ finished
 ]
 
-{ #category : #initialization }
-ZathuraGame >> initializePlayingBy: aCollectionOfShips movedInBoardOf: boardStructure rolling: aDiceCup [
+{ #category : #initalization }
+ZathuraGame >> initializePlayingBy: aCollectionOfShips movedInBoardOf: boardStructure rolling: aDiceCup withCards: aCollectionOfCards [
 
 	diceCup := aDiceCup.
-	board := Board of: boardStructure withAll: aCollectionOfShips.
-	sequenceOfShips := Sequence with: aCollectionOfShips.
+	cardManager := CardManager
+		               with: aCollectionOfShips
+		               and: aCollectionOfCards
+		               from: self.
+	ships := aCollectionOfShips asOrderedCollection asSequence.
+	cardApplicator := CardApplicator with: cardManager.
+	board := Board
+		         of: boardStructure
+		         withAll: ships
+		         andCardManager: cardManager.
+
 	finished := false.
 	timesPlayed := 0
+]
+
+{ #category : #accessing }
+ZathuraGame >> isTurnOf: aShip [
+
+	^ ((ships first) == aShip)
 ]
 
 { #category : #positioning }
@@ -107,9 +136,7 @@ ZathuraGame >> numberOfLockerOf: aShip [
 
 { #category : #playing }
 ZathuraGame >> play [
-
 	self assertZathuraHasNotBeenPlayed.
-
 	[ finished ] whileFalse: [ self playTurn ]
 ]
 
@@ -118,23 +145,22 @@ ZathuraGame >> playTurn [
 
 	| aShip |
 	self assertZathuraHasNotBeenPlayed.
-	aShip := sequenceOfShips value.
-	board changePositionOf: aShip by: diceCup roll.
-	self checkIfWon: aShip.
-	sequenceOfShips next
+	aShip := ships next.
+	board
+		changePositionOf: aShip
+		by: diceCup roll + (cardManager findChangeOfRoll: aShip).
+	self checkIfWon: aShip
 ]
 
 { #category : #positioning }
 ZathuraGame >> rankingOf: aShip [
 
-	^ (board rankingOf: aShip).
+	^ board rankingOf: aShip.
 ]
 
-{ #category : #ending }
+{ #category : #accessing }
 ZathuraGame >> winner [
 
-	| winner |
 	self assertZathuraHasFinished.
-	winner := (sequenceOfShips collection) select: [ :ship | (self rankingOf: ship) == 1 ].
-	^ winner at: 1
+	^ (ships select: [ :ship | (self rankingOf: ship) == 1 ]) first
 ]

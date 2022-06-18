@@ -41,6 +41,7 @@ SequencialLoadedDie class >> assertValid: anArrayOfNumbers [
 
 { #category : #'instance creation' }
 SequencialLoadedDie class >> with: anArrayOfNumbers [
+
 	self assertValid: anArrayOfNumbers.
 	^ self new initializeWith: anArrayOfNumbers
 ]
@@ -48,18 +49,23 @@ SequencialLoadedDie class >> with: anArrayOfNumbers [
 { #category : #initialization }
 SequencialLoadedDie >> initializeWith: aCollectionOfNumbers [
 
+	dies := Sequence withAll: (self loadSequence: aCollectionOfNumbers)
+]
+
+{ #category : #initialization }
+SequencialLoadedDie >> loadSequence: aCollectionOfNumbers [
+
 	| collectionOfDies |
 	collectionOfDies := OrderedCollection new.
 	aCollectionOfNumbers do: [ :number | 
 		collectionOfDies add: (LoadedDie with: number) ].
-	dies := Sequence with: collectionOfDies
+	^ collectionOfDies
 ]
 
 { #category : #rolling }
 SequencialLoadedDie >> roll [
 
 	| result |
-	result := (dies value) roll.
-	dies next.
+	result := (dies next) roll.
 	^ result
 ]

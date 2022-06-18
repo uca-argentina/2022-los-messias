@@ -1,3 +1,30 @@
+"
+Please comment me using the following template inspired by Class Responsibility Collaborator (CRC) design:
+!
+For the Class part:  State a one line summary. For example, ""I represent a paragraph of text"".
+
+For the Responsibility part: Three sentences about my main responsibilities - what I do, what I know.
+
+For the Collaborators Part: State my main collaborators and one line about how I interact with them. 
+
+Public API and Key Messages
+
+- message one   
+- message two 
+- (for bonus points) how to create instances.
+
+   One simple example is simply gorgeous.
+ 
+Internal Representation and Key Implementation Points.
+
+    Instance Variables
+	laps:		<Object>
+	lockers:		<Object>
+	parsecs:		<Object>
+
+
+    Implementation Points
+"
 Class {
 	#name : #BoardDefinition,
 	#superclass : #Object,
@@ -31,48 +58,19 @@ BoardDefinition class >> assertParsecsAreValid: parsecs [
 ]
 
 { #category : #'instance creation' }
-BoardDefinition class >> with: lockers and: parsecs played: laps [
+BoardDefinition class >> with: lockers and: unit played: laps [
 
 	self assertLockersAreValid: lockers size.
-	self assertParsecsAreValid: parsecs.
+	self assertParsecsAreValid: unit valueAsParsec .
 	self assertLapsAreValid: laps.
-	^ self new
-		  initializeWith: lockers
-		  and: parsecs
-		  played: laps
-]
-
-{ #category : #'instance creation' }
-BoardDefinition class >> withNoEffectsOf: numberOfLockers and: parsecs played: laps [
-
-	| lockers |
-	lockers := OrderedCollection new.
-	1 to: numberOfLockers do: [ :number | 
-	lockers add: LockerNoEffect new ].
-	^ self new initializeWith: lockers and: parsecs played: laps
-]
-
-{ #category : #'instance creation' }
-BoardDefinition class >> withOnly: effect at: effectLockerNumber of: numberOfLockers and: parsecs played: laps [
-
-	| lockers |
-	lockers := OrderedCollection new.
-	1 to: numberOfLockers do: [ :number | 
-	lockers add: LockerNoEffect new ].
-	lockers at: effectLockerNumber put: effect.
-	^ self new initializeWith: lockers and: parsecs played: laps
-]
-
-{ #category : #action }
-BoardDefinition >> doEffectTo: aShip inPosition: position of: aBoard [
-
-	(lockers at: (position +1)) applyFor: aShip  on: aBoard 
+	^ self new initializeWith: lockers and: unit played: laps
 ]
 
 { #category : #initialization }
-BoardDefinition >> initializeWith: aCollectionOfLockers and: aNumberParsecs played: aNumberLaps [ 
+BoardDefinition >> initializeWith: aCollectionOfLockers and: aNumberParsecs played: aNumberLaps [
+
 	lockers := aCollectionOfLockers.
-	parsecs := aNumberParsecs.
+	parsecs := aNumberParsecs valueAsParsec.
 	laps := aNumberLaps
 ]
 
@@ -82,8 +80,9 @@ BoardDefinition >> laps [
 ]
 
 { #category : #accesing }
-BoardDefinition >> lockers [
-	^ lockers
+BoardDefinition >> lockerAt: num [
+
+	^ lockers at: num
 ]
 
 { #category : #accesing }
@@ -93,7 +92,7 @@ BoardDefinition >> numberOfLockers [
 ]
 
 { #category : #accesing }
-BoardDefinition >> parsecsPerLocker [ 
+BoardDefinition >> parsecsPerLocker [
 
-^(lockers size / parsecs) asFloat
+	^ (lockers size / parsecs) asFloat
 ]

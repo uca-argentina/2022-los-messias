@@ -1,6 +1,6 @@
 "
 Please comment me using the following template inspired by Class Responsibility Collaborator (CRC) design:
-
+!
 For the Class part:  State a one line summary. For example, ""I represent a paragraph of text"".
 
 For the Responsibility part: Three sentences about my main responsibilities - what I do, what I know.
@@ -17,42 +17,17 @@ Public API and Key Messages
  
 Internal Representation and Key Implementation Points.
 
-    Instance Variables
-	numberOfFaces:		<Object>
-
 
     Implementation Points
 "
 Class {
-	#name : #RandomDie,
-	#superclass : #Object,
-	#instVars : [
-		'numberOfFaces'
-	],
+	#name : #CardEffect,
+	#superclass : #Effect,
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #asserting }
-RandomDie class >> assertValid: aNumberOfFaces [
+{ #category : #action }
+CardEffect >> applyFor: aShip on: aBoard [
 
-	aNumberOfFaces >= 3 ifFalse: [ 
-		Error signal: 'Die cannot be created with a number of faces smaller than 3' ]
-]
-
-{ #category : #'instance creation' }
-RandomDie class >> with: aNumberOfFaces [
-
-	self assertValid: aNumberOfFaces.
-	^ self new initializeWith: aNumberOfFaces
-]
-
-{ #category : #initialization }
-RandomDie >> initializeWith: aNumberOfFaces [ 
-	numberOfFaces := aNumberOfFaces.
-]
-
-{ #category : #rolling }
-RandomDie >> roll [
-
-	^ numberOfFaces atRandom.
+	aBoard giveCardTo: aShip
 ]

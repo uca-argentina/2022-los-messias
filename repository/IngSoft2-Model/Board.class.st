@@ -29,7 +29,9 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'positionOfShips',
-		'boardDefinition'
+		'boardDefinition',
+		'lastEffect',
+		'cardManager'
 	],
 	#classInstVars : [
 		'ships'
@@ -37,12 +39,13 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #'instance creation' }
-Board class >> of: boardStructure withAll: aCollectionOfShips [
+{ #category : #initialization }
+Board class >> of: aBoardStructure withAll: aCollectionOfShips andCardManager: aCardManager [
 
 	^ self new
-		  initializeWith: boardStructure
+		  initializeWith: aBoardStructure
 		  withAGroupOf: aCollectionOfShips
+		  withCardManager: aCardManager
 ]
 
 { #category : #private }
@@ -50,28 +53,47 @@ Board >> addIntoGame: aCollectionOfShips [
 
 	positionOfShips := OrderedCollection new.
 	aCollectionOfShips do: [ :aShip | 
-		positionOfShips add: (SpaceshipPosition for: aShip at: 0 and: 0) ]
+		positionOfShips add: (ShipPosition for: aShip at: 0 and: 0) ]
+]
+
+{ #category : #private }
+Board >> applyEffectOnLockerOrCorrectThePositionOfWinnerTo: aShip [
+
+	| thisLocker |
+	thisLocker := boardDefinition lockerAt:
+		              (self numberOfLockerOf: aShip) + 1.
+	lastEffect := thisLocker.
+	(self hasCrossFinishLine: aShip) ifFalse: [ 
+		thisLocker applyFor: aShip on: self] ifTrue: [ self correctPositionOfWinner: aShip ]
+	
+]
+
+{ #category : #moving }
+Board >> applyLastEffectOn: aShip [
+
+	lastEffect applyFor: aShip on: self
 ]
 
 { #category : #moving }
 Board >> changePositionOf: aShip by: aNumberOfLockers [
 
 	self move: aShip by: aNumberOfLockers.
-	(self hasCrossFinishLine: aShip) ifFalse: [ 
-		boardDefinition
-			doEffectTo: aShip
-			inPosition: (self numberOfLockerOf: aShip)
-			of: self ].
-	self correctPositionIfFinishLineWasCrossedBy: aShip.
+	self applyEffectOnLockerOrCorrectThePositionOfWinnerTo: aShip
 ]
 
 { #category : #private }
-Board >> correctPositionIfFinishLineWasCrossedBy: aShip [
+Board >> correctPositionOfWinner: aShip [
 
-	(self hasCrossFinishLine: aShip) ifTrue: [ 
-	positionOfShips
-		replaceAll: (self positionOf: aShip)
-		with: (self moveToFinalPosition: aShip) ]
+
+		positionOfShips
+			replaceAll: (self positionOf: aShip)
+			with: (self moveToFinalPosition: aShip) 
+]
+
+{ #category : #private }
+Board >> giveCardTo: aShip [
+
+	cardManager addTheNextCardToHandCardOf: aShip
 ]
 
 { #category : #moving }
@@ -82,29 +104,26 @@ Board >> hasCrossFinishLine: aShip [
 	^ positionOfShip numberOfLap >= boardDefinition laps
 ]
 
-{ #category : #initialization }
-Board >> initializeWith: aBoardStructure withAGroupOf: aCollectionOfShips [
+{ #category : #initalization }
+Board >> initializeWith: aBoardDefinition withAGroupOf: aCollectionOfShips withCardManager: aCardManager [
 
-	boardDefinition := aBoardStructure.
-	self addIntoGame: aCollectionOfShips
+	boardDefinition := aBoardDefinition.
+	self addIntoGame: aCollectionOfShips.
+	lastEffect := LockerNoEffect new.
+	cardManager := aCardManager
 ]
 
 { #category : #private }
 Board >> move: aShip by: aNumberOfLockers [
 
-	| oldPosition newPosition newNumberOfLockers aLap aLocker |
+	| oldPosition newPosition |
 	oldPosition := self positionOf: aShip.
-	newNumberOfLockers := oldPosition numberOfLocker + aNumberOfLockers.
-
-	aLap := oldPosition numberOfLap
-	        + (newNumberOfLockers // boardDefinition numberOfLockers).
-	aLocker := newNumberOfLockers % boardDefinition numberOfLockers.
-
-	aLap < 0 ifTrue: [ 
-		aLap := 0.
-		aLocker := 0 ].
-	newPosition := SpaceshipPosition for: aShip at: aLap and: aLocker.
+	newPosition := self
+		               newPositionStartingAt: oldPosition
+		               movingBy: aNumberOfLockers.
 	positionOfShips replaceAll: oldPosition with: newPosition
+
+
 ]
 
 { #category : #private }
@@ -128,16 +147,30 @@ Board >> moveAllToLockerZero [
 	positionOfShips do: [ :aShip | self moveToLockerZero: aShip ship ]
 ]
 
-{ #category : #creating }
+{ #category : #private }
 Board >> moveToFinalPosition: aShip [
 
-	^ SpaceshipPosition for: aShip at: boardDefinition laps and: 0
+	^ ShipPosition for: aShip at: boardDefinition laps and: 0
 ]
 
 { #category : #private }
 Board >> moveToLockerZero: aShip [
 
 self move: aShip by: ((self numberOfLockerOf: aShip) * -1 )
+]
+
+{ #category : #private }
+Board >> newPositionStartingAt: oldPosition movingBy: aNumberOfLockers [
+
+	| newNumberOfLockers aLap aLocker |
+	newNumberOfLockers := oldPosition numberOfLocker + aNumberOfLockers.
+	aLap := oldPosition numberOfLap
+	        + (newNumberOfLockers // boardDefinition numberOfLockers).
+	aLocker := newNumberOfLockers % boardDefinition numberOfLockers.
+	aLap < 0 ifTrue: [ 
+		aLap := 0.
+		aLocker := 0 ].
+	^ ShipPosition for: oldPosition ship at: aLap and: aLocker
 ]
 
 { #category : #'accessing - attributes' }
@@ -151,7 +184,7 @@ Board >> positionOf: aShip [
 
 	| positionOfShip |
 	positionOfShip := positionOfShips select: [ :aPositionOfShip | 
-		                  aPositionOfShip ship == aShip ].
+		                  (aPositionOfShip ship) == aShip ].
 
 	^ positionOfShip removeFirst
 ]
