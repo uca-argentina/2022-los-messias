@@ -1,6 +1,6 @@
 Class {
 	#name : #LightYear,
-	#superclass : #Object,
+	#superclass : #UnitMeasure,
 	#instVars : [
 		'lightYears'
 	],
@@ -19,7 +19,7 @@ LightYear >> initializeWith: lightYear [
 ]
 
 { #category : #accesing }
-LightYear >> unitValueAsParsec [
+LightYear >> valueAsParsec [
 
 	^ lightYears // 3
 ]

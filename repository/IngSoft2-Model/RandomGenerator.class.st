@@ -11,18 +11,9 @@ Class {
 }
 
 { #category : #'instance creation' }
-RandomGenerator class >> distributedBy: probabilytyDistribution [
+RandomGenerator class >> distributedBy: probabilityDistribution [
 
-	^ self new
-		  initializeWith: probabilytyDistribution
-]
-
-{ #category : #'class initialization' }
-RandomGenerator class >> distributedByRandom: aCollection [ 
-	| points |
-	points:= OrderedCollection new.
-	aCollection do: [ :anObject | points add: (PointProbability withX: anObject  andY: (100/(aCollection size)))].
-	^self new initializeWith: (ProbabilityDistribution withPoints: points )
+	^ self new initializeWith: probabilityDistribution
 ]
 
 { #category : #generating }

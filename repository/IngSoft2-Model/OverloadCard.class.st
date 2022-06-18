@@ -5,18 +5,15 @@ Class {
 }
 
 { #category : #action }
-OverloadCard >> addIn: zathuraGame appliedTo: ship [
+OverloadCard >> applyEffectTo: aShip on: aCardManager by: sourceShip [
 
-	zathuraGame addCardToTable:
-		(ActiveCard with: self appliedTo: { ship })
-]
-
-{ #category : #action }
-OverloadCard >> applyEffectTo: ship on: aCardManager by: sourceShip [
-
-	aCardManager throw: self.
+	
 	self assertIsYourTurn: sourceShip in: aCardManager.
-	self addIn: aCardManager appliedTo: ship
+	
+	aCardManager addCardToTable:
+		(ActiveCard with: self appliedTo: { aShip }).
+		
+	aCardManager addToTheCardsStack: self.
 ]
 
 { #category : #action }

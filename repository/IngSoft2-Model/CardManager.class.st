@@ -1,5 +1,5 @@
 Class {
-	#name : #CardHandController,
+	#name : #CardManager,
 	#superclass : #Object,
 	#instVars : [
 		'deck',
@@ -16,7 +16,7 @@ Class {
 }
 
 { #category : #'instance creation' }
-CardHandController class >> with: aCollectionOfShips and: aCollectionOfCards from: aZathuraGame [
+CardManager class >> with: aCollectionOfShips and: aCollectionOfCards from: aZathuraGame [
 
 	^ self new
 		  initializeWith: aCollectionOfShips
@@ -24,28 +24,34 @@ CardHandController class >> with: aCollectionOfShips and: aCollectionOfCards fro
 		  from: aZathuraGame 
 ]
 
-{ #category : #private }
-CardHandController >> addCardToTable: aCard [
+{ #category : #adding }
+CardManager >> addCardToTable: aCard [
 
 	cardsOnTable add: aCard.
 ]
 
-{ #category : #actions }
-CardHandController >> addToHandCardOf: aShip card: aCard [
+{ #category : #adding }
+CardManager >> addTheNextCardToHandCardOf: aShip [
 
 	| cardHand |
 	cardHand := self cardHandOf: aShip.
-	cardHand add: aCard
+	cardHand add: (self giveCard )
 ]
 
-{ #category : #moving }
-CardHandController >> applyLastEffectOn: aShip [
+{ #category : #adding }
+CardManager >> addToTheCardsStack: aCard [
+
+	thrownCardsStack add: aCard
+]
+
+{ #category : #resendingToZathura }
+CardManager >> applyLastEffectOn: aShip [
 
 	zathuraGame applyLastEffectOn: aShip
 ]
 
-{ #category : #accessing }
-CardHandController >> assertCardHasBeenThrown [
+{ #category : #asserting }
+CardManager >> assertCardHasBeenThrown [
 
 	thrownCardsStack ifEmpty: [ 
 		Error signal:
@@ -53,33 +59,25 @@ CardHandController >> assertCardHasBeenThrown [
 ]
 
 { #category : #asserting }
-CardHandController >> assertIsOnTable: aCard [
+CardManager >> assertIsOnTable: aCard [
 
 	aCard ifEmpty: [ Error signal: 'This card is not active in the table' ]
 ]
 
-{ #category : #accessing }
-CardHandController >> cardHandOf: aShip [
+{ #category : #private }
+CardManager >> cardHandOf: aShip [
 
 	^ (cardHands select: [ :aCardHand | aCardHand ship = aShip ]) first
 ]
 
-{ #category : #playing }
-CardHandController >> cardsAffecting: aShip [
+{ #category : #private }
+CardManager >> cardsAffecting: aShip [
 
 	^ cardsOnTable select: [ :aCard | aCard ship includes: aShip ]
 ]
 
 { #category : #accessing }
-CardHandController >> cardsOf: aShip [
-
-	| cards |
-	cards := self cardHandOf: aShip.
-	^ cards handOfCards
-]
-
-{ #category : #asserting }
-CardHandController >> findCardOnTable: aCard [
+CardManager >> findCardOnTable: aCard [
 
 	| theCard |
 	theCard := (cardsOnTable select: [ :card | card = aCard ]).
@@ -88,19 +86,19 @@ CardHandController >> findCardOnTable: aCard [
 ]
 
 { #category : #playing }
-CardHandController >> findChangeOfRoll: aShip [
+CardManager >> findChangeOfRoll: aShip [
 
 	^ (self cardsAffecting: aShip) sum: [ :aCard | aCard changeOfRoll ]
 ]
 
 { #category : #private }
-CardHandController >> giveCard [
+CardManager >> giveCard [
 
 	^ deck next
 ]
 
 { #category : #initialization }
-CardHandController >> initializeCardHandsBy: aCollectionOfShips [
+CardManager >> initializeCardHandsBy: aCollectionOfShips [
 
 	cardHands := OrderedCollection new.
 	aCollectionOfShips do: [ :aShip | 
@@ -111,7 +109,7 @@ CardHandController >> initializeCardHandsBy: aCollectionOfShips [
 ]
 
 { #category : #initialization }
-CardHandController >> initializeWith: aCollectionOfShips and: aCollectionOfCards from: aZathuraGame [
+CardManager >> initializeWith: aCollectionOfShips and: aCollectionOfCards from: aZathuraGame [
 
 	deck := aCollectionOfCards asOrderedCollection asSequence.
 	cardHands := self initializeCardHandsBy: aCollectionOfShips.
@@ -120,21 +118,21 @@ CardHandController >> initializeWith: aCollectionOfShips and: aCollectionOfCards
 	thrownCardsStack := OrderedCollection new
 ]
 
-{ #category : #testing }
-CardHandController >> isTurnOf: aShip [
+{ #category : #resendingToZathura }
+CardManager >> isTurnOf: aShip [
 
 	^ (zathuraGame isTurnOf: aShip)
 ]
 
 { #category : #accessing }
-CardHandController >> lastCardThrownOnTheGame [
+CardManager >> lastCardThrownOnTheGame [
 
 	self assertCardHasBeenThrown.
 	^ thrownCardsStack last
 ]
 
-{ #category : #set }
-CardHandController >> removeFromCardsOnTable: aCard [
+{ #category : #removing }
+CardManager >> removeFromCardsOnTable: aCard [
 
 	| theCard |
 	theCard := self findCardOnTable: aCard.
@@ -142,48 +140,42 @@ CardHandController >> removeFromCardsOnTable: aCard [
 ]
 
 { #category : #accessing }
-CardHandController >> ships [
+CardManager >> ships [
 
-	^(zathuraGame ships)
+	^ cardHands collect: [ :cardHand | cardHand ship ]
 ]
 
-{ #category : #private }
-CardHandController >> throw: aCard [
-
-	thrownCardsStack add: aCard
-]
-
-{ #category : #actions }
-CardHandController >> throws: aCancellationCard removing: aCard from: sourceShip [
+{ #category : #throwing }
+CardManager >> throws: aCancellationCard removing: aCard from: sourceShip [
 
 	(self cardHandOf: sourceShip)
 		throw: aCancellationCard
 		removingToAll: aCard
-		in: self
+		on: self
 ]
 
-{ #category : #actions }
-CardHandController >> throws: aCard to: destinationShip from: sourceShip [
+{ #category : #throwing }
+CardManager >> throws: aCard to: destinationShip from: sourceShip [
 
 	| cardHand |
 	cardHand := self cardHandOf: sourceShip.
-	cardHand throw: aCard to: destinationShip in: self
+	cardHand throw: aCard to: destinationShip on: self
 ]
 
-{ #category : #actions }
-CardHandController >> throws: cancellationCard to: destinationShip removing: aCard from: sourceShip [
+{ #category : #throwing }
+CardManager >> throws: cancellationCard to: destinationShip removing: aCard from: sourceShip [
 
 	(self cardHandOf: sourceShip)
 		throw: cancellationCard
 		to: destinationShip
 		removing: aCard
-		in: self
+		on: self
 ]
 
-{ #category : #actions }
-CardHandController >> throws: aCard toAllShipsFrom: aShip [
+{ #category : #throwing }
+CardManager >> throws: aCard toAllShipsFrom: aShip [
 
 	| cardHand |
 	cardHand := self cardHandOf: aShip.
-	cardHand throw: aCard toAllShipsin: self
+	cardHand throw: aCard toAllShipsOn: self
 ]

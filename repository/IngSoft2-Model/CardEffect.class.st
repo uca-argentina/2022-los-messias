@@ -29,5 +29,5 @@ Class {
 { #category : #action }
 CardEffect >> applyFor: aShip on: aBoard [
 
-	aBoard giveRandomCardTo: aShip
+	aBoard giveCardTo: aShip
 ]

@@ -25,7 +25,7 @@ CardApplicator >> throws: aCancellationCard removing: aCard from: sourceShip [
 	cardManager throws: aCancellationCard removing: aCard from: sourceShip
 ]
 
-{ #category : #actions }
+{ #category : #action }
 CardApplicator >> throws: aCard to: destinationShip from: sourceShip [
 
 	cardManager throws: aCard to: destinationShip from: sourceShip
@@ -37,7 +37,7 @@ CardApplicator >> throws: cancellationCard to: destinationShip removing: aCard f
 	cardManager throws: cancellationCard to: destinationShip removing: aCard from: sourceShip
 ]
 
-{ #category : #actions }
+{ #category : #action }
 CardApplicator >> throws: aCard toAllShipsFrom: aShip [
 
 	cardManager throws: aCard toAllShipsFrom: aShip

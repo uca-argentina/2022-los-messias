@@ -8,9 +8,16 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
+{ #category : #assertion }
+PointProbability class >> assertValid: aProbability [
+		(aProbability < 0) ifTrue: [ 
+		Error signal: 'A probabilty can not be negative' ]
+]
+
 { #category : #'class initialization' }
-PointProbability class >> withX: anObject andY: aProbability [ 
-	^self new withX: anObject  andY: aProbability .
+PointProbability class >> withX: anObject andY: aProbability [
+	self assertValid: aProbability.
+	^ self new withX: anObject andY: aProbability
 ]
 
 { #category : #initialization }

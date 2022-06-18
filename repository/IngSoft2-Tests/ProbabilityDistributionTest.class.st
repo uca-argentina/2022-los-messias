@@ -8,7 +8,7 @@ Class {
 ProbabilityDistributionTest >> testProbabilityDistributionReceivesACollectionWithOneHundredAndZeroProbabilityAndGivesTheIndexOfAHundredAsResult [
 
 	| aProbabilityDistribution |
-	aProbabilityDistribution := ProbabilityDistribution withPoints: { 
+	aProbabilityDistribution := ProbabilityDistribution with: { 
 			                            (PointProbability withX: 'a' andY: 100).
 			                            (PointProbability withX: 'b' andY: 0) }.
 	self assert: aProbabilityDistribution generateRandom equals: 'a'
@@ -18,7 +18,7 @@ ProbabilityDistributionTest >> testProbabilityDistributionReceivesACollectionWit
 ProbabilityDistributionTest >> testProbabilityDistributionReceivesACollectionWithProbabilitiesAndDistributesThemCorrectly [
 
 	| aProbabilityDistribution aCollection |
-	aProbabilityDistribution := ProbabilityDistribution withPoints: { 
+	aProbabilityDistribution := ProbabilityDistribution with: { 
 			                            (PointProbability withX: 'a' andY: 75).
 			                            (PointProbability  withX: 'b' andY: 20).
 			                            (PointProbability  withX: 'c' andY: 5) }.
@@ -41,22 +41,10 @@ ProbabilityDistributionTest >> testProbabilityDistributionReceivesACollectionWit
 ]
 
 { #category : #tests }
-ProbabilityDistributionTest >> testProbabilityDistributionThrowsErrorWhenIsIitializedWithANegativeProbability [
-
-	self
-		should: [ ProbabilityDistribution withPoints: { 
-			           (PointProbability withX: 'a' andY: 50).
-			           (PointProbability withX: 'b' andY: 60).
-			           (PointProbability withX: 'c' andY: -10) } ]
-		raise: Error
-		withMessage: 'A probabilty can not be negative'
-]
-
-{ #category : #tests }
 ProbabilityDistributionTest >> testProbabilityDistributionThrowsErrorWhenIsIitializedWithASumOfValuesDifferentOfAHundred [
 
 	self
-		should: [ ProbabilityDistribution withPoints: { 
+		should: [ ProbabilityDistribution with: { 
 					(PointProbability withX: 'a' andY: 10).
 					(PointProbability withX: 'b' andY: 89) }]
 		raise: Error
@@ -67,8 +55,8 @@ ProbabilityDistributionTest >> testProbabilityDistributionThrowsErrorWhenIsIitia
 ProbabilityDistributionTest >> testProbabilityDistributionThrowsErrorWhenIsIitializedWithAnEmptyCollection [
 
 	self
-		should: [ ProbabilityDistribution withPoints: {  } ]
+		should: [ ProbabilityDistribution with: {  } ]
 		raise: Error
 		withMessage:
-		'Probabilities should not be loaded with an empty Collection'
+		'There must be at least one point'
 ]

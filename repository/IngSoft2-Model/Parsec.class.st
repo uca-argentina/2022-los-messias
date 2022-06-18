@@ -25,7 +25,7 @@ Internal Representation and Key Implementation Points.
 "
 Class {
 	#name : #Parsec,
-	#superclass : #Object,
+	#superclass : #UnitMeasure,
 	#instVars : [
 		'parsecs'
 	],
@@ -43,6 +43,6 @@ Parsec >> initializeWith: parsec [
 ]
 
 { #category : #accesing }
-Parsec >> unitValueAsParsec [
+Parsec >> valueAsParsec [
 	^ parsecs
 ]

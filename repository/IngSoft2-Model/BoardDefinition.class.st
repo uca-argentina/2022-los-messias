@@ -61,7 +61,7 @@ BoardDefinition class >> assertParsecsAreValid: parsecs [
 BoardDefinition class >> with: lockers and: unit played: laps [
 
 	self assertLockersAreValid: lockers size.
-	self assertParsecsAreValid: unit unitValueAsParsec .
+	self assertParsecsAreValid: unit valueAsParsec .
 	self assertLapsAreValid: laps.
 	^ self new initializeWith: lockers and: unit played: laps
 ]
@@ -70,7 +70,7 @@ BoardDefinition class >> with: lockers and: unit played: laps [
 BoardDefinition >> initializeWith: aCollectionOfLockers and: aNumberParsecs played: aNumberLaps [
 
 	lockers := aCollectionOfLockers.
-	parsecs := aNumberParsecs unitValueAsParsec.
+	parsecs := aNumberParsecs valueAsParsec.
 	laps := aNumberLaps
 ]
 

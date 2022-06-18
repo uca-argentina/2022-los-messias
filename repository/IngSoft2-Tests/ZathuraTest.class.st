@@ -52,25 +52,6 @@ ZathuraTest >> boardDefinitionWithOnly: effect at: effectLockerNumber of: number
 	^ BoardDefinition with: lockers and: (Parsec with: parsec) played: laps
 ]
 
-{ #category : #shipWithHandOfCardsTests }
-ZathuraTest >> testBlueShipAndRedShipStartsTheGameWithTwoCards [
-
-	| die ships boardStructure zathura |
-	die := LoadedDie with: 2.
-	ships := #( 'RedShip' 'BlueShip' ).
-	boardStructure := self
-		                  boardDefinitionWithNoEffectsOf: 10
-		                  andParsec: 100
-		                  played: 1.
-	zathura := ZathuraGame
-		           playBy: ships
-		           movedInBoardOf: boardStructure
-		           rolling: die
-		           withCards: { OverloadCard new }.
-	self assert: (zathura cardsOf: 'RedShip') size equals: 2.
-	self assert: (zathura cardsOf: 'BlueShip') size equals: 2
-]
-
 { #category : #cancellationCard }
 ZathuraTest >> testBlueShipCantThrowCancellationCardIfNoCardsHaveBeenPlayed [
 
@@ -591,33 +572,10 @@ ZathuraTest >> testBlueShipThrowsAnOverloadCardToRedShipAndAfterTwoRoundsThrowsA
 	self assert: 'GreenShip' isAtLocker: 19 in: zathura.
 ]
 
-{ #category : #shipWithHandOfCardsTests }
-ZathuraTest >> testBlueShipThrowsAnOverloadCardToRedShipAndLosesOneOverloadCard [
-
-	| zathura aDie cardManager |
-	aDie := LoadedDie with: 4.
-	zathura := ZathuraGame
-		           playBy: { 'BlueShip'. 'RedShip' }
-		           movedInBoardOf:
-		           (self
-			            boardDefinitionWithNoEffectsOf: 10
-			            andParsec: 100
-			            played: 1)
-		           rolling: aDie
-		           withCards: { OverloadCard new }.
-	cardManager := zathura cardApplicator.
-	zathura playTurn.
-	zathura playTurn.
-	cardManager throws: OverloadCard new to: 'RedShip' from: 'BlueShip'.
-	zathura playTurn.
-	zathura playTurn.
-	self assert: (zathura  cardsOf: 'BlueShip') size equals: 1
-]
-
 { #category : #overloadCard }
 ZathuraTest >> testBlueShipThrowsAnOverloadCardToRedShipAndRedShipMovesBackwards [
 
-	|   zathura aDie cardManager |
+	| zathura aDie cardApplicator |
 	aDie := SequencialLoadedDie with: { 4. 4. 1. 1 }.
 	zathura := ZathuraGame
 		           playBy: { 'BlueShip'. 'RedShip' }
@@ -628,10 +586,10 @@ ZathuraTest >> testBlueShipThrowsAnOverloadCardToRedShipAndRedShipMovesBackwards
 			            played: 1)
 		           rolling: aDie
 		           withCards: { OverloadCard new }.
-	cardManager := zathura cardApplicator.
+	cardApplicator := zathura cardApplicator.
 	zathura playTurn.
 	zathura playTurn.
-	cardManager throws: OverloadCard new to: 'RedShip' from: 'BlueShip'.
+	cardApplicator throws: OverloadCard new to: 'RedShip' from: 'BlueShip'.
 	zathura playTurn.
 	zathura playTurn.
 	self
@@ -896,6 +854,40 @@ ZathuraTest >> testBlueShipThrowsTwoOverloadsCardsToRedShipAndGreenShipThrowsACa
 ]
 
 { #category : #boardTests }
+ZathuraTest >> testBlueShipsFallsIntoaCardGetterLockerAndGetsAnOverLoadCard [
+
+	| die ships boardDefinition zathura cardApplicator |
+	die := LoadedDie with: 1.
+	ships := #( 'BlueShip' 'RedShip' ).
+	boardDefinition := self
+		                   boardDefinitionWithOnly: CardEffect new
+		                   at: 2
+		                   of: 10
+		                   andParsec: 100
+		                   played: 1.
+	zathura := ZathuraGame
+		           playBy: ships
+		           movedInBoardOf: boardDefinition
+		           rolling: die
+		           withCards: { OverloadCard new }.
+	cardApplicator := zathura cardApplicator.
+	cardApplicator
+		throws: OverloadCard new
+		to: 'RedShip'
+		from: 'BlueShip'.
+	cardApplicator
+		throws: OverloadCard new
+		to: 'RedShip'
+		from: 'BlueShip'.
+	zathura playTurn.
+	zathura playTurn.
+	cardApplicator
+		throws: OverloadCard new
+		to: 'RedShip'
+		from: 'BlueShip'
+]
+
+{ #category : #boardTests }
 ZathuraTest >> testBoardCanBeInitializedWithLightyears [
 
 	| board |
@@ -967,6 +959,37 @@ ZathuraTest >> testBoardStructureCannotHaveLessThanZeroParsecs [
 				played: 3 ]
 		raise: Error
 		withMessage: 'Board Structure cannot have less than zero parsecs'
+]
+
+{ #category : #shipWithHandOfCardsTests }
+ZathuraTest >> testCardHandThrowsErrorWhenThrownTheThirdCardBeacauseItStartsTheGameWithTwoCard [
+
+	| die ships boardStructure zathura cardApplicator |
+	die := LoadedDie with: 2.
+	ships := #( 'BlueShip' 'RedShip' ).
+	boardStructure := self
+		                  boardDefinitionWithNoEffectsOf: 10
+		                  andParsec: 100
+		                  played: 1.
+	zathura := ZathuraGame
+		           playBy: ships
+		           movedInBoardOf: boardStructure
+		           rolling: die
+		           withCards: { OverloadCard new }.
+	cardApplicator := zathura cardApplicator.
+	cardApplicator
+		throws: OverloadCard new
+		to: 'RedShip'
+		from: 'BlueShip'.
+	cardApplicator
+		throws: OverloadCard new
+		to: 'RedShip'
+		from: 'BlueShip'.
+	self
+		should: [ 
+		cardApplicator throws: OverloadCard new to: 'RedShip' from: 'BlueShip' ]
+		raise: Error
+		withMessage: 'Card is not in Hand'
 ]
 
 { #category : #tests }
@@ -1087,28 +1110,6 @@ ZathuraTest >> testMoonwalkCannotHaveLessThanZeroLockers [
 		raise: Error
 		withMessage:
 		'MoonWalk cannot be created with less than zero lockers'
-]
-
-{ #category : #boardTests }
-ZathuraTest >> testRedShipsFallsIntoaCardGetterLockerAndGetsARandomCard [
-
-	| redShipCardHand die ships boardStructure zathura cardManager |
-	die := LoadedDie with: 1.
-	ships := #( 'RedShip' 'BlueShip' ).
-	boardStructure := self
-		                  boardDefinitionWithOnly: CardEffect new
-		                  at: 2
-		                  of: 10
-		                  andParsec: 100
-		                  played: 1.
-	zathura := ZathuraGame
-		           playBy: ships
-		           movedInBoardOf: boardStructure
-		           rolling: die
-		           withCards: { OverloadCard new }.
-	zathura playTurn.
-	redShipCardHand := zathura  cardsOf: 'RedShip'.
-	self assert: redShipCardHand size equals: 3
 ]
 
 { #category : #redoCard }

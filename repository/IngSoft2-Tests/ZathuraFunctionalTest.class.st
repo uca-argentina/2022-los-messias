@@ -25,11 +25,10 @@ ZathuraFunctionalTest >> boardDefinitionWithRandomEffects [
 		          (PointProbability withX: WormHoleEffect new andY: 20).
 		          (PointProbability withX: CardEffect new andY: 10) }.
 
-	probabilityDistribution := ProbabilityDistribution withPoints: points.
-	boardDefinition := (BoardDefinitionGenerator with:
-		                    (RandomGenerator distributedBy:
-			                     probabilityDistribution))
-		                   generatesWith: 10
+	probabilityDistribution := ProbabilityDistribution with: points.
+	boardDefinition := BoardDefinition with:
+		                    ((RandomGenerator distributedBy:
+			                     probabilityDistribution) generateRandomObjectsWith: 10)
 		                   and: (Parsec with: 50)
 		                   played: 3.
 	^ boardDefinition

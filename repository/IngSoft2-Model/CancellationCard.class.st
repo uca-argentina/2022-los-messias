@@ -5,10 +5,9 @@ Class {
 }
 
 { #category : #action }
-CancellationCard >> applyEffectTo: aShip removing: aCard in: zathuraGame [
+CancellationCard >> applyEffectTo: aShip removing: aCard on: aCardManager [
 
-	zathuraGame removeFromCardsOnTable:
+	aCardManager removeFromCardsOnTable:
 		(ActiveCard with: aCard appliedTo: aShip).
-
-	zathuraGame throw: self
+	aCardManager addToTheCardsStack: self
 ]

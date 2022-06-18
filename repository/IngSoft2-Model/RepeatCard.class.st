@@ -8,5 +8,5 @@ Class {
 RepeatCard >> applyEffectTo: aShip on: aCardManager by: sourceShip [
 
 	aCardManager applyLastEffectOn: aShip.
-	aCardManager throw: self
+	aCardManager addToTheCardsStack: self
 ]

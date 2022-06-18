@@ -36,7 +36,6 @@ Class {
 		'board',
 		'timesPlayed',
 		'ships',
-		'shipsHand',
 		'cardManager',
 		'cardApplicator'
 	],
@@ -60,7 +59,7 @@ ZathuraGame class >> playBy: ships movedInBoardOf: boardStructure rolling: die w
 		  withCards: cards
 ]
 
-{ #category : #private }
+{ #category : #resendingToBoard }
 ZathuraGame >> applyLastEffectOn: aShip [ 
 	board applyLastEffectOn: (aShip).
 ]
@@ -85,29 +84,11 @@ ZathuraGame >> cardApplicator [
 ]
 
 { #category : #accessing }
-ZathuraGame >> cardsOf: aShip [
-
-	^ cardManager cardsOf: aShip
-]
-
-{ #category : #accessing }
 ZathuraGame >> checkIfWon: aShip [
 
-	(board hasCrossFinishLine: aShip) ifFalse: [ ^ self ].
-	self finishGame
-]
-
-{ #category : #ending }
-ZathuraGame >> findWinnerShip [
-
-	^ (ships select: [ :ship | (self rankingOf: ship) == 1 ]) first
-]
-
-{ #category : #private }
-ZathuraGame >> finishGame [
-
-	timesPlayed := 1.
-	finished := true
+	(board hasCrossFinishLine: aShip) ifTrue: [ 
+		timesPlayed := 1.
+		finished := true ]
 ]
 
 { #category : #state }
@@ -120,7 +101,7 @@ ZathuraGame >> hasFinished [
 ZathuraGame >> initializePlayingBy: aCollectionOfShips movedInBoardOf: boardStructure rolling: aDiceCup withCards: aCollectionOfCards [
 
 	diceCup := aDiceCup.
-	cardManager := CardHandController
+	cardManager := CardManager
 		               with: aCollectionOfShips
 		               and: aCollectionOfCards
 		               from: self.
@@ -129,7 +110,6 @@ ZathuraGame >> initializePlayingBy: aCollectionOfShips movedInBoardOf: boardStru
 	board := Board
 		         of: boardStructure
 		         withAll: ships
-		         withCards: aCollectionOfCards
 		         andCardManager: cardManager.
 
 	finished := false.
@@ -156,9 +136,7 @@ ZathuraGame >> numberOfLockerOf: aShip [
 
 { #category : #playing }
 ZathuraGame >> play [
-
 	self assertZathuraHasNotBeenPlayed.
-
 	[ finished ] whileFalse: [ self playTurn ]
 ]
 
@@ -181,14 +159,8 @@ ZathuraGame >> rankingOf: aShip [
 ]
 
 { #category : #accessing }
-ZathuraGame >> ships [
-
-	^ ships
-]
-
-{ #category : #ending }
 ZathuraGame >> winner [
 
 	self assertZathuraHasFinished.
-	^ self findWinnerShip
+	^ (ships select: [ :ship | (self rankingOf: ship) == 1 ]) first
 ]

@@ -2,34 +2,24 @@ Class {
 	#name : #ProbabilityDistribution,
 	#superclass : #Object,
 	#instVars : [
-		'x',
-		'y',
 		'points'
 	],
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #asserting }
-ProbabilityDistribution class >> assertValidX: indices andY: probabilities [
+{ #category : #assertion }
+ProbabilityDistribution class >> assertValid: points [
 
 	| sum |
-	probabilities size <= 0 ifTrue: [ 
-		Error signal:
-			'Probabilities should not be loaded with an empty Collection' ].
-	probabilities size == indices size ifFalse: [ 
-		Error signal:
-			'Probabilities should be loaded with the same amount of data for x and y' ].
-
-	sum := probabilities sum: [ :probability | probability ].
+	points size <= 0 ifTrue: [ Error signal: 'There must be at least one point' ].
+	
+	sum := points sum: [ :point | point y ].
 	sum == 100 ifFalse: [ 
 		Error signal: 'The sum of the probabilities must be 100%' ].
-
-	(probabilities select: [ :value | value < 0 ]) ifNotEmpty: [ 
-		Error signal: 'A probabilty can not be negative' ]
 ]
 
 { #category : #'class initialization' }
-ProbabilityDistribution class >> withPoints: aCollectionOfPoints [
+ProbabilityDistribution class >> with: aCollectionOfPoints [
 
 	| indices probabilities |
 	indices := OrderedCollection new.
@@ -37,8 +27,8 @@ ProbabilityDistribution class >> withPoints: aCollectionOfPoints [
 	aCollectionOfPoints do: [ :aPoint | 
 		indices add: aPoint x.
 		probabilities add: aPoint y ].
-	self assertValidX: indices andY: probabilities.
-	^self new withPoints: aCollectionOfPoints.
+	self assertValid: aCollectionOfPoints.
+	^ self new with: aCollectionOfPoints
 ]
 
 { #category : #generating }
@@ -62,6 +52,6 @@ ProbabilityDistribution >> getGeneratedObjectWith: result [
 ]
 
 { #category : #initialization }
-ProbabilityDistribution >> withPoints: aCollectionOfPoints [ 
+ProbabilityDistribution >> with: aCollectionOfPoints [ 
 	points:= aCollectionOfPoints.
 ]

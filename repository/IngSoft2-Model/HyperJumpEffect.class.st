@@ -38,7 +38,7 @@ HyperJumpEffect class >> assertSequenceIsValid: parsecSequence [
 	parsecSequence isEmpty ifTrue: [ 
 		Error signal: 'Hyperjump cannot have a null parsec sequence' ].
 
-	(parsecSequence anySatisfy: [ :parsec | parsec unitValueAsParsec <= 0 ]) ifTrue: [ 
+	(parsecSequence anySatisfy: [ :parsec | parsec valueAsParsec <= 0 ]) ifTrue: [ 
 		Error signal: 'Hyperjump cannot have less than zero parsecs in the sequence' ]
 ]
 
@@ -54,17 +54,15 @@ HyperJumpEffect >> applyFor: aShip on: aBoard [
 
 	| parsecs |
 	parsecs := parsecsSequence next.
-	aBoard move: aShip byParsecs: (parsecs unitValueAsParsec)
+	aBoard move: aShip byParsecs: (parsecs valueAsParsec)
 ]
 
 { #category : #initialization }
 HyperJumpEffect >> initializeWith: aCollectionOfNumbers [
 
-	| anOrderedCollectionOfNumbers |
-	anOrderedCollectionOfNumbers := aCollectionOfNumbers asOrderedCollection.
-	anOrderedCollectionOfNumbers sort: [ 
-		                              :positionA 
-		                              :positionB | (positionA unitValueAsParsec) > (positionB unitValueAsParsec)].
-	
-	parsecsSequence := Sequence withAll: anOrderedCollectionOfNumbers
+	parsecsSequence := aCollectionOfNumbers
+		                                asOrderedCollection asSequence.
+	parsecsSequence sort: [ :positionA :positionB | 
+		positionA valueAsParsec > positionB valueAsParsec ].
+
 ]

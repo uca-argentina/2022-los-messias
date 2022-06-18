@@ -40,12 +40,12 @@ Class {
 }
 
 { #category : #initialization }
-Board class >> of: aBoardStructure withAll: aCollectionOfShips withCards: aCollectionOfCards andCardManager: aCardManager [ 
+Board class >> of: aBoardStructure withAll: aCollectionOfShips andCardManager: aCardManager [
+
 	^ self new
 		  initializeWith: aBoardStructure
 		  withAGroupOf: aCollectionOfShips
-		  withCards: aCollectionOfCards
-		withCardManager: aCardManager 
+		  withCardManager: aCardManager
 ]
 
 { #category : #private }
@@ -56,7 +56,7 @@ Board >> addIntoGame: aCollectionOfShips [
 		positionOfShips add: (ShipPosition for: aShip at: 0 and: 0) ]
 ]
 
-{ #category : #moving }
+{ #category : #private }
 Board >> applyEffectOnLockerOrCorrectThePositionOfWinnerTo: aShip [
 
 	| thisLocker |
@@ -84,16 +84,16 @@ Board >> changePositionOf: aShip by: aNumberOfLockers [
 { #category : #private }
 Board >> correctPositionOfWinner: aShip [
 
-	(self hasCrossFinishLine: aShip) ifTrue: [ 
-	positionOfShips
-		replaceAll: (self positionOf: aShip)
-		with: (self moveToFinalPosition: aShip) ]
+
+		positionOfShips
+			replaceAll: (self positionOf: aShip)
+			with: (self moveToFinalPosition: aShip) 
 ]
 
 { #category : #private }
-Board >> giveRandomCardTo: aShip [
+Board >> giveCardTo: aShip [
 
-	cardManager addToHandCardOf: aShip card: (cardManager giveCard )
+	cardManager addTheNextCardToHandCardOf: aShip
 ]
 
 { #category : #moving }
@@ -105,7 +105,7 @@ Board >> hasCrossFinishLine: aShip [
 ]
 
 { #category : #initalization }
-Board >> initializeWith: aBoardDefinition withAGroupOf: aCollectionOfShips withCards: aCollectionOfCards withCardManager: aCardManager [
+Board >> initializeWith: aBoardDefinition withAGroupOf: aCollectionOfShips withCardManager: aCardManager [
 
 	boardDefinition := aBoardDefinition.
 	self addIntoGame: aCollectionOfShips.

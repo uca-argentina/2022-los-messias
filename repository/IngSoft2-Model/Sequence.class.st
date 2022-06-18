@@ -32,18 +32,6 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #'instance creation' }
-Sequence class >> withAll: aCollection [
-
-	^ self new initializeWithAll: aCollection
-]
-
-{ #category : #initialization }
-Sequence >> initializeWithAll: aCollection [
-
-	(1 to: aCollection size) do: [ :i | self add: (aCollection at: i) ]
-]
-
 { #category : #'change set' }
 Sequence >> next [
 
@@ -51,9 +39,4 @@ Sequence >> next [
 	aValue := self removeFirst.
 	self addLast: aValue.
 	^aValue 
-]
-
-{ #category : #actions }
-Sequence >> random [
-	^self atRandom
 ]
