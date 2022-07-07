@@ -80,7 +80,7 @@ CardManager >> cardsAffecting: aShip [
 CardManager >> findCardOnTable: aCard [
 
 	| theCard |
-	theCard := (cardsOnTable select: [ :card | card = aCard ]).
+	theCard := cardsOnTable select: [ :card | card = aCard ].
 	self assertIsOnTable: theCard.
 	^ theCard first
 ]
