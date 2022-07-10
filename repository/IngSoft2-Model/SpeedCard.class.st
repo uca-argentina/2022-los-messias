@@ -8,11 +8,9 @@ Class {
 SpeedCard >> applyEffectTo: ship on: aCardManager by: sourceShip [
 
 	self assertIsYourTurn: sourceShip in: aCardManager.
-	
+
 	aCardManager addCardToTable:
-		(ActiveCard with: self appliedTo: { ship }).
-	
-	aCardManager addToTheCardsStack: self
+		(ActiveCard with: self appliedTo: { ship })
 ]
 
 { #category : #action }

@@ -8,11 +8,10 @@ Class {
 AccelerationCard >> applyEffectToAllShipsOn: aCardManager by: sourceShip [
 
 	self assertIsYourTurn: sourceShip in: aCardManager.
-	
+
 	aCardManager addCardToTable:
 		(ActiveCard with: self appliedTo: aCardManager ships).
-	
-	aCardManager addToTheCardsStack: self
+
 ]
 
 { #category : #asserting }

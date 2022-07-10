@@ -36,8 +36,7 @@ Class {
 		'board',
 		'timesPlayed',
 		'ships',
-		'cardManager',
-		'cardApplicator'
+		'cardManager'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -78,12 +77,6 @@ ZathuraGame >> assertZathuraHasNotBeenPlayed [
 ]
 
 { #category : #accessing }
-ZathuraGame >> cardApplicator [
-
-	^ cardApplicator
-]
-
-{ #category : #accessing }
 ZathuraGame >> checkIfWon: aShip [
 
 	(board hasCrossFinishLine: aShip) ifTrue: [ 
@@ -106,7 +99,6 @@ ZathuraGame >> initializePlayingBy: aCollectionOfShips movedInBoardOf: boardStru
 		               and: aCollectionOfCards
 		               from: self.
 	ships := aCollectionOfShips asOrderedCollection asSequence.
-	cardApplicator := CardApplicator with: cardManager.
 	board := Board
 		         of: boardStructure
 		         withAll: ships
@@ -156,6 +148,30 @@ ZathuraGame >> playTurn [
 ZathuraGame >> rankingOf: aShip [
 
 	^ board rankingOf: aShip.
+]
+
+{ #category : #action }
+ZathuraGame >> throws: aCancellationCard removing: aCard from: sourceShip [
+
+	cardManager throws: aCancellationCard removing: aCard from: sourceShip
+]
+
+{ #category : #action }
+ZathuraGame >> throws: aCard to: destinationShip from: sourceShip [
+
+	cardManager throws: aCard to: destinationShip from: sourceShip
+]
+
+{ #category : #action }
+ZathuraGame >> throws: cancellationCard to: destinationShip removing: aCard from: sourceShip [
+
+	cardManager throws: cancellationCard to: destinationShip removing: aCard from: sourceShip
+]
+
+{ #category : #action }
+ZathuraGame >> throws: aCard toAllShipsFrom: aShip [
+
+	cardManager throws: aCard toAllShipsFrom: aShip
 ]
 
 { #category : #accessing }

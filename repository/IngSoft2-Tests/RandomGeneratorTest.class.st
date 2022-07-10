@@ -4,7 +4,7 @@ Class {
 	#category : #'IngSoft2-Tests'
 }
 
-{ #category : #lockerGeneratorTests }
+{ #category : #'test - lockerGenerator' }
 RandomGeneratorTest >> generateWithTheOrdinaryDistributionACollectionOfLockersOf: quantityOfLockers [
 
 	| probabilityDistribution sequence lockers points |
@@ -31,31 +31,15 @@ RandomGeneratorTest >> generateWithTheOrdinaryDistributionACollectionOfLockersOf
 	^ lockers
 ]
 
-{ #category : #boardDefinitionGeneratorTests }
+{ #category : #'test - boardDefinitionGenerator' }
 RandomGeneratorTest >> testBoardDefinitionGeneratorGeneratesABoardDefinition [
 
-	| boardDefinition probabilityDistribution points sequence |
-	sequence := { 
-		            (Parsec with: 2).
-		            (Parsec with: 4).
-		            (Parsec with: 8) }.
-	points := { 
-		          (PointProbability withX: LockerNoEffect new andY: 40).
-		          (PointProbability withX: AtomicBombEffect new andY: 2).
-		          (PointProbability
-			           withX: (HyperJumpEffect with: sequence)
-			           andY: 8).
-		          (PointProbability
-			           withX: (MoonWalkEffect with: 10)
-			           andY: 10).
-		          (PointProbability withX: SpeedUpEffect new andY: 20).
-		          (PointProbability withX: WormHoleEffect new andY: 20) }.
-	probabilityDistribution := ProbabilityDistribution with: points.
+	| boardDefinition |
 	boardDefinition := BoardDefinition
 		                   with:
-			                   ((RandomGenerator distributedBy:
-				                     probabilityDistribution) 
-				                    generateRandomObjectsWith: 10)
+		                   (self 
+			                    generateWithTheOrdinaryDistributionACollectionOfLockersOf:
+			                    10)
 		                   and: (Parsec with: 100)
 		                   played: 3.
 
@@ -63,7 +47,7 @@ RandomGeneratorTest >> testBoardDefinitionGeneratorGeneratesABoardDefinition [
 	self assert: boardDefinition parsecsPerLocker equals: 0.1
 ]
 
-{ #category : #cardGeneratorTests }
+{ #category : #'test - cardGenerator' }
 RandomGeneratorTest >> testCardGeneratorGeneratesACollectionOfDifferentCardsWithCorrectProportion [
 
 	| probabilityDistribution points typeOfCards aDeck |
@@ -89,30 +73,29 @@ RandomGeneratorTest >> testCardGeneratorGeneratesACollectionOfDifferentCardsWith
 	aDeck := (RandomGenerator distributedBy: probabilityDistribution) 
 		         generateRandomObjectsWith: 100000.
 
-	self assert:
-		((aDeck select: [ :i | i isMemberOf: OverloadCard ]) size
+	self assert: ((aDeck count: [ :i | i isMemberOf: OverloadCard ])
 			 between: 10000
 			 and: 20000).
-	self assert: ((aDeck select: [ :i | i isMemberOf: SpeedCard ]) size
-			 between: 10000
-			 and: 20000).
-	self assert:
-		((aDeck select: [ :i | i isMemberOf: AccelerationCard ]) size
+	self assert: ((aDeck count: [ :i | i isMemberOf: SpeedCard ])
 			 between: 10000
 			 and: 20000).
 	self assert:
-		((aDeck select: [ :i | i isMemberOf: CancellationCard ]) size
+		((aDeck count: [ :i | i isMemberOf: AccelerationCard ])
 			 between: 10000
 			 and: 20000).
-	self assert: ((aDeck select: [ :i | i isMemberOf: RedoCard ]) size
+	self assert:
+		((aDeck count: [ :i | i isMemberOf: CancellationCard ])
 			 between: 10000
 			 and: 20000).
-	self assert: ((aDeck select: [ :i | i isMemberOf: RepeatCard ]) size
+	self assert: ((aDeck count: [ :i | i isMemberOf: RedoCard ])
+			 between: 10000
+			 and: 20000).
+	self assert: ((aDeck count: [ :i | i isMemberOf: RepeatCard ])
 			 between: 10000
 			 and: 20000)
 ]
 
-{ #category : #lockerGeneratorTests }
+{ #category : #'test - lockerGenerator' }
 RandomGeneratorTest >> testLockerGeneratorGeneratesACollectionOfDifferentLockersWithCorrectProportion [
 
 	| lockers |
@@ -150,7 +133,7 @@ RandomGeneratorTest >> testLockerGeneratorGeneratesACollectionOfDifferentLockers
 			 and: 20000)
 ]
 
-{ #category : #lockerGeneratorTests }
+{ #category : #'test - lockerGenerator' }
 RandomGeneratorTest >> testLockerGeneratorGeneratesACollectionOfLockersWithDifferentInstancesOfEffects [
 
 	| lockers probabilityDistribution |
@@ -163,7 +146,7 @@ RandomGeneratorTest >> testLockerGeneratorGeneratesACollectionOfLockersWithDiffe
 	self deny: (lockers at: 2) identicalTo: (lockers at: 3)
 ]
 
-{ #category : #lockerGeneratorTests }
+{ #category : #'test - lockerGenerator' }
 RandomGeneratorTest >> testLockerGeneratorGeneratesACollectionOfSizeTen [
 
 	| lockers |

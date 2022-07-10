@@ -7,13 +7,11 @@ Class {
 { #category : #action }
 OverloadCard >> applyEffectTo: aShip on: aCardManager by: sourceShip [
 
-	
 	self assertIsYourTurn: sourceShip in: aCardManager.
-	
+
 	aCardManager addCardToTable:
 		(ActiveCard with: self appliedTo: { aShip }).
-		
-	aCardManager addToTheCardsStack: self.
+
 ]
 
 { #category : #action }

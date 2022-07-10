@@ -151,7 +151,8 @@ CardManager >> throws: aCancellationCard removing: aCard from: sourceShip [
 	(self cardHandOf: sourceShip)
 		throw: aCancellationCard
 		removingToAll: aCard
-		on: self
+		on: self.
+	thrownCardsStack add: aCard
 ]
 
 { #category : #throwing }
@@ -159,7 +160,8 @@ CardManager >> throws: aCard to: destinationShip from: sourceShip [
 
 	| cardHand |
 	cardHand := self cardHandOf: sourceShip.
-	cardHand throw: aCard to: destinationShip on: self
+	cardHand throw: aCard to: destinationShip on: self.
+	thrownCardsStack add: aCard
 ]
 
 { #category : #throwing }
@@ -169,7 +171,8 @@ CardManager >> throws: cancellationCard to: destinationShip removing: aCard from
 		throw: cancellationCard
 		to: destinationShip
 		removing: aCard
-		on: self
+		on: self.
+	thrownCardsStack add: aCard
 ]
 
 { #category : #throwing }
@@ -177,5 +180,6 @@ CardManager >> throws: aCard toAllShipsFrom: aShip [
 
 	| cardHand |
 	cardHand := self cardHandOf: aShip.
-	cardHand throw: aCard toAllShipsOn: self
+	cardHand throw: aCard toAllShipsOn: self.
+	thrownCardsStack add: aCard
 ]

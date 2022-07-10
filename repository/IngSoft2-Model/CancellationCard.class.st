@@ -8,6 +8,5 @@ Class {
 CancellationCard >> applyEffectTo: aShip removing: aCard on: aCardManager [
 
 	aCardManager removeFromCardsOnTable:
-		(ActiveCard with: aCard appliedTo: aShip).
-	aCardManager addToTheCardsStack: self
+		(ActiveCard with: aCard appliedTo: aShip)
 ]
