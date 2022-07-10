@@ -174,6 +174,12 @@ ZathuraGame >> throws: aCard toAllShipsFrom: aShip [
 	cardManager throws: aCard toAllShipsFrom: aShip
 ]
 
+{ #category : #action }
+ZathuraGame >> throwsRepeat: aCard to: destinationShip from: sourceShip [
+
+	cardManager throwsRepeat: aCard to: destinationShip from: sourceShip
+]
+
 { #category : #accessing }
 ZathuraGame >> winner [
 

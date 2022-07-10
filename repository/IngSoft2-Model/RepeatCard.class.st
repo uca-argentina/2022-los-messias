@@ -5,7 +5,13 @@ Class {
 }
 
 { #category : #actions }
+RepeatCard >> accept: aCardManager [
+
+	^ [:aShip | aCardManager applyLastEffectOn: aShip ]
+]
+
+{ #category : #actions }
 RepeatCard >> applyEffectTo: aShip on: aCardManager by: sourceShip [
 
-	aCardManager applyLastEffectOn: aShip
+	^[aCardManager applyLastEffectOn: aShip]
 ]

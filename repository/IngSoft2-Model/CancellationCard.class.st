@@ -5,8 +5,9 @@ Class {
 }
 
 { #category : #action }
-CancellationCard >> applyEffectTo: aShip removing: aCard on: aCardManager [
+CancellationCard >> accept: aCardManager [
 
+	^[ :aCard :aShip | 
 	aCardManager removeFromCardsOnTable:
-		(ActiveCard with: aCard appliedTo: aShip)
+		(ActiveCard with: aCard appliedTo: aShip) ]
 ]

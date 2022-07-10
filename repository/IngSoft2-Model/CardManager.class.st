@@ -38,6 +38,23 @@ CardManager >> addTheNextCardToHandCardOf: aShip [
 	cardHand add: (self giveCard )
 ]
 
+{ #category : #'as yet unclassified' }
+CardManager >> applyEffectOf: aCard to: aShip thrownBy: sourceShip [
+
+	self assertIsYourTurn: sourceShip in: self.
+
+	self addCardToTable:
+		(ActiveCard with: aCard appliedTo: { aShip })
+]
+
+{ #category : #applyCardEffects }
+CardManager >> applyEffectOf: aCard toAllShipsThrownBy: sourceShip [ 
+
+	self assertIsYourTurn: sourceShip in: self.
+
+	self addCardToTable: (ActiveCard with: aCard appliedTo: self ships)
+]
+
 { #category : #resendingToZathura }
 CardManager >> applyLastEffectOn: aShip [
 
@@ -56,6 +73,13 @@ CardManager >> assertCardHasBeenThrown [
 CardManager >> assertIsOnTable: aCard [
 
 	aCard ifEmpty: [ Error signal: 'This card is not active in the table' ]
+]
+
+{ #category : #asserting }
+CardManager >> assertIsYourTurn: aShip in: aCardManager [
+
+	(aCardManager isTurnOf: aShip) ifFalse: [ 
+		Error signal: 'Permanent cards can only be used when its your turn' ]
 ]
 
 { #category : #private }
@@ -142,38 +166,53 @@ CardManager >> ships [
 { #category : #throwing }
 CardManager >> throws: aCancellationCard removing: aCard from: sourceShip [
 
-	(self cardHandOf: sourceShip)
-		throw: aCancellationCard
-		removingToAll: aCard
-		on: self.
+	| cardHand bloque |
+	cardHand := self cardHandOf: sourceShip.
+	cardHand assertCardIsInHand: aCard.
+	bloque := aCard accept: self.
+	bloque value: aCard.
 	thrownCardsStack add: aCancellationCard
 ]
 
 { #category : #throwing }
-CardManager >> throws: aCard to: destinationShip from: sourceShip [
+CardManager >> throws: aCard to: aShip from: sourceShip [
 
-	| cardHand |
+	| cardHand bloque | 
 	cardHand := self cardHandOf: sourceShip.
-	cardHand throw: aCard to: destinationShip on: self.
+	cardHand assertCardIsInHand: aCard.
+	bloque := aCard accept: self.
+	bloque value: aCard value: aShip value: sourceShip.
 	thrownCardsStack add: aCard
 ]
 
 { #category : #throwing }
 CardManager >> throws: cancellationCard to: destinationShip removing: aCard from: sourceShip [
-
-	(self cardHandOf: sourceShip)
-		throw: cancellationCard
-		to: destinationShip
-		removing: aCard
-		on: self.
-	thrownCardsStack add: cancellationCard
+	| cardHand bloque |
+	cardHand := self cardHandOf: sourceShip.
+	cardHand assertCardIsInHand: aCard.
+	bloque := aCard accept: self.
+	bloque value: aCard value: destinationShip.
+	thrownCardsStack add: cancellationCard.
 ]
 
 { #category : #throwing }
 CardManager >> throws: aCard toAllShipsFrom: aShip [
 
-	| cardHand |
+	| cardHand bloque |
 	cardHand := self cardHandOf: aShip.
-	cardHand throw: aCard toAllShipsOn: self.
+	cardHand assertCardIsInHand: aCard.
+	bloque := aCard accept: self.
+	bloque value: aCard value: aShip.
+	thrownCardsStack add: aCard
+]
+
+{ #category : #throwing }
+CardManager >> throwsRepeat: aCard to: aShip from: sourceShip [
+
+	| cardHand bloque |
+	cardHand := self cardHandOf: sourceShip.
+	cardHand assertCardIsInHand: aCard.
+	bloque := aCard accept: self.
+	bloque value: aShip.
 	thrownCardsStack add: aCard
 ]

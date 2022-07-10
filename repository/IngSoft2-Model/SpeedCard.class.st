@@ -4,13 +4,11 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #action }
-SpeedCard >> applyEffectTo: ship on: aCardManager by: sourceShip [
+{ #category : #visiting }
+SpeedCard >> accept: aCardManager [
 
-	self assertIsYourTurn: sourceShip in: aCardManager.
-
-	aCardManager addCardToTable:
-		(ActiveCard with: self appliedTo: { ship })
+	^ [ :aCard :aShip :sourceShip | 
+	  aCardManager applyEffectOf: aCard to: aShip thrownBy: sourceShip ]
 ]
 
 { #category : #action }

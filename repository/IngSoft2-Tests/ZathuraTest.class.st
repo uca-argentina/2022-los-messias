@@ -1475,7 +1475,7 @@ ZathuraTest >> testZathuraKnowsTheRankingOfAShip [
 { #category : #'test - repeatCard' }
 ZathuraTest >> testZathuraRedShipThrowsRepeatCardToBlueShip [
 
-	| zathura aDie cardManager |
+	| zathura aDie |
 	aDie := LoadedDie with: 2.
 	zathura := ZathuraGame
 		           playBy: { 'BlueShip'. 'RedShip' }
@@ -1502,7 +1502,7 @@ ZathuraTest >> testZathuraRedShipThrowsRepeatCardToBlueShip [
 		with: 0
 		in: zathura.
 
-	zathura throws: RepeatCard new to: 'RedShip' from: 'RedShip'.
+	zathura throwsRepeat: RepeatCard new to: 'RedShip' from: 'RedShip'.
 
 	self
 		assert: 'RedShip'
@@ -1545,7 +1545,7 @@ ZathuraTest >> testZathuraRedShipThrowsRepeatCardToHimselfWhenTheLastLockerWasAN
 		with: 0
 		in: zathura.
 
-	zathura throws: RepeatCard new to: 'RedShip' from: 'RedShip'.
+	zathura throwsRepeat: RepeatCard new to: 'RedShip' from: 'RedShip'.
 
 	self
 		assert: 'RedShip'

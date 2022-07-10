@@ -45,36 +45,3 @@ CardHand >> remove: aCard [
 CardHand >> ship [
 	^ ship
 ]
-
-{ #category : #throwing }
-CardHand >> throw: aCancelationCard removingToAll: aCard on: aCardManager [
-
-	aCancelationCard
-		applyEffectTo: aCardManager ships
-		removing: aCard
-		on: aCardManager.
-	self remove: aCancelationCard
-]
-
-{ #category : #throwing }
-CardHand >> throw: aCard to: aShip on: aCardManager [
-
-	self assertCardIsInHand: aCard.
-	aCard applyEffectTo: aShip on: aCardManager by: self ship.
-	self remove: aCard
-]
-
-{ #category : #throwing }
-CardHand >> throw: cancellationCard to: aShip removing: aCard on: aCardManager [
-
-	cancellationCard applyEffectTo: {aShip} removing: aCard on: aCardManager.
-	self remove: cancellationCard
-]
-
-{ #category : #throwing }
-CardHand >> throw: card toAllShipsOn: aCardManager [
-
-	self assertCardIsInHand: card.
-	card applyEffectToAllShipsOn: aCardManager by: self ship.
-	self remove: card
-]

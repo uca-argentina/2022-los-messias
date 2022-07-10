@@ -4,6 +4,12 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
+{ #category : #visiting }
+AccelerationCard >> accept: aCardManager [
+
+	^ [:aCard :sourceShip | aCardManager applyEffectOf: aCard toAllShipsThrownBy: sourceShip ]
+]
+
 { #category : #action }
 AccelerationCard >> applyEffectToAllShipsOn: aCardManager by: sourceShip [
 

@@ -4,6 +4,13 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
+{ #category : #visiting }
+OverloadCard >> accept: aCardManager [
+
+	^ [ :aCard :aShip :sourceShip | 
+	  aCardManager applyEffectOf: aCard to: aShip thrownBy: sourceShip]
+]
+
 { #category : #action }
 OverloadCard >> applyEffectTo: aShip on: aCardManager by: sourceShip [
 
