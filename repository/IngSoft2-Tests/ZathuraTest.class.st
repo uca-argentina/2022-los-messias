@@ -352,10 +352,12 @@ ZathuraTest >> testBlueShipThrowsARedoCardToRepeatAnotherRedoCardThrownToASpeedC
 	zathura playTurn.
 	zathura throws: RedoCard new to: 'GreenShip' from: 'GreenShip'.
 	zathura playTurn.
+	zathura throws: RedoCard new to: 'BlueShip' from: 'BlueShip'.
+	zathura playTurn.
 
 	self
 		assert: 'BlueShip'
-		isAt: 8
+		isAt: 17
 		with: 0
 		in: zathura.
 	self

@@ -38,12 +38,6 @@ CardManager >> addTheNextCardToHandCardOf: aShip [
 	cardHand add: (self giveCard )
 ]
 
-{ #category : #adding }
-CardManager >> addToTheCardsStack: aCard [
-
-	thrownCardsStack add: aCard
-]
-
 { #category : #resendingToZathura }
 CardManager >> applyLastEffectOn: aShip [
 
@@ -152,7 +146,7 @@ CardManager >> throws: aCancellationCard removing: aCard from: sourceShip [
 		throw: aCancellationCard
 		removingToAll: aCard
 		on: self.
-	thrownCardsStack add: aCard
+	thrownCardsStack add: aCancellationCard
 ]
 
 { #category : #throwing }
@@ -172,7 +166,7 @@ CardManager >> throws: cancellationCard to: destinationShip removing: aCard from
 		to: destinationShip
 		removing: aCard
 		on: self.
-	thrownCardsStack add: aCard
+	thrownCardsStack add: cancellationCard
 ]
 
 { #category : #throwing }
