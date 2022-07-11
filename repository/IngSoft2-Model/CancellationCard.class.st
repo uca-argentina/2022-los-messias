@@ -7,7 +7,8 @@ Class {
 { #category : #action }
 CancellationCard >> accept: aCardManager [
 
-	^[ :aCard :aShip | 
-	aCardManager removeFromCardsOnTable:
-		(ActiveCard with: aCard appliedTo: aShip) ]
+	^ [ :aCard :aShip | 
+	  aCardManager removeFromCardsOnTable:
+		  (ActiveCard with: aCard appliedTo: aShip) ]
+
 ]

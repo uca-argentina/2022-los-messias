@@ -43,8 +43,7 @@ CardManager >> applyEffectOf: aCard to: aShip thrownBy: sourceShip [
 
 	self assertIsYourTurn: sourceShip in: self.
 
-	self addCardToTable:
-		(ActiveCard with: aCard appliedTo: { aShip })
+	self addCardToTable: (ActiveCard with: aCard appliedTo: {aShip} )
 ]
 
 { #category : #applyCardEffects }
@@ -169,8 +168,8 @@ CardManager >> throws: aCancellationCard removing: aCard from: sourceShip [
 	| cardHand bloque |
 	cardHand := self cardHandOf: sourceShip.
 	cardHand assertCardIsInHand: aCard.
-	bloque := aCard accept: self.
-	bloque value: aCard.
+	bloque := aCancellationCard accept: self.
+	bloque value: aCard value:  self ships.
 	thrownCardsStack add: aCancellationCard
 ]
 
@@ -187,12 +186,13 @@ CardManager >> throws: aCard to: aShip from: sourceShip [
 
 { #category : #throwing }
 CardManager >> throws: cancellationCard to: destinationShip removing: aCard from: sourceShip [
+
 	| cardHand bloque |
 	cardHand := self cardHandOf: sourceShip.
-	cardHand assertCardIsInHand: aCard.
-	bloque := aCard accept: self.
-	bloque value: aCard value: destinationShip.
-	thrownCardsStack add: cancellationCard.
+	cardHand assertCardIsInHand: cancellationCard.
+	bloque := cancellationCard accept: self.
+	bloque value: aCard value: {destinationShip}.
+	thrownCardsStack add: cancellationCard
 ]
 
 { #category : #throwing }
