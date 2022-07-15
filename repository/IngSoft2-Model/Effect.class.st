@@ -26,6 +26,12 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
+{ #category : #comparing }
+Effect >> = aLockerEffect [
+
+	^ self class = aLockerEffect class
+]
+
 { #category : #action }
 Effect >> applyFor: aShip on: aBoard [
 

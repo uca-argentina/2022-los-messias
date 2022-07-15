@@ -21,8 +21,8 @@ CardHand >> add: aCard [
 { #category : #asserting }
 CardHand >> assertCardIsInHand: aCard [
 
-	(handOfCards anySatisfy: [ :card | aCard isKindOf: card class ]) ifFalse: [ 
-		Error signal: 'Card is not in Hand' ]
+	(handOfCards anySatisfy: [ :card | aCard = card ]) 
+		ifFalse: [ Error signal: 'Card is not in Hand' ]
 ]
 
 { #category : #initalization }
@@ -34,11 +34,10 @@ CardHand >> initializeCardHandOf: aShip with: cards [
 { #category : #private }
 CardHand >> remove: aCard [
 
-	| theCard |
-	theCard := 0.
-	handOfCards do: [ :card | (card isKindOf: aCard class)
-		 ifTrue: [ theCard := card ] ].
-	handOfCards remove: theCard
+	| cards |
+	self assertCardIsInHand: aCard.
+	cards := handOfCards do: [ :card | card = aCard ].
+	handOfCards remove: cards first
 ]
 
 { #category : #'accessing - attributes' }

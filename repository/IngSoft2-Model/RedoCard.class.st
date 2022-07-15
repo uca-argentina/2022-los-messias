@@ -1,31 +1,17 @@
 Class {
 	#name : #RedoCard,
-	#superclass : #Object,
+	#superclass : #Card,
 	#instVars : [
 		'cardRepeated'
 	],
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #action }
-RedoCard >> applyEffectTo: aShip on: aCardManager by: sourceShip [
+{ #category : #visiting }
+RedoCard >> accept: aCardManager [
 
 	self fetchCardToRedoFrom: aCardManager.
-	cardRepeated applyEffectTo: aShip on: aCardManager by: sourceShip
-]
-
-{ #category : #action }
-RedoCard >> applyEffectTo: aShip removing: card on: aCardManager [
-
-	self fetchCardToRedoFrom: aCardManager.
-	cardRepeated applyEffectTo: aShip removing: card on: aCardManager
-]
-
-{ #category : #action }
-RedoCard >> applyEffectToAllShipsOn: aCardManager by: sourceShip [
-
-	self fetchCardToRedoFrom: aCardManager.
-	cardRepeated applyEffectToAllShipsOn: aCardManager by: sourceShip
+	^ cardRepeated accept: aCardManager
 ]
 
 { #category : #accessing }

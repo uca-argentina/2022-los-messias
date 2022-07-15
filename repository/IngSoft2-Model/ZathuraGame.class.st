@@ -111,7 +111,7 @@ ZathuraGame >> initializePlayingBy: aCollectionOfShips movedInBoardOf: boardStru
 { #category : #accessing }
 ZathuraGame >> isTurnOf: aShip [
 
-	^ ((ships first) == aShip)
+	^ ((ships first) = aShip)
 ]
 
 { #category : #positioning }
@@ -153,25 +153,36 @@ ZathuraGame >> rankingOf: aShip [
 { #category : #action }
 ZathuraGame >> throws: aCancellationCard removing: aCard from: sourceShip [
 
-	cardManager throws: aCancellationCard removing: aCard from: sourceShip
+	self throws: aCancellationCard to: ships removing: aCard from: sourceShip
+
 ]
 
 { #category : #action }
 ZathuraGame >> throws: aCard to: destinationShip from: sourceShip [
-
-	cardManager throws: aCard to: destinationShip from: sourceShip
+	| newDestinationShip |
+	newDestinationShip := destinationShip.
+	(destinationShip isString) ifTrue: [newDestinationShip := { destinationShip }].
+	cardManager throws: aCard to: newDestinationShip from: sourceShip
 ]
 
 { #category : #action }
 ZathuraGame >> throws: cancellationCard to: destinationShip removing: aCard from: sourceShip [
 
-	cardManager throws: cancellationCard to: destinationShip removing: aCard from: sourceShip
+	| newDestinationShip |
+	newDestinationShip := destinationShip.
+	destinationShip isString ifTrue: [ 
+		newDestinationShip := { destinationShip } ].
+	cardManager
+		throws: cancellationCard
+		to: newDestinationShip
+		removing: aCard
+		from: sourceShip
 ]
 
 { #category : #action }
-ZathuraGame >> throws: aCard toAllShipsFrom: aShip [
+ZathuraGame >> throws: aCard toAllShipsFrom: sourceShip [
 
-	cardManager throws: aCard toAllShipsFrom: aShip
+	self throws: aCard to: ships from: sourceShip
 ]
 
 { #category : #action }

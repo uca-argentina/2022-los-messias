@@ -7,28 +7,12 @@ Class {
 { #category : #tests }
 ZathuraFunctionalTest >> boardDefinitionWithRandomEffects [
 
-	| boardDefinition probabilityDistribution points sequence |
-	sequence := { 
-		            (Parsec with: 2).
-		            (Parsec with: 4).
-		            (Parsec with: 8) }.
-	points := { 
-		          (PointProbability withX: LockerNoEffect new andY: 30).
-		          (PointProbability withX: AtomicBombEffect new andY: 2).
-		          (PointProbability
-			           withX: (HyperJumpEffect with: sequence)
-			           andY: 8).
-		          (PointProbability
-			           withX: (MoonWalkEffect with: 10)
-			           andY: 10).
-		          (PointProbability withX: SpeedUpEffect new andY: 20).
-		          (PointProbability withX: WormHoleEffect new andY: 20).
-		          (PointProbability withX: CardEffect new andY: 10) }.
-
-	probabilityDistribution := ProbabilityDistribution with: points.
-	boardDefinition := BoardDefinition with:
-		                    ((RandomGenerator distributedBy:
-			                     probabilityDistribution) generateRandomObjectsWith: 10)
+	| boardDefinition lockers |
+	lockers := (RandomGeneratorTest new)
+		           generateWithTheOrdinaryDistributionACollectionOfLockersOf:
+		           10.
+	boardDefinition := BoardDefinition
+		                   with: lockers
 		                   and: (Parsec with: 50)
 		                   played: 3.
 	^ boardDefinition

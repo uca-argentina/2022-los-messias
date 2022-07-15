@@ -1,6 +1,6 @@
 Class {
 	#name : #RepeatCard,
-	#superclass : #Object,
+	#superclass : #Card,
 	#category : #'IngSoft2-Model'
 }
 
@@ -8,10 +8,4 @@ Class {
 RepeatCard >> accept: aCardManager [
 
 	^ [:aShip | aCardManager applyLastEffectOn: aShip ]
-]
-
-{ #category : #actions }
-RepeatCard >> applyEffectTo: aShip on: aCardManager by: sourceShip [
-
-	^[aCardManager applyLastEffectOn: aShip]
 ]

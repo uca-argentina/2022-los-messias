@@ -287,8 +287,8 @@ ZathuraTest >> testBlueShipThrowsARedoCardAfterARepeatCardHasBeenPlayed [
 
 	zathura playTurn.
 
-	zathura throws: RepeatCard new to: 'BlueShip' from: 'BlueShip'.
-	zathura throws: RedoCard new to: 'GreenShip' from: 'GreenShip'.
+	zathura throwsRepeat: RepeatCard new to: 'BlueShip' from: 'BlueShip'.
+	zathura throwsRepeat: RedoCard new to: 'GreenShip' from: 'GreenShip'.
 
 	self
 		assert: 'GreenShip'
