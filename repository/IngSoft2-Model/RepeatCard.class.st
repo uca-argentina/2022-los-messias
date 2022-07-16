@@ -7,5 +7,11 @@ Class {
 { #category : #actions }
 RepeatCard >> accept: aCardManager [
 
-	^ [:aShip | aCardManager applyLastEffectOn: aShip ]
+	^ [ :aCollectionOfShip | aCardManager applyLastEffectOn: aCollectionOfShip first ]
+]
+
+{ #category : #initialization }
+RepeatCard >> initialize [
+
+	typeOfCard := Instant new
 ]

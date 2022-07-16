@@ -14,3 +14,9 @@ SpeedCard >> accept: aCardManager [
 SpeedCard >> changeOfRoll [
 	^1
 ]
+
+{ #category : #initialization }
+SpeedCard >> initialize [
+
+	typeOfCard := Permanent new
+]

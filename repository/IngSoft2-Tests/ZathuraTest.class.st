@@ -73,9 +73,8 @@ ZathuraTest >> testBlueShipCantThrowCancellationCardIfNoCardsHaveBeenPlayed [
 	self
 		should: [ 
 			zathura
-				throws: CancellationCard new
+				throws: (CancellationCard withRemoving: OverloadCard new)
 				to: 'RedShip'
-				removing: OverloadCard new
 				from: 'BlueShip' ]
 		raise: Error
 		withMessage: 'This card is not active in the table'
@@ -103,9 +102,8 @@ ZathuraTest >> testBlueShipCantThrowCancellationCardToOverloadCardIfNoOverloadCa
 	self
 		should: [ 
 			zathura
-				throws: CancellationCard new
+				throws: (CancellationCard withRemoving: OverloadCard new)
 				to: 'RedShip'
-				removing: OverloadCard new
 				from: 'BlueShip' ]
 		raise: Error
 		withMessage: 'This card is not active in the table'
@@ -287,8 +285,8 @@ ZathuraTest >> testBlueShipThrowsARedoCardAfterARepeatCardHasBeenPlayed [
 
 	zathura playTurn.
 
-	zathura throwsRepeat: RepeatCard new to: 'BlueShip' from: 'BlueShip'.
-	zathura throwsRepeat: RedoCard new to: 'GreenShip' from: 'GreenShip'.
+	zathura throws: RepeatCard new to: 'BlueShip' from: 'BlueShip'.
+	zathura throws: RedoCard new to: 'GreenShip' from: 'GreenShip'.
 
 	self
 		assert: 'GreenShip'
@@ -435,9 +433,8 @@ ZathuraTest >> testBlueShipThrowsAnAccelerationCardAndAfterTwoRoundsThrowsACance
 		assert: 'BlueShip' isAtLocker: 16 in: zathura;
 		assert: 'RedShip' isAtLocker: 16 in: zathura.
 	zathura
-		throws: CancellationCard new
-		removing: AccelerationCard new
-		from: 'BlueShip'.
+		throws: (CancellationCard withRemoving: AccelerationCard new)
+		toAllShipsFrom: 'BlueShip'.
 	zathura
 		playTurn;
 		playTurn.
@@ -593,7 +590,7 @@ ZathuraTest >> testBlueShipThrowsAnOverloadCardToRedShipAndRedShipMovesBackwards
 { #category : #'test - overloadCard' }
 ZathuraTest >> testBlueShipThrowsAnOverloadCardToRedShipAndRedShipMovesRolledNumberMinusTwoAllGame [
 
-	| diceCup zathura cardManager |
+	| diceCup zathura |
 	diceCup := DiceCup withAll: { 
 			           (LoadedDie with: 3).
 			           (LoadedDie with: 4) }.
@@ -647,9 +644,8 @@ ZathuraTest >> testBlueShipThrowsAnOverloadCardToRedShipThenRedShipsThrowsACance
 		assert: 'BlueShip' isAtLocker: 7 in: zathura;
 		assert: 'RedShip' isAtLocker: 5 in: zathura.
 	zathura
-		throws: CancellationCard new
+		throws: (CancellationCard withRemoving: OverloadCard new)
 		to: 'RedShip'
-		removing: OverloadCard new
 		from: 'RedShip'.
 	zathura
 		playTurn;
@@ -685,9 +681,8 @@ ZathuraTest >> testBlueShipThrowsAnOverloadsCardsToRedShipAndGreenShipThrowsACan
 	zathura throws: OverloadCard new to: 'RedShip' from: 'BlueShip'.
 
 	zathura
-		throws: CancellationCard new
+		throws: (CancellationCard withRemoving: OverloadCard new)
 		to: 'RedShip'
-		removing: OverloadCard new
 		from: 'GreenShip'.
 
 	self
@@ -695,7 +690,6 @@ ZathuraTest >> testBlueShipThrowsAnOverloadsCardsToRedShipAndGreenShipThrowsACan
 			zathura
 				throws: RedoCard new
 				to: 'RedShip'
-				removing: OverloadCard new
 				from: 'GreenShip' ]
 		raise: Error
 		withMessage: 'This card is not active in the table'
@@ -819,14 +813,12 @@ ZathuraTest >> testBlueShipThrowsTwoOverloadsCardsToRedShipAndGreenShipThrowsACa
 		assert: 'RedShip' isAtLocker: 10 in: zathura.
 	self assert: 'GreenShip' isAtLocker: 14 in: zathura.
 	zathura
-		throws: CancellationCard new
+		throws: (CancellationCard withRemoving: OverloadCard new)
 		to: 'RedShip'
-		removing: OverloadCard new
 		from: 'GreenShip'.
 	zathura
-		throws: RedoCard new
+		throws: (RedoCancellationCard withRemoving: OverloadCard new)
 		to: 'RedShip'
-		removing: OverloadCard new
 		from: 'GreenShip'.
 	zathura
 		playTurn;
@@ -1145,9 +1137,8 @@ ZathuraTest >> testShipCantThrowCancellationCardToCancelACardToTheWrongShip [
 	self
 		should: [ 
 			zathura
-				throws: CancellationCard new
+				throws: (CancellationCard withRemoving: OverloadCard new)
 				to: 'BlueShip'
-				removing: OverloadCard new
 				from: 'RedShip' ]
 		raise: Error
 		withMessage: 'This card is not active in the table'
@@ -1502,7 +1493,7 @@ ZathuraTest >> testZathuraRedShipThrowsRepeatCardToBlueShip [
 		with: 0
 		in: zathura.
 
-	zathura throwsRepeat: RepeatCard new to: 'RedShip' from: 'RedShip'.
+	zathura throws: RepeatCard new to: 'RedShip' from: 'RedShip'.
 
 	self
 		assert: 'RedShip'
@@ -1545,7 +1536,7 @@ ZathuraTest >> testZathuraRedShipThrowsRepeatCardToHimselfWhenTheLastLockerWasAN
 		with: 0
 		in: zathura.
 
-	zathura throwsRepeat: RepeatCard new to: 'RedShip' from: 'RedShip'.
+	zathura throws: RepeatCard new to: 'RedShip' from: 'RedShip'.
 
 	self
 		assert: 'RedShip'

@@ -14,3 +14,9 @@ OverloadCard >> accept: aCardManager [
 OverloadCard >> changeOfRoll [
 	^-2
 ]
+
+{ #category : #initialization }
+OverloadCard >> initialize [
+
+	typeOfCard := Permanent new
+]

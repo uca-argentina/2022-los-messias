@@ -15,3 +15,8 @@ AccelerationCard >> accept: aCardManager [
 AccelerationCard >> changeOfRoll [
 	^1
 ]
+
+{ #category : #accesing }
+AccelerationCard >> initialize [ 
+	typeOfCard := Permanent new
+]

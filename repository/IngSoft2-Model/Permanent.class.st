@@ -10,3 +10,9 @@ Permanent >> applyEffectOf: activeCard on: aCardManager [
 	self assertIsYourTurn: activeCard ship.
 	aCardManager addCardToTable: activeCard
 ]
+
+{ #category : #assertion }
+Permanent >> assertIsValid: sourceShip on: aCardManager [
+
+	aCardManager assertIsYourTurn: sourceShip.
+]

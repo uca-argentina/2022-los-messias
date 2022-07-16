@@ -1,6 +1,9 @@
 Class {
 	#name : #Card,
 	#superclass : #Object,
+	#instVars : [
+		'typeOfCard'
+	],
 	#category : #'IngSoft2-Model'
 }
 
@@ -13,4 +16,10 @@ Card >> = aCard [
 Card >> accept: aCardManager [
 
 	self subclassResponsibility
+]
+
+{ #category : #asserting }
+Card >> assertIsValid: sourceShip on: cardManager [
+
+	^ typeOfCard assertIsValid: sourceShip on: cardManager
 ]

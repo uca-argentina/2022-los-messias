@@ -160,32 +160,7 @@ CardManager >> throws: aCard to: aShip from: sourceShip [
 	cardHand remove: aCard.
 
 	bloque := aCard accept: self.
-
-	self assertIsYourTurn: sourceShip.
-	bloque value: aShip.
-	thrownCardsStack add: aCard
-]
-
-{ #category : #throwing }
-CardManager >> throws: cancellationCard to: destinationShip removing: aCard from: sourceShip [
-
-	| cardHand bloque |
-	cardHand := self cardHandOf: sourceShip.
-	cardHand remove: cancellationCard.
-
-	bloque := cancellationCard accept: self.
-	bloque value: aCard value: destinationShip.
-	thrownCardsStack add: cancellationCard
-]
-
-{ #category : #throwing }
-CardManager >> throwsRepeat: aCard to: aShip from: sourceShip [
-
-	| cardHand bloque |
-	cardHand := self cardHandOf: sourceShip.
-	cardHand remove: aCard.
-
-	bloque := aCard accept: self.
+	aCard assertIsValid: sourceShip on: self.
 	bloque value: aShip.
 	thrownCardsStack add: aCard
 ]
