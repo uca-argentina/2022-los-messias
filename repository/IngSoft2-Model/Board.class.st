@@ -39,7 +39,7 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #initialization }
+{ #category : #'instance creation' }
 Board class >> of: aBoardStructure withAll: aCollectionOfShips andCardManager: aCardManager [
 
 	^ self new

@@ -101,7 +101,7 @@ ZathuraGame >> initializePlayingBy: aCollectionOfShips movedInBoardOf: boardStru
 	ships := aCollectionOfShips asOrderedCollection asSequence.
 	board := Board
 		         of: boardStructure
-		         withAll: ships
+		         withAll: aCollectionOfShips asOrderedCollection
 		         andCardManager: cardManager.
 
 	finished := false.
@@ -195,5 +195,6 @@ ZathuraGame >> throwsRepeat: aCard to: destinationShip from: sourceShip [
 ZathuraGame >> winner [
 
 	self assertZathuraHasFinished.
-	^ (ships select: [ :ship | (self rankingOf: ship) == 1 ]) first
+	^ (ships select: [ :ship | (self rankingOf: ship) == 1 ])
+		  first
 ]
