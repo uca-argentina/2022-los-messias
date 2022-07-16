@@ -13,17 +13,16 @@ CancellationCard class >> withRemoving: aCard [
 	^ self new initializeWithRemoving: aCard
 ]
 
+{ #category : #initialization }
+CancellationCard >> initializeWithRemoving: aCard [
+
+	cardToRemove := aCard
+]
+
 { #category : #action }
-CancellationCard >> accept: aCardManager [
+CancellationCard >> returnsEffectOfCardThrownBy: sourceShip on: aCardManager [
 
 	^ [ :aShip | 
 	  aCardManager removeFromCardsOnTable:
 		  (ActiveCard with: cardToRemove appliedTo: aShip) ]
-]
-
-{ #category : #initialization }
-CancellationCard >> initializeWithRemoving: aCard [
-
-	cardToRemove := aCard.
-	typeOfCard := Instant new
 ]

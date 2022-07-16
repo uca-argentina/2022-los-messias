@@ -38,12 +38,6 @@ CardManager >> addTheNextCardToHandCardOf: aShip [
 	cardHand add: (self giveCard )
 ]
 
-{ #category : #applyCardEffects }
-CardManager >> applyEffectOf: aCard to: aCollectionOfShips [
-
-	self addCardToTable: (ActiveCard with: aCard appliedTo:  aCollectionOfShips )
-]
-
 { #category : #resendingToZathura }
 CardManager >> applyLastEffectOn: aShip [
 
@@ -153,14 +147,13 @@ CardManager >> ships [
 ]
 
 { #category : #throwing }
-CardManager >> throws: aCard to: aShip from: sourceShip [
+CardManager >> throws: aCard to: destinationShip from: sourceShip [
 
 	| cardHand bloque |
 	cardHand := self cardHandOf: sourceShip.
 	cardHand remove: aCard.
 
-	bloque := aCard accept: self.
-	aCard assertIsValid: sourceShip on: self.
-	bloque value: aShip.
+	bloque := aCard returnsEffectOfCardThrownBy: sourceShip on: self.
+	bloque value: destinationShip.
 	thrownCardsStack add: aCard
 ]

@@ -1,9 +1,6 @@
 Class {
 	#name : #Card,
 	#superclass : #Object,
-	#instVars : [
-		'typeOfCard'
-	],
 	#category : #'IngSoft2-Model'
 }
 
@@ -13,13 +10,7 @@ Card >> = aCard [
 ]
 
 { #category : #visiting }
-Card >> accept: aCardManager [
+Card >> returnsEffectOfCardThrownBy: sourceShip on: aCardManager [
 
 	self subclassResponsibility
-]
-
-{ #category : #asserting }
-Card >> assertIsValid: sourceShip on: cardManager [
-
-	^ typeOfCard assertIsValid: sourceShip on: cardManager
 ]

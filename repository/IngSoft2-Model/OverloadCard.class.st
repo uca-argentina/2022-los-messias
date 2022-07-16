@@ -4,19 +4,16 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #visiting }
-OverloadCard >> accept: aCardManager [
-
-	^ [ :aShip | aCardManager applyEffectOf: self to: aShip ]
-]
-
 { #category : #action }
 OverloadCard >> changeOfRoll [
 	^-2
 ]
 
-{ #category : #initialization }
-OverloadCard >> initialize [
+{ #category : #visiting }
+OverloadCard >> returnsEffectOfCardThrownBy: sourceShip on: aCardManager [
 
-	typeOfCard := Permanent new
+	^ PermanentCard new
+		  returnsEffectOf: self
+		  thrownBy: sourceShip
+		  on: aCardManager
 ]

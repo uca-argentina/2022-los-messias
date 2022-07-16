@@ -4,19 +4,16 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #visiting }
-SpeedCard >> accept: aCardManager [
-
-	^ [ :aShip | aCardManager applyEffectOf: self to: aShip ]
-]
-
 { #category : #action }
 SpeedCard >> changeOfRoll [
 	^1
 ]
 
-{ #category : #initialization }
-SpeedCard >> initialize [
+{ #category : #visiting }
+SpeedCard >> returnsEffectOfCardThrownBy: sourceShip on: aCardManager [
 
-	typeOfCard := Permanent new
+	^ PermanentCard new
+		  returnsEffectOf: self
+		  thrownBy: sourceShip
+		  on: aCardManager
 ]

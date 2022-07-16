@@ -14,8 +14,7 @@ RedoCancellationCard class >> withRemoving: aCard [
 ]
 
 { #category : #initialization }
-RedoCancellationCard >> initializeWithRemoving: aCard [ 
-	
+RedoCancellationCard >> initializeWithRemoving: aCard [
+
 	cardToRemove := aCard.
-	typeOfCard := Instant new
 ]

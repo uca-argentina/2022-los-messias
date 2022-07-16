@@ -93,7 +93,9 @@ Board >> correctPositionOfWinner: aShip [
 { #category : #private }
 Board >> giveCardTo: aShip [
 
-	cardManager addTheNextCardToHandCardOf: aShip
+	| cardHand |
+	cardHand := self cardHandOf: aShip.
+	cardHand add: self giveCard
 ]
 
 { #category : #moving }

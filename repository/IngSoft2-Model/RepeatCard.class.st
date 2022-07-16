@@ -5,13 +5,7 @@ Class {
 }
 
 { #category : #actions }
-RepeatCard >> accept: aCardManager [
+RepeatCard >> returnsEffectOfCardThrownBy: sourceShip on: aCardManager [
 
 	^ [ :aCollectionOfShip | aCardManager applyLastEffectOn: aCollectionOfShip first ]
-]
-
-{ #category : #initialization }
-RepeatCard >> initialize [
-
-	typeOfCard := Instant new
 ]

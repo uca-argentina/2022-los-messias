@@ -2,7 +2,7 @@ Class {
 	#name : #RedoCard,
 	#superclass : #Card,
 	#instVars : [
-		'cardRepeated'
+		'cardToRedo'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -13,22 +13,10 @@ RedoCard >> = aCard [
 	^ (aCard class == RedoCancellationCard) or: (self class = aCard class)
 ]
 
-{ #category : #visiting }
-RedoCard >> accept: aCardManager [
-
-	self fetchCardToRedoFrom: aCardManager.
-	^ cardRepeated accept: aCardManager
-]
-
-{ #category : #action }
-RedoCard >> assertIsValid: sourceShip on: cardManager [
-
-	cardRepeated assertIsValid: sourceShip on: cardManager
-]
-
 { #category : #accessing }
-RedoCard >> cardRepeated [
-	^cardRepeated 
+RedoCard >> cardToRedo [ 
+
+	^ cardToRedo 
 ]
 
 { #category : #action }
@@ -36,6 +24,14 @@ RedoCard >> fetchCardToRedoFrom: aCardManager [
 
 	| aCard |
 	aCard := aCardManager lastCardThrownOnTheGame.
-	(aCard = self) ifTrue: [ aCard := aCard cardRepeated ].
-	cardRepeated := aCard
+	aCard = self ifTrue: [ aCard := aCard cardToRedo ].
+	cardToRedo := aCard
+]
+
+{ #category : #visiting }
+RedoCard >> returnsEffectOfCardThrownBy: sourceShip on: aCardManager [
+
+	| aCard |
+	aCard := self fetchCardToRedoFrom: aCardManager.
+	^ aCard returnsEffectOfCardThrownBy: sourceShip on: aCardManager
 ]
