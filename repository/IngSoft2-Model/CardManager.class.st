@@ -136,13 +136,14 @@ CardManager >> ships [
 ]
 
 { #category : #throwing }
-CardManager >> throws: aCard to: destinationShip from: sourceShip [
+CardManager >> throws: aCard to: destinationShip [
 
-	| cardHand effectOfCard |
+	| cardHand effectOfCard sourceShip |
+	sourceShip := aCard sourceShip.
 	cardHand := self cardHandOf: sourceShip.
 	cardHand remove: aCard.
 
-	effectOfCard := aCard returnsEffectOfCardThrownBy: sourceShip on: self.
+	effectOfCard := aCard effectOn: self.
 	effectOfCard value: destinationShip.
 	thrownCardsStack add: aCard
 ]

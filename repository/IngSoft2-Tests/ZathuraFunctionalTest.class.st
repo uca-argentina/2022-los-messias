@@ -39,29 +39,6 @@ ZathuraFunctionalTest >> testZathuraAfterBeingPlayedHasOnlyOneWinnerOfTheShips [
 ]
 
 { #category : #tests }
-ZathuraFunctionalTest >> testZathuraIsPlayedWithGeneratedLockers [
-
-	| zathura die ships |
-	die := DiceCup withAll: { 
-			       (RandomDie with: 6).
-			       (RandomDie with: 8).
-			       (RandomDie with: 3) }.
-	ships := OrderedCollection
-		         with: 'BlueShip'
-		         with: 'RedShip'
-		         with: 'GreenShip'.
-
-	zathura := ZathuraGame
-		           playBy: ships
-		           movedInBoardOf: self boardDefinitionWithRandomEffects
-		           rolling: die
-		           withCards: { OverloadCard new }.
-
-	zathura play.
-	self assert: zathura hasFinished
-]
-
-{ #category : #tests }
 ZathuraFunctionalTest >> testZathuraIsPlayedWithRandomDiceOfSixFacesAndABoardWithRandomEffectDistribution [
 
 	| zathura die |
@@ -71,6 +48,31 @@ ZathuraFunctionalTest >> testZathuraIsPlayedWithRandomDiceOfSixFacesAndABoardWit
 		           movedInBoardOf: self boardDefinitionWithRandomEffects
 		           rolling: die
 		           withCards: { OverloadCard new }.
+	zathura play.
+	self assert: zathura hasFinished
+]
+
+{ #category : #tests }
+ZathuraFunctionalTest >> testZathuraIsPlayedWithRandomGeneratedLockersAndCards [
+
+	| zathura die ships deck |
+	die := DiceCup withAll: { 
+			       (RandomDie with: 6).
+			       (RandomDie with: 8).
+			       (RandomDie with: 3) }.
+	ships := OrderedCollection
+		         with: 'BlueShip'
+		         with: 'RedShip'
+		         with: 'GreenShip'.
+
+	deck := (RandomGeneratorTest new) generateWithTheOrdinaryDistributionADeckOf: 50.
+
+	zathura := ZathuraGame
+		           playBy: ships
+		           movedInBoardOf: self boardDefinitionWithRandomEffects
+		           rolling: die
+		           withCards: deck.
+
 	zathura play.
 	self assert: zathura hasFinished
 ]

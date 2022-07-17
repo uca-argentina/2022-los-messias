@@ -4,8 +4,20 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
+{ #category : #'instance creation' }
+RepeatCard class >> thrownBy: sourceShip [ 
+	
+	^self new initializeThrownBy: sourceShip
+]
+
 { #category : #actions }
-RepeatCard >> returnsEffectOfCardThrownBy: sourceShip on: aCardManager [
+RepeatCard >> effectOn: aCardManager [
 
 	^ [ :aCollectionOfShip | aCardManager applyLastEffectOn: aCollectionOfShip first ]
+]
+
+{ #category : #initialization }
+RepeatCard >> initializeThrownBy: aSourceShip [  
+	
+	sourceShip := aSourceShip
 ]

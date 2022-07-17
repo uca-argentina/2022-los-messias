@@ -7,6 +7,12 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
+{ #category : #'instance creation' }
+RedoCard class >> thrownBy: aSourceShip [
+
+	^self new initializeThrownBy: aSourceShip
+]
+
 { #category : #comparing }
 RedoCard >> = aCard [
 
@@ -20,17 +26,24 @@ RedoCard >> cardToRedo [
 ]
 
 { #category : #action }
+RedoCard >> effectOn: aCardManager [
+
+	self fetchCardToRedoFrom: aCardManager.
+	^ cardToRedo effectOn: aCardManager
+]
+
+{ #category : #action }
 RedoCard >> fetchCardToRedoFrom: aCardManager [
 
 	| aCard |
 	aCard := aCardManager lastCardThrownOnTheGame.
 	aCard = self ifTrue: [ aCard := aCard cardToRedo ].
-	cardToRedo := aCard
+	
+	cardToRedo := (aCard class) thrownBy: sourceShip 
 ]
 
-{ #category : #action }
-RedoCard >> returnsEffectOfCardThrownBy: sourceShip on: aCardManager [
+{ #category : #initialization }
+RedoCard >> initializeThrownBy: aSourceShip [
 
-	self fetchCardToRedoFrom: aCardManager.
-	^ cardToRedo returnsEffectOfCardThrownBy: sourceShip on: aCardManager
+	sourceShip := aSourceShip
 ]

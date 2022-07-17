@@ -8,9 +8,17 @@ Class {
 }
 
 { #category : #'instance creation' }
-CancellationCard class >> withRemoving: aCard [
+CancellationCard class >> withRemoving: aCard thrownBy: sourceShip [ 
+	
+	^ self new initializeWithRemoving: aCard thrownBy: sourceShip
+]
 
-	^ self new initializeWithRemoving: aCard
+{ #category : #action }
+CancellationCard >> effectOn: aCardManager [
+
+	^ [ :aShip | 
+	  aCardManager removeFromCardsOnTable:
+		  (ActiveCard with: cardToRemove appliedTo: aShip) ]
 ]
 
 { #category : #initialization }
@@ -19,10 +27,9 @@ CancellationCard >> initializeWithRemoving: aCard [
 	cardToRemove := aCard
 ]
 
-{ #category : #action }
-CancellationCard >> returnsEffectOfCardThrownBy: sourceShip on: aCardManager [
-
-	^ [ :aShip | 
-	  aCardManager removeFromCardsOnTable:
-		  (ActiveCard with: cardToRemove appliedTo: aShip) ]
+{ #category : #initialization }
+CancellationCard >> initializeWithRemoving: aCard thrownBy: aSourceShip [  
+	
+	sourceShip := aSourceShip.
+	cardToRemove := aCard
 ]

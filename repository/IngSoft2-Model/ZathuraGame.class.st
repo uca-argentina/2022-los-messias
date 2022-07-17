@@ -151,17 +151,17 @@ ZathuraGame >> rankingOf: aShip [
 ]
 
 { #category : #action }
-ZathuraGame >> throws: aCard to: destinationShip from: sourceShip [
+ZathuraGame >> throws: aCard to: destinationShip [
 
 	| newDestinationShip |
 	newDestinationShip := destinationShip asArray.
-	cardManager throws: aCard to: newDestinationShip from: sourceShip
+	cardManager throws: aCard to: newDestinationShip
 ]
 
 { #category : #action }
-ZathuraGame >> throws: aCard toAllShipsFrom: sourceShip [
+ZathuraGame >> throwsToAllShip: aCard [
 
-	self throws: aCard to: ships from: sourceShip
+	self throws: aCard to: ships
 ]
 
 { #category : #accessing }

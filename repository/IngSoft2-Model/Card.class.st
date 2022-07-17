@@ -1,6 +1,9 @@
 Class {
 	#name : #Card,
 	#superclass : #Object,
+	#instVars : [
+		'sourceShip'
+	],
 	#category : #'IngSoft2-Model'
 }
 
@@ -10,7 +13,13 @@ Card >> = aCard [
 ]
 
 { #category : #visiting }
-Card >> returnsEffectOfCardThrownBy: sourceShip on: aCardManager [
+Card >> effectOn: aCardManager [
 
 	self subclassResponsibility
+]
+
+{ #category : #accessing }
+Card >> sourceShip [
+	
+	^sourceShip 
 ]
