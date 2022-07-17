@@ -28,10 +28,9 @@ RedoCard >> fetchCardToRedoFrom: aCardManager [
 	cardToRedo := aCard
 ]
 
-{ #category : #visiting }
+{ #category : #action }
 RedoCard >> returnsEffectOfCardThrownBy: sourceShip on: aCardManager [
 
-	| aCard |
-	aCard := self fetchCardToRedoFrom: aCardManager.
-	^ aCard returnsEffectOfCardThrownBy: sourceShip on: aCardManager
+	self fetchCardToRedoFrom: aCardManager.
+	^ cardToRedo returnsEffectOfCardThrownBy: sourceShip on: aCardManager
 ]

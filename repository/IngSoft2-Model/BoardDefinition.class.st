@@ -30,8 +30,8 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'lockers',
-		'parsecs',
-		'laps'
+		'laps',
+		'unit'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -61,16 +61,16 @@ BoardDefinition class >> assertParsecsAreValid: parsecs [
 BoardDefinition class >> with: lockers and: unit played: laps [
 
 	self assertLockersAreValid: lockers size.
-	self assertParsecsAreValid: unit valueAsParsec .
+	self assertParsecsAreValid: unit valueAsParsec.
 	self assertLapsAreValid: laps.
 	^ self new initializeWith: lockers and: unit played: laps
 ]
 
 { #category : #initialization }
-BoardDefinition >> initializeWith: aCollectionOfLockers and: aNumberParsecs played: aNumberLaps [
+BoardDefinition >> initializeWith: aCollectionOfLockers and: aUnit played: aNumberLaps [
 
 	lockers := aCollectionOfLockers.
-	parsecs := aNumberParsecs valueAsParsec.
+	unit := aUnit.
 	laps := aNumberLaps
 ]
 
@@ -92,7 +92,7 @@ BoardDefinition >> numberOfLockers [
 ]
 
 { #category : #accesing }
-BoardDefinition >> parsecsPerLocker [
+BoardDefinition >> unitPerLocker [
 
-	^ (lockers size / parsecs) asFloat
+	^ (lockers size / unit valueAsParsec ) asFloat
 ]

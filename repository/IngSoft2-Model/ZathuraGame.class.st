@@ -60,7 +60,7 @@ ZathuraGame class >> playBy: ships movedInBoardOf: boardStructure rolling: die w
 
 { #category : #resendingToBoard }
 ZathuraGame >> applyLastEffectOn: aShip [ 
-	board applyLastEffectOn: (aShip).
+	board applyLastEffectOn: aShip.
 ]
 
 { #category : #asserting }
@@ -152,9 +152,9 @@ ZathuraGame >> rankingOf: aShip [
 
 { #category : #action }
 ZathuraGame >> throws: aCard to: destinationShip from: sourceShip [
+
 	| newDestinationShip |
-	newDestinationShip := destinationShip.
-	(destinationShip isString) ifTrue: [newDestinationShip := { destinationShip }].
+	newDestinationShip := destinationShip asArray.
 	cardManager throws: aCard to: newDestinationShip from: sourceShip
 ]
 
@@ -168,6 +168,6 @@ ZathuraGame >> throws: aCard toAllShipsFrom: sourceShip [
 ZathuraGame >> winner [
 
 	self assertZathuraHasFinished.
-	^ (ships select: [ :ship | (self rankingOf: ship) == 1 ])
-		  first
+	^(ships
+		detect: [ :ship | (self rankingOf: ship) == 1 ])
 ]

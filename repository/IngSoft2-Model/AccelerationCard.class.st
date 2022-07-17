@@ -9,7 +9,7 @@ AccelerationCard >> changeOfRoll [
 	^1
 ]
 
-{ #category : #visiting }
+{ #category : #action }
 AccelerationCard >> returnsEffectOfCardThrownBy: sourceShip on: aCardManager [
 
 	^ PermanentCard new

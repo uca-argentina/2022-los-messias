@@ -112,7 +112,7 @@ ZathuraTest >> testBlueShipCantThrowCancellationCardToOverloadCardIfNoOverloadCa
 { #category : #'test - shipWithHandOfCards' }
 ZathuraTest >> testBlueShipCantThrowOverloadCardIfNotInHand [
 
-	| zathura aDie cardManager |
+	| zathura aDie |
 	aDie := LoadedDie with: 1.
 	zathura := ZathuraGame
 		           playBy: { 'BlueShip'. 'RedShip' }
@@ -863,7 +863,7 @@ ZathuraTest >> testBoardCanBeInitializedWithLightyears [
 		         and: (LightYear with: 60)
 		         played: 3.
 
-	self assert: board parsecsPerLocker equals: 1
+	self assert: board unitPerLocker equals: 1
 ]
 
 { #category : #'test - boardDefinitionAssertion' }

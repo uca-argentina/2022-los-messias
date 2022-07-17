@@ -9,7 +9,7 @@ OverloadCard >> changeOfRoll [
 	^-2
 ]
 
-{ #category : #visiting }
+{ #category : #action }
 OverloadCard >> returnsEffectOfCardThrownBy: sourceShip on: aCardManager [
 
 	^ PermanentCard new

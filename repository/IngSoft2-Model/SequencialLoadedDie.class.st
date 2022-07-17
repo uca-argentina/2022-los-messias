@@ -49,17 +49,16 @@ SequencialLoadedDie class >> with: anArrayOfNumbers [
 { #category : #initialization }
 SequencialLoadedDie >> initializeWith: aCollectionOfNumbers [
 
-	dies := self loadSequence: aCollectionOfNumbers
+	dies := self loadASequenceOfLoadedDiesFrom: aCollectionOfNumbers
 ]
 
 { #category : #initialization }
-SequencialLoadedDie >> loadSequence: aCollectionOfNumbers [
+SequencialLoadedDie >> loadASequenceOfLoadedDiesFrom: aCollectionOfNumbers [
 
 	| collectionOfDies |
-	collectionOfDies := OrderedCollection new.
-	aCollectionOfNumbers do: [ :number | 
-		collectionOfDies add: (LoadedDie with: number) ].
-	^ collectionOfDies asSequence 
+	collectionOfDies := aCollectionOfNumbers collect: [ :number | 
+		LoadedDie with: number ].
+	^ collectionOfDies asOrderedCollection asSequence 
 ]
 
 { #category : #rolling }

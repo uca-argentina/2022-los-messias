@@ -51,20 +51,19 @@ Board class >> of: aBoardStructure withAll: aCollectionOfShips andCardManager: a
 { #category : #private }
 Board >> addIntoGame: aCollectionOfShips [
 
-	positionOfShips := OrderedCollection new.
-	aCollectionOfShips do: [ :aShip | 
-		positionOfShips add: (ShipPosition for: aShip at: 0 and: 0) ]
+	positionOfShips := aCollectionOfShips collect: [ :aShip | 
+		                          (ShipPosition for: aShip at: 0 and: 0) ].
 ]
 
 { #category : #private }
-Board >> applyEffectOnLockerOrCorrectThePositionOfWinnerTo: aShip [
+Board >> applyEffectOnLockerOrCorrectThePositionIfCrossFinishLineTo: aShip [
 
 	| thisLocker |
 	thisLocker := boardDefinition lockerAt:
 		              (self numberOfLockerOf: aShip) + 1.
 	lastEffect := thisLocker.
 	(self hasCrossFinishLine: aShip) ifFalse: [ 
-		thisLocker applyFor: aShip on: self] ifTrue: [ self correctPositionOfWinner: aShip ]
+		thisLocker applyFor: aShip on: self] ifTrue: [ self correctPositionIfCrossFinishLineTo: aShip ]
 	
 ]
 
@@ -78,11 +77,11 @@ Board >> applyLastEffectOn: aShip [
 Board >> changePositionOf: aShip by: aNumberOfLockers [
 
 	self move: aShip by: aNumberOfLockers.
-	self applyEffectOnLockerOrCorrectThePositionOfWinnerTo: aShip
+	self applyEffectOnLockerOrCorrectThePositionIfCrossFinishLineTo: aShip
 ]
 
 { #category : #private }
-Board >> correctPositionOfWinner: aShip [
+Board >> correctPositionIfCrossFinishLineTo: aShip [
 
 
 		positionOfShips
@@ -93,9 +92,7 @@ Board >> correctPositionOfWinner: aShip [
 { #category : #private }
 Board >> giveCardTo: aShip [
 
-	| cardHand |
-	cardHand := self cardHandOf: aShip.
-	cardHand add: self giveCard
+	cardManager addTheNextCardToHandCardOf: aShip
 ]
 
 { #category : #moving }
@@ -131,11 +128,13 @@ Board >> move: aShip by: aNumberOfLockers [
 { #category : #private }
 Board >> move: aShip byParsecs: numberOfParsecs [
 
-	self move: aShip by: (numberOfParsecs * (boardDefinition parsecsPerLocker )) asInteger
+	self
+		move: aShip
+		by: (numberOfParsecs * boardDefinition unitPerLocker) floor
 ]
 
 { #category : #private }
-Board >> moveAllExcept: aShip by: aNumberOfLockers [
+Board >> moveAllBackwardsExcept: aShip by: aNumberOfLockers [
 
 	| ships |
 	ships := (positionOfShips collect: [ :positionOfShip | 
@@ -184,11 +183,8 @@ Board >> numberOfLockerOf: aShip [
 { #category : #'accessing - attributes' }
 Board >> positionOf: aShip [
 
-	| positionOfShip |
-	positionOfShip := positionOfShips select: [ :aPositionOfShip | 
-		                  (aPositionOfShip ship) == aShip ].
-
-	^ positionOfShip removeFirst
+	^ positionOfShips detect: [ :aPositionOfShip | 
+		  aPositionOfShip ship == aShip ]
 ]
 
 { #category : #ranking }

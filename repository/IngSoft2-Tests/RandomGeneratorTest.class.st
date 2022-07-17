@@ -70,7 +70,7 @@ RandomGeneratorTest >> testBoardDefinitionGeneratorGeneratesABoardDefinition [
 		                   played: 3.
 
 	self assert: boardDefinition laps equals: 3.
-	self assert: boardDefinition parsecsPerLocker equals: 0.1
+	self assert: boardDefinition unitPerLocker equals: 0.1
 ]
 
 { #category : #'test - cardGenerator' }

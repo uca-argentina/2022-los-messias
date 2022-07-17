@@ -9,7 +9,7 @@ SpeedCard >> changeOfRoll [
 	^1
 ]
 
-{ #category : #visiting }
+{ #category : #action }
 SpeedCard >> returnsEffectOfCardThrownBy: sourceShip on: aCardManager [
 
 	^ PermanentCard new

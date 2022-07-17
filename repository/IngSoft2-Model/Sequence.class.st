@@ -38,6 +38,18 @@ Sequence class >> with: aCollection [
 	^ self new initializeWith: aCollection asOrderedCollection 
 ]
 
+{ #category : #enumerating }
+Sequence >> asArray [
+
+	^ collection asArray
+]
+
+{ #category : #enumerating }
+Sequence >> detect: aBlock [
+
+	^ collection detect: aBlock
+]
+
 { #category : #'accessing - attributes' }
 Sequence >> first [
 	^ collection first 

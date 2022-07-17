@@ -21,14 +21,8 @@ ProbabilityDistribution class >> assertValid: points [
 { #category : #'class initialization' }
 ProbabilityDistribution class >> with: aCollectionOfPoints [
 
-	| indices probabilities |
-	indices := OrderedCollection new.
-	probabilities := OrderedCollection new.
-	aCollectionOfPoints do: [ :aPoint | 
-		indices add: aPoint object.
-		probabilities add: aPoint probability ].
 	self assertValid: aCollectionOfPoints.
-	^ self new with: aCollectionOfPoints
+	^ self new initializeWith: aCollectionOfPoints
 ]
 
 { #category : #generating }
@@ -52,6 +46,7 @@ ProbabilityDistribution >> getGeneratedObjectWith: result [
 ]
 
 { #category : #initialization }
-ProbabilityDistribution >> with: aCollectionOfPoints [ 
-	points:= aCollectionOfPoints.
+ProbabilityDistribution >> initializeWith: aCollectionOfPoints [
+
+	points := aCollectionOfPoints
 ]

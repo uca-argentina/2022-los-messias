@@ -27,7 +27,7 @@ CardManager class >> with: aCollectionOfShips and: aCollectionOfCards from: aZat
 { #category : #adding }
 CardManager >> addCardToTable: aCard [
 
-	cardsOnTable add: aCard.
+	cardsOnTable add: aCard
 ]
 
 { #category : #adding }
@@ -53,12 +53,6 @@ CardManager >> assertCardHasBeenThrown [
 ]
 
 { #category : #asserting }
-CardManager >> assertIsOnTable: aCard [
-
-	aCard ifEmpty: [ Error signal: 'This card is not active in the table' ]
-]
-
-{ #category : #asserting }
 CardManager >> assertIsYourTurn: aShip [
 
 	(self isTurnOf: aShip) ifFalse: [ 
@@ -68,7 +62,7 @@ CardManager >> assertIsYourTurn: aShip [
 { #category : #private }
 CardManager >> cardHandOf: aShip [
 
-	^ (cardHands select: [ :aCardHand | aCardHand ship = aShip ]) first
+	^ cardHands detect: [ :aCardHand | aCardHand ship = aShip ]
 ]
 
 { #category : #private }
@@ -80,10 +74,7 @@ CardManager >> cardsAffecting: aShip [
 { #category : #accessing }
 CardManager >> findCardOnTable: aCard [
 
-	| theCard |
-	theCard := cardsOnTable select: [ :card | card = aCard ].
-	self assertIsOnTable: theCard.
-	^ theCard first
+	^ cardsOnTable detect: [ :card | card = aCard ] ifNone:[ Error signal: 'This card is not active in the table' ].
 ]
 
 { #category : #playing }
@@ -101,12 +92,10 @@ CardManager >> giveCard [
 { #category : #initialization }
 CardManager >> initializeCardHandsBy: aCollectionOfShips [
 
-	cardHands := OrderedCollection new.
-	aCollectionOfShips do: [ :aShip | 
-		cardHands add: (CardHand of: aShip with: { 
-					 self giveCard .
-					 self giveCard }) ].
-	^ cardHands
+	^ aCollectionOfShips collect: [ :aShip | 
+		  CardHand of: aShip with: { 
+				  self giveCard.
+				  self giveCard } ]
 ]
 
 { #category : #initialization }
@@ -149,11 +138,11 @@ CardManager >> ships [
 { #category : #throwing }
 CardManager >> throws: aCard to: destinationShip from: sourceShip [
 
-	| cardHand bloque |
+	| cardHand effectOfCard |
 	cardHand := self cardHandOf: sourceShip.
 	cardHand remove: aCard.
 
-	bloque := aCard returnsEffectOfCardThrownBy: sourceShip on: self.
-	bloque value: destinationShip.
+	effectOfCard := aCard returnsEffectOfCardThrownBy: sourceShip on: self.
+	effectOfCard value: destinationShip.
 	thrownCardsStack add: aCard
 ]
