@@ -67,6 +67,12 @@ Sequence >> initializeWith: aCollection [
 	collection := aCollection 
 ]
 
+{ #category : #enumerating }
+Sequence >> maxValue: block [
+
+	^ collection maxValue: block
+]
+
 { #category : #'change set' }
 Sequence >> next [
 
@@ -76,8 +82,23 @@ Sequence >> next [
 	^ aValue
 ]
 
+{ #category : #reversed }
+Sequence >> reversed [
+	
+	collection := collection reversed 
+]
+
 { #category : #enumerating }
 Sequence >> select: aBlock [
 
 	^ collection select: aBlock
+]
+
+{ #category : #action }
+Sequence >> undoNext [
+
+	| aValue |
+	aValue := collection removeLast.
+	collection addFirst: aValue.
+	^ aValue
 ]

@@ -62,6 +62,12 @@ SequencialLoadedDie >> loadASequenceOfLoadedDiesFrom: aCollectionOfNumbers [
 ]
 
 { #category : #rolling }
+SequencialLoadedDie >> maxNumberOfRoll [
+
+	^ dies maxValue: [:die |die maxNumberOfRoll].
+]
+
+{ #category : #rolling }
 SequencialLoadedDie >> roll [
 
 	| result |

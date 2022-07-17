@@ -73,8 +73,9 @@ ZathuraTest >> testBlueShipCantThrowCancellationCardIfNoCardsHaveBeenPlayed [
 	self
 		should: [ 
 			zathura
-				throws: (CancellationCard with: OverloadCard new thrownBy: 'BlueShip')
-				to: 'RedShip' ]
+				throws:
+				(CancellationCard with: OverloadCard new thrownBy: 'BlueShip' to: 'RedShip')
+				 ]
 		raise: Error
 		withMessage: 'This card is not active in the table'
 ]
@@ -97,15 +98,13 @@ ZathuraTest >> testBlueShipCantThrowCancellationCardToOverloadCardIfNoOverloadCa
 		           withCards: { 
 				           SpeedCard new.
 				           CancellationCard new }.
-	zathura throws: (SpeedCard thrownBy: 'BlueShip') to: 'RedShip'.
+	zathura throws: (SpeedCard thrownBy: 'BlueShip' to: 'RedShip').
 	self
 		should: [ 
 			zathura
 				throws:
-				(CancellationCard
-					 with: OverloadCard new
-					 thrownBy: 'BlueShip')
-				to: 'RedShip' ]
+				(CancellationCard with: OverloadCard new thrownBy: 'BlueShip'
+				to: 'RedShip' )]
 		raise: Error
 		withMessage: 'This card is not active in the table'
 ]
@@ -170,6 +169,47 @@ ZathuraTest >> testBlueShipFallsIntoAAtomicBombAndAllShipsGoToFirstLockerOfTheSa
 		isAt: 0
 		with: 0
 		in: zathura
+]
+
+{ #category : #'test - board' }
+ZathuraTest >> testBlueShipFallsIntoAJailLockerAndItDoesNotAdvanceUntilItThrowsTheMaxNumber [
+
+	| die ships zathura boardDefinition |
+	die := SequencialLoadedDie with: { 3. 10 . 3 . 10 . 10 }.
+	ships := OrderedCollection with: 'BlueShip' with: 'RedShip'.
+
+	boardDefinition := self
+		                   boardDefinitionWithOnly: JailEffect new
+		                   at: 4
+		                   of: 100
+		                   andParsec: 50
+		                   played: 1.
+	zathura := ZathuraGame
+		           playBy: ships
+		           movedInBoardOf: boardDefinition
+		           rolling: die
+		           withCards: { OverloadCard new }.
+	zathura playTurn.
+	self
+		assert: 'BlueShip'
+		isAt: 3
+		with: 0
+		in: zathura.
+	zathura playTurn.
+	zathura playTurn.
+	self
+		assert: 'BlueShip'
+		isAt: 3
+		with: 0
+		in: zathura.
+	zathura playTurn.
+	zathura playTurn.
+	self
+		assert: 'BlueShip'
+		isAt: 13
+		with: 0
+		in: zathura.
+
 ]
 
 { #category : #'test - board' }
@@ -1313,6 +1353,205 @@ ZathuraTest >> testWhenShipGoesBackwardsInTheFirstLapItStayesAtTheLapZero [
 		assert: 'BlueShip' isAt: 0 with: 0 in: zathura . 
 ]
 
+{ #category : #'test - doubleCard' }
+ZathuraTest >> testZathuraBlueShipThrowsADoubleCardAndPlayTurnTwice [
+
+	| zathura aDie |
+	aDie := LoadedDie with: 5.
+	zathura := ZathuraGame
+		           playBy: { 'BlueShip'. 'RedShip'. 'GreenShip' }
+		           movedInBoardOf:
+		           (self
+			            boardDefinitionWithNoEffectsOf: 15
+			            andParsec: 100
+			            played: 1)
+		           rolling: aDie
+		           withCards: { DoubleCard new }.
+
+	zathura playTurn.
+
+	zathura throwsToAllShip: (DoubleCard thrownBy: 'BlueShip').
+
+	zathura playTurn.
+
+	self
+		assert: 'BlueShip'
+		isAt: 10
+		with: 0
+		in: zathura.
+	self
+		assert: 'RedShip'
+		isAt: 0
+		with: 0
+		in: zathura.
+	self
+		assert: 'GreenShip'
+		isAt: 0
+		with: 0
+		in: zathura
+]
+
+{ #category : #'test - freedomCard' }
+ZathuraTest >> testZathuraBlueShipThrowsFreedomCardToReleaseHimself [
+
+	| zathura aDie |
+	aDie := SequencialLoadedDie with: { 2. 2. 2. 2. 2. 10 }.
+	zathura := ZathuraGame
+		           playBy: { 'BlueShip'. 'RedShip' }
+		           movedInBoardOf: (self
+				            boardDefinitionWithOnly: JailEffect new
+				            at: 3
+				            of: 12
+				            andParsec: 100
+				            played: 1)
+		           rolling: aDie
+		           withCards: { FreedomCard new }.
+
+	zathura playTurn.
+	zathura playTurn.
+	zathura playTurn.
+
+	self
+		assert: 'BlueShip'
+		isAt: 2
+		with: 0
+		in: zathura.
+
+	zathura throws: (FreedomCard thrownBy: 'BlueShip') to: 'BlueShip'.
+
+	zathura playTurn.
+	zathura playTurn.
+	self
+		assert: 'BlueShip'
+		isAt: 4
+		with: 0
+		in: zathura.
+	self
+		assert: 'RedShip'
+		isAt: 2
+		with: 0
+		in: zathura
+]
+
+{ #category : #'test - reverseCard' }
+ZathuraTest >> testZathuraBlueShipThrowsReverseCardAndAsAResultItChangeTheOrderOfTurns [
+
+	| zathura aDie |
+	aDie := LoadedDie with: 5.
+	zathura := ZathuraGame
+		           playBy: { 'BlueShip'. 'RedShip'. 'GreenShip' }
+		           movedInBoardOf:
+		           (self
+			            boardDefinitionWithNoEffectsOf: 15
+			            andParsec: 100
+			            played: 1)
+		           rolling: aDie
+		           withCards: { ReverseCard new }.
+
+	zathura playTurn.
+	zathura playTurn.
+
+	zathura throwsToAllShip: (ReverseCard thrownBy: 'BlueShip').
+	
+	zathura playTurn.
+	self
+		assert: 'RedShip'
+		isAt: 10
+		with: 0
+		in: zathura.
+	zathura playTurn.
+	self
+		assert: 'BlueShip'
+		isAt: 10
+		with: 0
+		in: zathura.
+	zathura playTurn.
+	self
+		assert: 'GreenShip'
+		isAt: 5
+		with: 0
+		in: zathura
+]
+
+{ #category : #'test - reverseCard' }
+ZathuraTest >> testZathuraBlueShipThrowsTwoReverseCardAndNothingHappens [
+
+	| zathura aDie |
+	aDie := LoadedDie with: 5.
+	zathura := ZathuraGame
+		           playBy: { 'BlueShip'. 'RedShip'. 'GreenShip' }
+		           movedInBoardOf:
+		           (self
+			            boardDefinitionWithNoEffectsOf: 15
+			            andParsec: 100
+			            played: 1)
+		           rolling: aDie
+		           withCards: { ReverseCard new }.
+
+	zathura playTurn.
+	zathura playTurn.
+
+	zathura throwsToAllShip: (ReverseCard thrownBy: 'BlueShip').
+	zathura throwsToAllShip: (ReverseCard thrownBy: 'BlueShip').
+
+	zathura playTurn.
+	
+	self
+		assert: 'RedShip'
+		isAt: 5
+		with: 0
+		in: zathura.
+	self
+		assert: 'BlueShip'
+		isAt: 5
+		with: 0
+		in: zathura.
+	self
+		assert: 'GreenShip'
+		isAt: 5
+		with: 0
+		in: zathura
+]
+
+{ #category : #'test - skipCard' }
+ZathuraTest >> testZathuraBlueShipThrowsTwoSkipCardsSoRedShipAndGreenShipLoseTheTurn [
+
+	| zathura aDie |
+	aDie := LoadedDie with: 5.
+	zathura := ZathuraGame
+		           playBy: { 'BlueShip'. 'RedShip'. 'GreenShip' }
+		           movedInBoardOf:
+		           (self
+			            boardDefinitionWithNoEffectsOf: 15
+			            andParsec: 100
+			            played: 1)
+		           rolling: aDie
+		           withCards: { SkipCard new }.
+
+	zathura playTurn.
+
+	zathura throwsToAllShip: (SkipCard thrownBy: 'BlueShip').
+	zathura throwsToAllShip: (SkipCard thrownBy: 'BlueShip').
+
+	zathura playTurn.
+
+	self
+		assert: 'BlueShip'
+		isAt: 10
+		with: 0
+		in: zathura.
+	self
+		assert: 'RedShip'
+		isAt: 0
+		with: 0
+		in: zathura.
+	self
+		assert: 'GreenShip'
+		isAt: 0
+		with: 0
+		in: zathura
+]
+
 { #category : #'test - zathuraAssertion' }
 ZathuraTest >> testZathuraCannotBePlayedMoreThanOnce [
 
@@ -1581,6 +1820,28 @@ ZathuraTest >> testZathuraShipFallsIntoASpeedUpMovesFourLockersAndStaysThere [
 		isAt: 6
 		with: 0
 		in: zathura
+]
+
+{ #category : #'test - freedomCard' }
+ZathuraTest >> testZathuraThrowsErrorWhenBlueShipThrowsFreedomCardToHimselfAndIsNotInJail [
+
+	| zathura aDie |
+	aDie := LoadedDie with: 2.
+	zathura := ZathuraGame
+		           playBy: { 'BlueShip'. 'RedShip' }
+		           movedInBoardOf:
+		           (self
+			            boardDefinitionWithNoEffectsOf: 12
+			            andParsec: 100
+			            played: 1)
+		           rolling: aDie
+		           withCards: { FreedomCard new }.
+
+	self
+		should: [ 
+		zathura throws: (FreedomCard thrownBy: 'BlueShip') to: 'BlueShip' ]
+		raise: Error
+		withMessage: 'The ship is not in a Jail Locker' 
 ]
 
 { #category : #'test - board' }

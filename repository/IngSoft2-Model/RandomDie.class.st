@@ -52,6 +52,12 @@ RandomDie >> initializeWith: aNumberOfFaces [
 ]
 
 { #category : #rolling }
+RandomDie >> maxNumberOfRoll [
+
+	^ numberOfFaces
+]
+
+{ #category : #rolling }
 RandomDie >> roll [
 
 	^ numberOfFaces atRandom.

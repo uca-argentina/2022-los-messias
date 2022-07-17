@@ -13,7 +13,7 @@ Card >> = aCard [
 ]
 
 { #category : #visiting }
-Card >> effectOn: aCardManager [
+Card >> effectOn: aCardApplicator [
 
 	self subclassResponsibility
 ]

@@ -51,6 +51,12 @@ DiceCup >> initializeWithAll: aDice [
 ]
 
 { #category : #rolling }
+DiceCup >> maxNumberOfRoll [
+
+	^ dice sum: [ :aDie | aDie maxNumberOfRoll ]
+]
+
+{ #category : #rolling }
 DiceCup >> roll [
 
 	^ dice sum: [ :aDie | aDie roll ]

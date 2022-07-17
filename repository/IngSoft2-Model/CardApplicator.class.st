@@ -129,12 +129,36 @@ CardApplicator >> lastCardThrownOnTheGame [
 	^ thrownCardsStack last
 ]
 
+{ #category : #resendingToZathura }
+CardApplicator >> loseTheTurnTo: aCollectionOfShips [
+	
+	zathuraGame skipTurnOfActualShip
+]
+
+{ #category : #resendingToZathura }
+CardApplicator >> releaseFromJail: aCollectionOfShips [
+
+	zathuraGame releaseFromJail: aCollectionOfShips first
+]
+
 { #category : #removing }
 CardApplicator >> removeFromCardsOnTable: aCard [
 
 	| theCard |
 	theCard := self findCardOnTable: aCard.
 	cardsOnTable remove: theCard.
+]
+
+{ #category : #private }
+CardApplicator >> repeatTurn: aShip [
+
+	zathuraGame repeatTurn
+]
+
+{ #category : #resendingToZathura }
+CardApplicator >> reverseTheOrderOfTurnsTo: aCollectionOfShips [
+	
+	zathuraGame reverseTheOrderOfTurns
 ]
 
 { #category : #accessing }

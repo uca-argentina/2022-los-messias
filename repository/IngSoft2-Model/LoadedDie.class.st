@@ -51,6 +51,13 @@ LoadedDie >> initializeWith: aLoadedFace [
 ]
 
 { #category : #rolling }
+LoadedDie >> maxNumberOfRoll [
+
+	^ loadedFace
+	
+]
+
+{ #category : #rolling }
 LoadedDie >> roll [
 	^ loadedFace .
 ]

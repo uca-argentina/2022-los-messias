@@ -136,7 +136,7 @@ ZathuraGame >> playTurn [
 	aShip := ships next.
 	board
 		changePositionOf: aShip
-		by: diceCup roll + (cardApplicator findChangeOfRoll: aShip).
+		with: diceCup.
 	self checkIfWon: aShip
 ]
 
@@ -144,6 +144,30 @@ ZathuraGame >> playTurn [
 ZathuraGame >> rankingOf: aShip [
 
 	^ board rankingOf: aShip.
+]
+
+{ #category : #resendingToBoard }
+ZathuraGame >> releaseFromJail: aShip [
+
+	board releaseFromJail: aShip 
+]
+
+{ #category : #private }
+ZathuraGame >> repeatTurn [
+
+	ships undoNext
+]
+
+{ #category : #private }
+ZathuraGame >> reverseTheOrderOfTurns [
+	
+	ships reversed
+]
+
+{ #category : #private }
+ZathuraGame >> skipTurnOfActualShip [
+
+	ships next.
 ]
 
 { #category : #action }
