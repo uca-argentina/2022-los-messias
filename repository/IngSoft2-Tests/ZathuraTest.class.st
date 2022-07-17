@@ -73,7 +73,7 @@ ZathuraTest >> testBlueShipCantThrowCancellationCardIfNoCardsHaveBeenPlayed [
 	self
 		should: [ 
 			zathura
-				throws: (CancellationCard withRemoving: OverloadCard new thrownBy: 'BlueShip')
+				throws: (CancellationCard with: OverloadCard new thrownBy: 'BlueShip')
 				to: 'RedShip' ]
 		raise: Error
 		withMessage: 'This card is not active in the table'
@@ -103,7 +103,7 @@ ZathuraTest >> testBlueShipCantThrowCancellationCardToOverloadCardIfNoOverloadCa
 			zathura
 				throws:
 				(CancellationCard
-					 withRemoving: OverloadCard new
+					 with: OverloadCard new
 					 thrownBy: 'BlueShip')
 				to: 'RedShip' ]
 		raise: Error
@@ -430,7 +430,7 @@ ZathuraTest >> testBlueShipThrowsAnAccelerationCardAndAfterTwoRoundsThrowsACance
 		assert: 'BlueShip' isAtLocker: 16 in: zathura;
 		assert: 'RedShip' isAtLocker: 16 in: zathura.
 	zathura throwsToAllShip: (CancellationCard
-			 withRemoving: AccelerationCard new
+			 with: AccelerationCard new
 			 thrownBy: 'BlueShip').
 	zathura
 		playTurn;
@@ -636,7 +636,7 @@ ZathuraTest >> testBlueShipThrowsAnOverloadCardToRedShipThenRedShipsThrowsACance
 		assert: 'RedShip' isAtLocker: 5 in: zathura.
 	zathura
 		throws:
-		(CancellationCard withRemoving: OverloadCard new thrownBy: 'RedShip')
+		(CancellationCard with: OverloadCard new thrownBy: 'RedShip')
 		to: 'RedShip'.
 	zathura
 		playTurn;
@@ -674,13 +674,13 @@ ZathuraTest >> testBlueShipThrowsAnOverloadsCardsToRedShipAndGreenShipThrowsACan
 	zathura
 		throws:
 		(CancellationCard
-			 withRemoving: OverloadCard new
+			 with: OverloadCard new
 			 thrownBy: 'GreenShip')
 		to: 'RedShip'.
 
 	self
 		should: [ 
-		zathura throws: (RedoCancellationCard withRemoving: OverloadCard new thrownBy: 'GreenShip' ) to: 'RedShip' ]
+		zathura throws: (RedoWithACardAsInternCollaborator with: OverloadCard new thrownBy: 'GreenShip' ) to: 'RedShip' ]
 		raise: Error
 		withMessage: 'This card is not active in the table'
 ]
@@ -801,10 +801,10 @@ ZathuraTest >> testBlueShipThrowsTwoOverloadsCardsToRedShipAndGreenShipThrowsACa
 		assert: 'RedShip' isAtLocker: 10 in: zathura;
 		 assert: 'GreenShip' isAtLocker: 14 in: zathura.
 	zathura
-		throws: (CancellationCard withRemoving: OverloadCard new thrownBy: 'GreenShip')
+		throws: (CancellationCard with: OverloadCard new thrownBy: 'GreenShip')
 		to: 'RedShip'.
 	zathura
-		throws: (RedoCancellationCard withRemoving: OverloadCard new thrownBy: 'GreenShip')
+		throws: (RedoWithACardAsInternCollaborator with: OverloadCard new thrownBy: 'GreenShip')
 		to: 'RedShip'.
 	zathura
 		playTurn;
@@ -1114,7 +1114,7 @@ ZathuraTest >> testShipCantThrowCancellationCardToCancelACardToTheWrongShip [
 			zathura
 				throws:
 				(CancellationCard
-					 withRemoving: OverloadCard new
+					 with: OverloadCard new
 					 thrownBy: 'RedShip')
 				to: 'BlueShip' ]
 		raise: Error
@@ -1334,7 +1334,31 @@ ZathuraTest >> testZathuraCannotBePlayedMoreThanOnce [
 	self
 		should: [ zathura play ]
 		raise: Error
-		withMessage: 'Zathura cannot be played more than once'
+		withMessage: 'Zathura has been already played'
+]
+
+{ #category : #'test - zathuraAssertion' }
+ZathuraTest >> testZathuraCannotThrowACardWhenTheGameHasFinished [
+
+	| ships aDie zathura boardStructure |
+	aDie := LoadedDie with: 8.
+	ships := { 'BlueShip'. 'RedShip' }.
+
+	boardStructure := self
+		                  boardDefinitionWithNoEffectsOf: 5
+		                  andParsec: 100
+		                  played: 3.
+	zathura := ZathuraGame
+		           playBy: ships
+		           movedInBoardOf: boardStructure
+		           rolling: aDie
+		           withCards: { OverloadCard new }.
+	zathura play.
+	self
+		should: [ 
+		zathura throws: (OverloadCard thrownBy: 'BlueShip') to: 'RedShip' ]
+		raise: Error
+		withMessage: 'Zathura has been already played'
 ]
 
 { #category : #tests }

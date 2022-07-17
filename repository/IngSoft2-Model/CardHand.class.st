@@ -21,7 +21,7 @@ CardHand >> add: aCard [
 { #category : #asserting }
 CardHand >> assertCardIsInHand: aCard [
 
-	(handOfCards anySatisfy: [ :card | card = aCard]) 
+	(handOfCards anySatisfy: [ :card | aCard = card]) 
 		ifFalse: [ Error signal: 'Card is not in Hand' ]
 ]
 

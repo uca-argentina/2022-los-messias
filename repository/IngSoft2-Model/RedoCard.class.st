@@ -13,22 +13,22 @@ RedoCard class >> thrownBy: aSourceShip [
 	^self new initializeThrownBy: aSourceShip
 ]
 
-{ #category : #comparing }
-RedoCard >> = aCard [
-
-	^ (aCard class == RedoCancellationCard) or: (self class = aCard class)
-]
-
 { #category : #accessing }
 RedoCard >> cardToRedo [ 
 
 	^ cardToRedo 
 ]
 
+{ #category : #'as yet unclassified' }
+RedoCard >> createCardToRedoFrom: aCard [
+
+	^ aCard class thrownBy: sourceShip
+]
+
 { #category : #action }
 RedoCard >> effectOn: aCardManager [
 
-	self fetchCardToRedoFrom: aCardManager.
+	cardToRedo := self fetchCardToRedoFrom: aCardManager.
 	^ cardToRedo effectOn: aCardManager
 ]
 
@@ -38,8 +38,8 @@ RedoCard >> fetchCardToRedoFrom: aCardManager [
 	| aCard |
 	aCard := aCardManager lastCardThrownOnTheGame.
 	aCard = self ifTrue: [ aCard := aCard cardToRedo ].
-	
-	cardToRedo := (aCard class) thrownBy: sourceShip 
+
+	cardToRedo := self createCardToRedoFrom: aCard
 ]
 
 { #category : #initialization }

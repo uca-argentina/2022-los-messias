@@ -34,7 +34,6 @@ Class {
 		'finished',
 		'diceCup',
 		'board',
-		'timesPlayed',
 		'ships',
 		'cardManager'
 	],
@@ -70,17 +69,15 @@ ZathuraGame >> assertZathuraHasFinished [
 ]
 
 { #category : #asserting }
-ZathuraGame >> assertZathuraHasNotBeenPlayed [
+ZathuraGame >> assertZathuraHasNotFinished [
 
-	(timesPlayed == 1) ifTrue: [ 
-		Error signal: 'Zathura cannot be played more than once' ]
+	finished == true ifTrue: [ Error signal: 'Zathura has been already played' ]
 ]
 
 { #category : #accessing }
 ZathuraGame >> checkIfWon: aShip [
 
 	(board hasCrossFinishLine: aShip) ifTrue: [ 
-		timesPlayed := 1.
 		finished := true ]
 ]
 
@@ -104,8 +101,7 @@ ZathuraGame >> initializePlayingBy: aCollectionOfShips movedInBoardOf: boardStru
 		         withAll: aCollectionOfShips asOrderedCollection
 		         andCardManager: cardManager.
 
-	finished := false.
-	timesPlayed := 0
+	finished := false
 ]
 
 { #category : #accessing }
@@ -128,7 +124,7 @@ ZathuraGame >> numberOfLockerOf: aShip [
 
 { #category : #playing }
 ZathuraGame >> play [
-	self assertZathuraHasNotBeenPlayed.
+	self assertZathuraHasNotFinished.
 	[ finished ] whileFalse: [ self playTurn ]
 ]
 
@@ -136,7 +132,7 @@ ZathuraGame >> play [
 ZathuraGame >> playTurn [
 
 	| aShip |
-	self assertZathuraHasNotBeenPlayed.
+	self assertZathuraHasNotFinished.
 	aShip := ships next.
 	board
 		changePositionOf: aShip
@@ -155,6 +151,7 @@ ZathuraGame >> throws: aCard to: destinationShip [
 
 	| newDestinationShip |
 	newDestinationShip := destinationShip asArray.
+	self assertZathuraHasNotFinished.
 	cardManager throws: aCard to: newDestinationShip
 ]
 
