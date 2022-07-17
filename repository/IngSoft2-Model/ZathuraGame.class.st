@@ -35,7 +35,7 @@ Class {
 		'diceCup',
 		'board',
 		'ships',
-		'cardManager'
+		'cardApplicator'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -91,7 +91,7 @@ ZathuraGame >> hasFinished [
 ZathuraGame >> initializePlayingBy: aCollectionOfShips movedInBoardOf: boardStructure rolling: aDiceCup withCards: aCollectionOfCards [
 
 	diceCup := aDiceCup.
-	cardManager := CardManager
+	cardApplicator := CardApplicator
 		               with: aCollectionOfShips
 		               and: aCollectionOfCards
 		               from: self.
@@ -99,7 +99,7 @@ ZathuraGame >> initializePlayingBy: aCollectionOfShips movedInBoardOf: boardStru
 	board := Board
 		         of: boardStructure
 		         withAll: aCollectionOfShips asOrderedCollection
-		         andCardManager: cardManager.
+		         and: cardApplicator.
 
 	finished := false
 ]
@@ -136,7 +136,7 @@ ZathuraGame >> playTurn [
 	aShip := ships next.
 	board
 		changePositionOf: aShip
-		by: diceCup roll + (cardManager findChangeOfRoll: aShip).
+		by: diceCup roll + (cardApplicator findChangeOfRoll: aShip).
 	self checkIfWon: aShip
 ]
 
@@ -152,7 +152,7 @@ ZathuraGame >> throws: aCard to: destinationShip [
 	| newDestinationShip |
 	newDestinationShip := destinationShip asArray.
 	self assertZathuraHasNotFinished.
-	cardManager throws: aCard to: newDestinationShip
+	cardApplicator throws: aCard to: newDestinationShip
 ]
 
 { #category : #action }

@@ -14,10 +14,10 @@ CancellationCard class >> with: aCard thrownBy: sourceShip [
 ]
 
 { #category : #action }
-CancellationCard >> effectOn: aCardManager [
+CancellationCard >> effectOn: aCardApplicator [
 
 	^ [ :aShip | 
-	  aCardManager removeFromCardsOnTable:
+	  aCardApplicator removeFromCardsOnTable:
 		  (ActiveCard with: cardToRemove appliedTo: aShip) ]
 ]
 

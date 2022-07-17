@@ -1,5 +1,5 @@
 Class {
-	#name : #CardManager,
+	#name : #CardApplicator,
 	#superclass : #Object,
 	#instVars : [
 		'deck',
@@ -16,7 +16,7 @@ Class {
 }
 
 { #category : #'instance creation' }
-CardManager class >> with: aCollectionOfShips and: aCollectionOfCards from: aZathuraGame [
+CardApplicator class >> with: aCollectionOfShips and: aCollectionOfCards from: aZathuraGame [
 
 	^ self new
 		  initializeWith: aCollectionOfShips
@@ -25,13 +25,13 @@ CardManager class >> with: aCollectionOfShips and: aCollectionOfCards from: aZat
 ]
 
 { #category : #adding }
-CardManager >> addCardToTable: aCard [
+CardApplicator >> addCardToTable: aCard [
 
 	cardsOnTable add: aCard
 ]
 
 { #category : #adding }
-CardManager >> addTheNextCardToHandCardOf: aShip [
+CardApplicator >> addTheNextCardToHandCardOf: aShip [
 
 	| cardHand |
 	cardHand := self cardHandOf: aShip.
@@ -39,13 +39,21 @@ CardManager >> addTheNextCardToHandCardOf: aShip [
 ]
 
 { #category : #resendingToZathura }
-CardManager >> applyLastEffectOn: aShip [
+CardApplicator >> applyLastEffectOn: aShip [
 
 	zathuraGame applyLastEffectOn: aShip
 ]
 
+{ #category : #playing }
+CardApplicator >> applyPermanentCardEffectOf: aCard to: aCollectionOfShips thrownBy: sourceShip [
+
+	self assertIsYourTurn: sourceShip.
+	  self addCardToTable:
+		  (ActiveCard with: aCard appliedTo: aCollectionOfShips)
+]
+
 { #category : #asserting }
-CardManager >> assertCardHasBeenThrown [
+CardApplicator >> assertCardHasBeenThrown [
 
 	thrownCardsStack ifEmpty: [ 
 		Error signal:
@@ -53,44 +61,44 @@ CardManager >> assertCardHasBeenThrown [
 ]
 
 { #category : #asserting }
-CardManager >> assertIsYourTurn: aShip [
+CardApplicator >> assertIsYourTurn: aShip [
 
 	(self isTurnOf: aShip) ifFalse: [ 
 		Error signal: 'Permanent cards can only be used when its your turn' ]
 ]
 
 { #category : #private }
-CardManager >> cardHandOf: aShip [
+CardApplicator >> cardHandOf: aShip [
 
 	^ cardHands detect: [ :aCardHand | aCardHand ship = aShip ]
 ]
 
 { #category : #private }
-CardManager >> cardsAffecting: aShip [
+CardApplicator >> cardsAffecting: aShip [
 
 	^ cardsOnTable select: [ :aCard | aCard ship includes: aShip ]
 ]
 
 { #category : #accessing }
-CardManager >> findCardOnTable: aCard [
+CardApplicator >> findCardOnTable: aCard [
 
 	^ cardsOnTable detect: [ :card | card = aCard ] ifNone:[ Error signal: 'This card is not active in the table' ].
 ]
 
 { #category : #playing }
-CardManager >> findChangeOfRoll: aShip [
+CardApplicator >> findChangeOfRoll: aShip [
 
 	^ (self cardsAffecting: aShip) sum: [ :aCard | aCard changeOfRoll ]
 ]
 
 { #category : #private }
-CardManager >> giveCard [
+CardApplicator >> giveCard [
 
 	^ deck next
 ]
 
 { #category : #initialization }
-CardManager >> initializeCardHandsBy: aCollectionOfShips [
+CardApplicator >> initializeCardHandsBy: aCollectionOfShips [
 
 	^ aCollectionOfShips collect: [ :aShip | 
 		  CardHand of: aShip with: { 
@@ -99,7 +107,7 @@ CardManager >> initializeCardHandsBy: aCollectionOfShips [
 ]
 
 { #category : #initialization }
-CardManager >> initializeWith: aCollectionOfShips and: aCollectionOfCards from: aZathuraGame [
+CardApplicator >> initializeWith: aCollectionOfShips and: aCollectionOfCards from: aZathuraGame [
 
 	deck := aCollectionOfCards asOrderedCollection asSequence.
 	cardHands := self initializeCardHandsBy: aCollectionOfShips.
@@ -109,20 +117,20 @@ CardManager >> initializeWith: aCollectionOfShips and: aCollectionOfCards from: 
 ]
 
 { #category : #resendingToZathura }
-CardManager >> isTurnOf: aShip [
+CardApplicator >> isTurnOf: aShip [
 
 	^ (zathuraGame isTurnOf: aShip)
 ]
 
 { #category : #accessing }
-CardManager >> lastCardThrownOnTheGame [
+CardApplicator >> lastCardThrownOnTheGame [
 
 	self assertCardHasBeenThrown.
 	^ thrownCardsStack last
 ]
 
 { #category : #removing }
-CardManager >> removeFromCardsOnTable: aCard [
+CardApplicator >> removeFromCardsOnTable: aCard [
 
 	| theCard |
 	theCard := self findCardOnTable: aCard.
@@ -130,13 +138,13 @@ CardManager >> removeFromCardsOnTable: aCard [
 ]
 
 { #category : #accessing }
-CardManager >> ships [
+CardApplicator >> ships [
 
 	^ cardHands collect: [ :cardHand | cardHand ship ]
 ]
 
 { #category : #throwing }
-CardManager >> throws: aCard to: destinationShip [
+CardApplicator >> throws: aCard to: destinationShip [
 
 	| cardHand effectOfCard sourceShip |
 	sourceShip := aCard sourceShip.

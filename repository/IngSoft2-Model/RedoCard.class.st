@@ -19,27 +19,27 @@ RedoCard >> cardToRedo [
 	^ cardToRedo 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #action }
 RedoCard >> createCardToRedoFrom: aCard [
 
 	^ aCard class thrownBy: sourceShip
 ]
 
 { #category : #action }
-RedoCard >> effectOn: aCardManager [
+RedoCard >> effectOn: aCardApplicator [
 
-	cardToRedo := self fetchCardToRedoFrom: aCardManager.
-	^ cardToRedo effectOn: aCardManager
+	cardToRedo := self fetchCardToRedoFrom: aCardApplicator.
+	^ cardToRedo effectOn: aCardApplicator
 ]
 
 { #category : #action }
-RedoCard >> fetchCardToRedoFrom: aCardManager [
+RedoCard >> fetchCardToRedoFrom: aCardApplicator [
 
 	| aCard |
-	aCard := aCardManager lastCardThrownOnTheGame.
+	aCard := aCardApplicator lastCardThrownOnTheGame.
 	aCard = self ifTrue: [ aCard := aCard cardToRedo ].
 
-	cardToRedo := self createCardToRedoFrom: aCard
+	^ self createCardToRedoFrom: aCard
 ]
 
 { #category : #initialization }

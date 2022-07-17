@@ -11,9 +11,10 @@ RepeatCard class >> thrownBy: sourceShip [
 ]
 
 { #category : #actions }
-RepeatCard >> effectOn: aCardManager [
+RepeatCard >> effectOn: aCardApplicator [
 
-	^ [ :aCollectionOfShip | aCardManager applyLastEffectOn: aCollectionOfShip first ]
+	^ [ :aCollectionOfShip | 
+	  aCardApplicator applyLastEffectOn: aCollectionOfShip first ]
 ]
 
 { #category : #initialization }

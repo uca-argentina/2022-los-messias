@@ -31,7 +31,7 @@ Class {
 		'positionOfShips',
 		'boardDefinition',
 		'lastEffect',
-		'cardManager'
+		'cardApplicator'
 	],
 	#classInstVars : [
 		'ships'
@@ -40,12 +40,12 @@ Class {
 }
 
 { #category : #'instance creation' }
-Board class >> of: aBoardStructure withAll: aCollectionOfShips andCardManager: aCardManager [
+Board class >> of: aBoardStructure withAll: aCollectionOfShips and: aCardApplicator [
 
 	^ self new
 		  initializeWith: aBoardStructure
 		  withAGroupOf: aCollectionOfShips
-		  withCardManager: aCardManager
+		  withCardManager: aCardApplicator
 ]
 
 { #category : #private }
@@ -92,7 +92,7 @@ Board >> correctPositionIfCrossFinishLineTo: aShip [
 { #category : #private }
 Board >> giveCardTo: aShip [
 
-	cardManager addTheNextCardToHandCardOf: aShip
+	cardApplicator addTheNextCardToHandCardOf: aShip
 ]
 
 { #category : #moving }
@@ -104,12 +104,12 @@ Board >> hasCrossFinishLine: aShip [
 ]
 
 { #category : #initalization }
-Board >> initializeWith: aBoardDefinition withAGroupOf: aCollectionOfShips withCardManager: aCardManager [
+Board >> initializeWith: aBoardDefinition withAGroupOf: aCollectionOfShips withCardManager: aCardApplicator [
 
 	boardDefinition := aBoardDefinition.
 	self addIntoGame: aCollectionOfShips.
 	lastEffect := LockerNoEffect new.
-	cardManager := aCardManager
+	cardApplicator := aCardApplicator
 ]
 
 { #category : #private }

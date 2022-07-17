@@ -16,12 +16,13 @@ OverloadCard >> changeOfRoll [
 ]
 
 { #category : #action }
-OverloadCard >> effectOn: aCardManager [
+OverloadCard >> effectOn: aCardApplicator [
 
-	^ PermanentCard new
-		  returnsEffectOf: self
-		  thrownBy: sourceShip
-		  on: aCardManager
+	^ [ :aCollectionOfShips | 
+	  aCardApplicator
+		  applyPermanentCardEffectOf: self
+		  to: aCollectionOfShips
+		  thrownBy: sourceShip ]
 ]
 
 { #category : #initialization }

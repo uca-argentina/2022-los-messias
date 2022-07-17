@@ -16,11 +16,10 @@ AccelerationCard >> changeOfRoll [
 ]
 
 { #category : #action }
-AccelerationCard >> effectOn: aCardManager [
+AccelerationCard >> effectOn: aCardApplicator [
 
-	^ PermanentCard new
-		  returnsEffectOf: self thrownBy: sourceShip
-		  on: aCardManager
+	^ [ :aCollectionOfShips | 
+	  aCardApplicator applyPermanentCardEffectOf: self to: aCollectionOfShips thrownBy: sourceShip ]
 ]
 
 { #category : #initialization }
