@@ -31,7 +31,7 @@ CardHand >> initializeCardHandOf: aShip with: cards [
 	ship:= aShip
 ]
 
-{ #category : #private }
+{ #category : #action }
 CardHand >> remove: aCard [
 
 	| cards |

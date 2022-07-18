@@ -10,7 +10,7 @@ ReverseCard class >> thrownBy: sourceShip [
 	^self new initializeThrownBy: sourceShip
 ]
 
-{ #category : #visiting }
+{ #category : #action }
 ReverseCard >> effectOn: aCardApplicator [
 
 	  aCardApplicator reverseTheOrderOfTurns

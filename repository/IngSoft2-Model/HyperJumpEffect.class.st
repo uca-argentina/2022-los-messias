@@ -45,15 +45,11 @@ HyperJumpEffect class >> assertSequenceIsValid: parsecSequence [
 { #category : #'instance creation' }
 HyperJumpEffect class >> with: parsecCollection [
 
-	| parsecOrderedCollection parsecSequence |
+	| parsecOrderedCollection |
 	parsecOrderedCollection := parsecCollection asOrderedCollection.
 	self assertSequenceIsValid: parsecOrderedCollection.
-	
-	parsecOrderedCollection sort: [ :positionA :positionB | 
-		positionA valueAsParsec > positionB valueAsParsec ].
-	parsecSequence := parsecOrderedCollection asSequence.
-	
-	^ self new initializeWith: parsecSequence
+
+	^ self new initializeWith: parsecOrderedCollection
 ]
 
 { #category : #'instance creation' }
@@ -65,8 +61,9 @@ HyperJumpEffect >> applyFor: aShip on: aBoard [
 ]
 
 { #category : #initialization }
-HyperJumpEffect >> initializeWith: aParsecsSequence [ 
+HyperJumpEffect >> initializeWith: parsecOrderedCollection [
 
-	parsecsSequence := aParsecsSequence
-
+	parsecOrderedCollection sort: [ :positionA :positionB | 
+		positionA valueAsParsec > positionB valueAsParsec ].
+	parsecsSequence := parsecOrderedCollection asSequence
 ]

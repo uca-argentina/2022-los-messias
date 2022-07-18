@@ -12,7 +12,7 @@ Card >> = aCard [
 	^(self class = aCard class)
 ]
 
-{ #category : #visiting }
+{ #category : #action }
 Card >> effectOn: aCardApplicator [
 
 	self subclassResponsibility

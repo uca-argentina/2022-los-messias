@@ -10,7 +10,7 @@ SkipCard class >> thrownBy: sourceShip [
 	^self new initializeThrownBy: sourceShip
 ]
 
-{ #category : #'instance creation' }
+{ #category : #action }
 SkipCard >> effectOn: aCardApplicator [
 
 	aCardApplicator loseTheTurn

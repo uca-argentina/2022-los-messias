@@ -13,7 +13,7 @@ OverloadCard class >> thrownBy: sourceShip to: destinationShip [
 	^ self new initializeThrownBy: sourceShip to: destinationShip 
 ]
 
-{ #category : #action }
+{ #category : #accessing }
 OverloadCard >> changeOfRoll [
 	^-2
 ]

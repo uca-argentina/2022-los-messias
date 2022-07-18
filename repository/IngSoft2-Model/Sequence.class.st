@@ -38,7 +38,7 @@ Sequence class >> with: aCollection [
 	^ self new initializeWith: aCollection asOrderedCollection 
 ]
 
-{ #category : #enumerating }
+{ #category : #'accessing - attributes' }
 Sequence >> asArray [
 
 	^ collection asArray
@@ -55,13 +55,13 @@ Sequence >> initializeWith: aCollection [
 	collection := aCollection 
 ]
 
-{ #category : #enumerating }
+{ #category : #'accessing - attributes' }
 Sequence >> maxValue: block [
 
 	^ collection maxValue: block
 ]
 
-{ #category : #'change set' }
+{ #category : #action }
 Sequence >> next [
 
 	| aValue |

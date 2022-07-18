@@ -13,7 +13,7 @@ SpeedCard class >> thrownBy: aSourceShip to: destinationShip [
 	^ self new initializeThrownBy: aSourceShip to: destinationShip
 ]
 
-{ #category : #action }
+{ #category : #accessing }
 SpeedCard >> changeOfRoll [
 	^1
 ]

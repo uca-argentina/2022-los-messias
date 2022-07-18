@@ -1,5 +1,5 @@
 Class {
-	#name : #RedoWithACardAsInternCollaborator,
+	#name : #RedoCardWithACard,
 	#superclass : #RedoCard,
 	#instVars : [
 		'card'
@@ -8,25 +8,25 @@ Class {
 }
 
 { #category : #'instance creation' }
-RedoWithACardAsInternCollaborator class >> with: aCard thrownBy: aSourceShip [
+RedoCardWithACard class >> with: aCard thrownBy: aSourceShip [
 
 	^ self new initializeWith: aCard thrownBy: aSourceShip
 ]
 
 { #category : #comparing }
-RedoWithACardAsInternCollaborator >> = aCard [
+RedoCardWithACard >> = aCard [
 	^ RedoCard = aCard class
 ]
 
 { #category : #action }
-RedoWithACardAsInternCollaborator >> createCardToRedoFrom: aCard [
+RedoCardWithACard >> createCardToRedoFrom: aCard [
 
 	^ aCard class with: card thrownBy: sourceShip
 
 ]
 
 { #category : #initialization }
-RedoWithACardAsInternCollaborator >> initializeWith: aCard thrownBy: aSourceShip [
+RedoCardWithACard >> initializeWith: aCard thrownBy: aSourceShip [
 
 	card := aCard.
 	sourceShip := aSourceShip 

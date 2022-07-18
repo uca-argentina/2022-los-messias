@@ -86,7 +86,7 @@ ZathuraGame >> hasFinished [
 ZathuraGame >> initializePlayingBy: aCollectionOfShips movedInBoardOf: boardStructure rolling: aDiceCup withCards: aCollectionOfCards [
 
 	diceCup := aDiceCup.
-	turnEffectApplicator := TurnEffectApplicator with: aCollectionOfShips.
+	turnEffectApplicator := TurnApplicator with: aCollectionOfShips.
 
 	cardApplicator := CardApplicator
 		                  with: turnEffectApplicator

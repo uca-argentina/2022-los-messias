@@ -13,7 +13,7 @@ FreedomCard class >> thrownBy: sourceShip to: destinationShip [
 	^ self new initializeThrownBy: sourceShip to: destinationShip 
 ]
 
-{ #category : #visiting }
+{ #category : #action }
 FreedomCard >> effectOn: aCardApplicator [
 
 	  aCardApplicator releaseFromJail: destinationShip 

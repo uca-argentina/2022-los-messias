@@ -8,7 +8,7 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #'instance creation' }
 ActiveCard class >> with: card appliedTo: ship [
 
 	^ self new initializeWith: card appliedTo: ship

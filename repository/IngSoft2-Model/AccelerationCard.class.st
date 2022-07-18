@@ -19,7 +19,7 @@ AccelerationCard class >> thrownBy: sourceShip to: destinationShip [
 	^ self new initializeThrownBy: sourceShip to: destinationShip
 ]
 
-{ #category : #accesing }
+{ #category : #accessing }
 AccelerationCard >> changeOfRoll [
 	^1
 ]

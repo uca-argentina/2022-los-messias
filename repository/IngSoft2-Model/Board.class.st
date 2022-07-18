@@ -83,11 +83,13 @@ Board >> applyLastEffectOn: aShip [
 Board >> changePositionOf: aShip with: diceCup [
 
 	| aNumberOfLockers |
-	aNumberOfLockers := diceCup roll + (cardApplicator findChangeOfRoll: aShip).
+	aNumberOfLockers := diceCup roll
+	                    + (cardApplicator findChangeOfRoll: aShip).
 	self
 		checkIf: aShip
 		isOnJailAndCanBeReleasedWith: aNumberOfLockers
 		of: diceCup maxNumberOfRoll.
+	
 	(jail includes: aShip) ifFalse: [ 
 		self move: aShip by: aNumberOfLockers.
 		self applyEffectOnLockerOrCorrectThePositionIfCrossFinishLineTo:

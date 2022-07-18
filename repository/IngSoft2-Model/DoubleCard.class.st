@@ -13,10 +13,10 @@ DoubleCard class >> thrownBy: sourceShip [
 	^ self new initializeThrownBy: sourceShip
 ]
 
-{ #category : #visiting }
+{ #category : #action }
 DoubleCard >> effectOn: aCardApplicator [
 
-	  aCardApplicator repeatTurn: destinationShip
+	aCardApplicator doubleTurn
 ]
 
 { #category : #initialization }
