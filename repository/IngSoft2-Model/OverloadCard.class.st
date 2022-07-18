@@ -1,13 +1,16 @@
 Class {
 	#name : #OverloadCard,
 	#superclass : #Card,
+	#instVars : [
+		'destinationShip'
+	],
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #'instance creation' }
-OverloadCard class >> thrownBy: sourceShip [ 
-	
-	^ self new initializeThrownBy: sourceShip
+OverloadCard class >> thrownBy: sourceShip to: destinationShip [
+
+	^ self new initializeThrownBy: sourceShip to: destinationShip 
 ]
 
 { #category : #action }
@@ -15,18 +18,24 @@ OverloadCard >> changeOfRoll [
 	^-2
 ]
 
+{ #category : #accessing }
+OverloadCard >> destinationShip [ 
+
+	^destinationShip 
+]
+
 { #category : #action }
 OverloadCard >> effectOn: aCardApplicator [
 
-	^ [ :aCollectionOfShips | 
-	  aCardApplicator
-		  applyPermanentCardEffectOf: self
-		  to: aCollectionOfShips
-		  thrownBy: sourceShip ]
+	aCardApplicator
+		applyPermanentCardEffectOf: self
+		to: destinationShip 
+		thrownBy: sourceShip
 ]
 
 { #category : #initialization }
-OverloadCard >> initializeThrownBy: aSourceShip [ 
-	
-	sourceShip := aSourceShip 
+OverloadCard >> initializeThrownBy: aSourceShip to: aDestinationShip [
+
+	sourceShip := aSourceShip.
+	destinationShip := aDestinationShip
 ]

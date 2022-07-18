@@ -8,22 +8,31 @@ Class {
 }
 
 { #category : #'instance creation' }
-CancellationCard class >> with: aCard thrownBy: sourceShip [ 
-	
-	^ self new initializeWith: aCard thrownBy: sourceShip
+CancellationCard class >> with: aCard thrownBy: sourceShip [
+
+	^ self new
+		  initializeWith: aCard
+		  thrownBy: sourceShip
 ]
 
 { #category : #action }
 CancellationCard >> effectOn: aCardApplicator [
 
-	^ [ :aShip | 
-	  aCardApplicator removeFromCardsOnTable:
-		  (ActiveCard with: cardToRemove appliedTo: aShip) ]
+	| destinationShip |
+	destinationShip :=  {cardToRemove destinationShip} .
+	destinationShip = {'allShips'} ifTrue: [ 
+		destinationShip := aCardApplicator ships ].
+	aCardApplicator removeFromCardsOnTable:
+		(ActiveCard with: cardToRemove appliedTo: destinationShip)
 ]
 
 { #category : #initialization }
-CancellationCard >> initializeWith: aCard thrownBy: aSourceShip [  
-	
+CancellationCard >> initializeWith: aCard thrownBy: aSourceShip [
+
 	sourceShip := aSourceShip.
+	
+	
+	
+	
 	cardToRemove := aCard
 ]

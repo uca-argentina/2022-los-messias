@@ -6,7 +6,8 @@ Class {
 		'cardHands',
 		'cardsOnTable',
 		'thrownCardsStack',
-		'zathuraGame'
+		'zathuraGame',
+		'turnEffectApplicator'
 	],
 	#classInstVars : [
 		'cardHands',
@@ -45,11 +46,18 @@ CardApplicator >> applyLastEffectOn: aShip [
 ]
 
 { #category : #playing }
-CardApplicator >> applyPermanentCardEffectOf: aCard to: aCollectionOfShips thrownBy: sourceShip [
+CardApplicator >> applyPermanentCardEffectOf: aCard thrownBy: sourceShip [
 
 	self assertIsYourTurn: sourceShip.
-	  self addCardToTable:
-		  (ActiveCard with: aCard appliedTo: aCollectionOfShips)
+	self addCardToTable: (ActiveCard with: aCard appliedTo: self ships)
+]
+
+{ #category : #playing }
+CardApplicator >> applyPermanentCardEffectOf: aCard to: aShip thrownBy: sourceShip [
+
+	self assertIsYourTurn: sourceShip.
+	self addCardToTable:
+		(ActiveCard with: aCard appliedTo: {aShip})
 ]
 
 { #category : #asserting }
@@ -107,19 +115,20 @@ CardApplicator >> initializeCardHandsBy: aCollectionOfShips [
 ]
 
 { #category : #initialization }
-CardApplicator >> initializeWith: aCollectionOfShips and: aCollectionOfCards from: aZathuraGame [
+CardApplicator >> initializeWith: aTurnEffectApplicator and: aCollectionOfCards from: aZathuraGame [
 
 	deck := aCollectionOfCards asOrderedCollection asSequence.
-	cardHands := self initializeCardHandsBy: aCollectionOfShips.
+	cardHands := self initializeCardHandsBy: aTurnEffectApplicator ships.
 	zathuraGame := aZathuraGame.
 	cardsOnTable := OrderedCollection new.
-	thrownCardsStack := OrderedCollection new
+	thrownCardsStack := OrderedCollection new.
+	turnEffectApplicator := aTurnEffectApplicator
 ]
 
 { #category : #resendingToZathura }
 CardApplicator >> isTurnOf: aShip [
 
-	^ (zathuraGame isTurnOf: aShip)
+	^ (turnEffectApplicator isTurnOf: aShip)
 ]
 
 { #category : #accessing }
@@ -130,15 +139,15 @@ CardApplicator >> lastCardThrownOnTheGame [
 ]
 
 { #category : #resendingToZathura }
-CardApplicator >> loseTheTurnTo: aCollectionOfShips [
+CardApplicator >> loseTheTurn [
 	
-	zathuraGame skipTurnOfActualShip
+	turnEffectApplicator skipTurnOfActualShip
 ]
 
 { #category : #resendingToZathura }
-CardApplicator >> releaseFromJail: aCollectionOfShips [
+CardApplicator >> releaseFromJail: aShip [
 
-	zathuraGame releaseFromJail: aCollectionOfShips first
+	zathuraGame releaseFromJail: aShip
 ]
 
 { #category : #removing }
@@ -152,13 +161,13 @@ CardApplicator >> removeFromCardsOnTable: aCard [
 { #category : #private }
 CardApplicator >> repeatTurn: aShip [
 
-	zathuraGame repeatTurn
+	turnEffectApplicator repeatTurn
 ]
 
 { #category : #resendingToZathura }
-CardApplicator >> reverseTheOrderOfTurnsTo: aCollectionOfShips [
+CardApplicator >> reverseTheOrderOfTurns [
 	
-	zathuraGame reverseTheOrderOfTurns
+	turnEffectApplicator reverseTheOrderOfTurns
 ]
 
 { #category : #accessing }
@@ -168,14 +177,13 @@ CardApplicator >> ships [
 ]
 
 { #category : #throwing }
-CardApplicator >> throws: aCard to: destinationShip [
+CardApplicator >> throws: aCard [
 
-	| cardHand effectOfCard sourceShip |
+	| cardHand  sourceShip |
 	sourceShip := aCard sourceShip.
 	cardHand := self cardHandOf: sourceShip.
 	cardHand remove: aCard.
 
-	effectOfCard := aCard effectOn: self.
-	effectOfCard value: destinationShip.
+	aCard effectOn: self.
 	thrownCardsStack add: aCard
 ]

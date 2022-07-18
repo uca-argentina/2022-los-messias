@@ -34,8 +34,8 @@ Class {
 		'finished',
 		'diceCup',
 		'board',
-		'ships',
-		'cardApplicator'
+		'cardApplicator',
+		'turnEffectApplicator'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -91,11 +91,12 @@ ZathuraGame >> hasFinished [
 ZathuraGame >> initializePlayingBy: aCollectionOfShips movedInBoardOf: boardStructure rolling: aDiceCup withCards: aCollectionOfCards [
 
 	diceCup := aDiceCup.
+	turnEffectApplicator := TurnEffectApplicator with: aCollectionOfShips.
+
 	cardApplicator := CardApplicator
-		               with: aCollectionOfShips
-		               and: aCollectionOfCards
-		               from: self.
-	ships := aCollectionOfShips asOrderedCollection asSequence.
+		                  with: turnEffectApplicator
+		                  and: aCollectionOfCards
+		                  from: self.
 	board := Board
 		         of: boardStructure
 		         withAll: aCollectionOfShips asOrderedCollection
@@ -107,7 +108,7 @@ ZathuraGame >> initializePlayingBy: aCollectionOfShips movedInBoardOf: boardStru
 { #category : #accessing }
 ZathuraGame >> isTurnOf: aShip [
 
-	^ ((ships first) = aShip)
+	^ turnEffectApplicator isTurnOf: aShip
 ]
 
 { #category : #positioning }
@@ -133,10 +134,8 @@ ZathuraGame >> playTurn [
 
 	| aShip |
 	self assertZathuraHasNotFinished.
-	aShip := ships next.
-	board
-		changePositionOf: aShip
-		with: diceCup.
+	aShip := turnEffectApplicator next.
+	board changePositionOf: aShip with: diceCup.
 	self checkIfWon: aShip
 ]
 
@@ -152,43 +151,22 @@ ZathuraGame >> releaseFromJail: aShip [
 	board releaseFromJail: aShip 
 ]
 
-{ #category : #private }
-ZathuraGame >> repeatTurn [
-
-	ships undoNext
-]
-
-{ #category : #private }
-ZathuraGame >> reverseTheOrderOfTurns [
-	
-	ships reversed
-]
-
-{ #category : #private }
-ZathuraGame >> skipTurnOfActualShip [
-
-	ships next.
-]
-
 { #category : #action }
-ZathuraGame >> throws: aCard to: destinationShip [
+ZathuraGame >> throws: aCard [
 
-	| newDestinationShip |
-	newDestinationShip := destinationShip asArray.
 	self assertZathuraHasNotFinished.
-	cardApplicator throws: aCard to: newDestinationShip
+	cardApplicator throws: aCard
 ]
 
 { #category : #action }
 ZathuraGame >> throwsToAllShip: aCard [
 
-	self throws: aCard to: ships
+	self throws: aCard
 ]
 
 { #category : #accessing }
 ZathuraGame >> winner [
 
 	self assertZathuraHasFinished.
-	^(ships
-		detect: [ :ship | (self rankingOf: ship) == 1 ])
+	^ turnEffectApplicator ships detect: [ :ship | (self rankingOf: ship) == 1 ]
 ]

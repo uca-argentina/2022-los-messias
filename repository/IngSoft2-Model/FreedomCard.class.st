@@ -1,6 +1,9 @@
 Class {
 	#name : #FreedomCard,
 	#superclass : #Card,
+	#instVars : [
+		'destinationShip'
+	],
 	#category : #'IngSoft2-Model'
 }
 
@@ -10,16 +13,27 @@ FreedomCard class >> thrownBy: sourceShip [
 	^self new initializeThrownBy: sourceShip
 ]
 
+{ #category : #'instance creation' }
+FreedomCard class >> thrownBy: sourceShip to: destinationShip [
+
+	^ self new initializeThrownBy: sourceShip to: destinationShip 
+]
+
 { #category : #visiting }
 FreedomCard >> effectOn: aCardApplicator [
 
-		^ [ :aCollectionOfShips | 
-	  aCardApplicator
-		  releaseFromJail: aCollectionOfShips ]
+	  aCardApplicator releaseFromJail: destinationShip 
 ]
 
 { #category : #initialization }
 FreedomCard >> initializeThrownBy: aSourceShip [ 
 	
 	sourceShip := aSourceShip 
+]
+
+{ #category : #initialization }
+FreedomCard >> initializeThrownBy: aSourceShip to: aDestinationShip [
+
+	sourceShip := aSourceShip.
+	destinationShip := aDestinationShip
 ]

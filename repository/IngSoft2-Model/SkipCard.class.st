@@ -13,7 +13,7 @@ SkipCard class >> thrownBy: sourceShip [
 { #category : #'instance creation' }
 SkipCard >> effectOn: aCardApplicator [
 
-	^ [ :aShip | aCardApplicator loseTheTurnTo: aShip ]
+	aCardApplicator loseTheTurn
 ]
 
 { #category : #initialization }

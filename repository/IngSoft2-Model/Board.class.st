@@ -66,12 +66,11 @@ Board >> addToJail: aShip [
 Board >> applyEffectOnLockerOrCorrectThePositionIfCrossFinishLineTo: aShip [
 
 	| thisLocker |
-	thisLocker := boardDefinition lockerAt:
-		              (self numberOfLockerOf: aShip) + 1.
+	thisLocker := boardDefinition lockerAt: (self numberOfLockerOf: aShip) + 1.
 	lastEffect := thisLocker.
-	(self hasCrossFinishLine: aShip) ifFalse: [ 
-		thisLocker applyFor: aShip on: self] ifTrue: [ self correctPositionIfCrossFinishLineTo: aShip ]
-	
+	(self hasCrossFinishLine: aShip)
+		ifFalse: [ thisLocker applyFor: aShip on: self ]
+		ifTrue: [ self correctPositionIfCrossFinishLineTo: aShip ]
 ]
 
 { #category : #moving }

@@ -13,7 +13,7 @@ ReverseCard class >> thrownBy: sourceShip [
 { #category : #visiting }
 ReverseCard >> effectOn: aCardApplicator [
 
-	^[ :aCollectionOfShips |  aCardApplicator reverseTheOrderOfTurnsTo: aCollectionOfShips]
+	  aCardApplicator reverseTheOrderOfTurns
 ]
 
 { #category : #initialization }
