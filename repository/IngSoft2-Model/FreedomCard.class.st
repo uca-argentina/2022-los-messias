@@ -8,12 +8,6 @@ Class {
 }
 
 { #category : #'instance creation' }
-FreedomCard class >> thrownBy: sourceShip [
-	
-	^self new initializeThrownBy: sourceShip
-]
-
-{ #category : #'instance creation' }
 FreedomCard class >> thrownBy: sourceShip to: destinationShip [
 
 	^ self new initializeThrownBy: sourceShip to: destinationShip 
@@ -23,12 +17,6 @@ FreedomCard class >> thrownBy: sourceShip to: destinationShip [
 FreedomCard >> effectOn: aCardApplicator [
 
 	  aCardApplicator releaseFromJail: destinationShip 
-]
-
-{ #category : #initialization }
-FreedomCard >> initializeThrownBy: aSourceShip [ 
-	
-	sourceShip := aSourceShip 
 ]
 
 { #category : #initialization }

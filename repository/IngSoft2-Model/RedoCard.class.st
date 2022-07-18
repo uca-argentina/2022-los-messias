@@ -9,12 +9,6 @@ Class {
 }
 
 { #category : #'instance creation' }
-RedoCard class >> thrownBy: aSourceShip [
-
-	^self new initializeThrownBy: aSourceShip
-]
-
-{ #category : #'instance creation' }
 RedoCard class >> thrownBy: aSourceShip to: destinationShip [
 
 	^ self new initializeThrownBy: aSourceShip to: destinationShip
@@ -47,12 +41,6 @@ RedoCard >> fetchCardToRedoFrom: aCardApplicator [
 	aCard = self ifTrue: [ aCard := aCard cardToRedo ].
 
 	^ self createCardToRedoFrom: aCard
-]
-
-{ #category : #initialization }
-RedoCard >> initializeThrownBy: aSourceShip [
-
-	sourceShip := aSourceShip
 ]
 
 { #category : #initialization }

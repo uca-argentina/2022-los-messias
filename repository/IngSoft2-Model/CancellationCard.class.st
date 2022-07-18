@@ -30,9 +30,5 @@ CancellationCard >> effectOn: aCardApplicator [
 CancellationCard >> initializeWith: aCard thrownBy: aSourceShip [
 
 	sourceShip := aSourceShip.
-	
-	
-	
-	
 	cardToRemove := aCard
 ]

@@ -57,11 +57,6 @@ ZathuraGame class >> playBy: ships movedInBoardOf: boardStructure rolling: die w
 		  withCards: cards
 ]
 
-{ #category : #resendingToBoard }
-ZathuraGame >> applyLastEffectOn: aShip [ 
-	board applyLastEffectOn: aShip.
-]
-
 { #category : #asserting }
 ZathuraGame >> assertZathuraHasFinished [
 
@@ -95,20 +90,15 @@ ZathuraGame >> initializePlayingBy: aCollectionOfShips movedInBoardOf: boardStru
 
 	cardApplicator := CardApplicator
 		                  with: turnEffectApplicator
-		                  and: aCollectionOfCards
-		                  from: self.
+		                  and: aCollectionOfCards.
 	board := Board
 		         of: boardStructure
 		         withAll: aCollectionOfShips asOrderedCollection
 		         and: cardApplicator.
+	
+	cardApplicator load: board.
 
 	finished := false
-]
-
-{ #category : #accessing }
-ZathuraGame >> isTurnOf: aShip [
-
-	^ turnEffectApplicator isTurnOf: aShip
 ]
 
 { #category : #positioning }
@@ -145,23 +135,11 @@ ZathuraGame >> rankingOf: aShip [
 	^ board rankingOf: aShip.
 ]
 
-{ #category : #resendingToBoard }
-ZathuraGame >> releaseFromJail: aShip [
-
-	board releaseFromJail: aShip 
-]
-
 { #category : #action }
 ZathuraGame >> throws: aCard [
 
 	self assertZathuraHasNotFinished.
 	cardApplicator throws: aCard
-]
-
-{ #category : #action }
-ZathuraGame >> throwsToAllShip: aCard [
-
-	self throws: aCard
 ]
 
 { #category : #accessing }

@@ -1114,7 +1114,7 @@ ZathuraTest >> testRedoCardThrowsErrorWhenBlueShipThrowsItBeforeAnyOtherCardHasB
 				           RedoCard new }.
 
 	self
-		should: [ zathura throws: (RedoCard thrownBy: 'RedShip') ]
+		should: [ zathura throws: (RedoCard thrownBy: 'RedShip' to: 'BlueShip') ]
 		raise: Error
 		withMessage:
 		'Redo card must be thrown before another card has been played'

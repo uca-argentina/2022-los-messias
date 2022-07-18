@@ -24,31 +24,31 @@ TurnEffectApplicator >> isTurnOf: aShip [
 	^ (ships first = aShip)
 ]
 
-{ #category : #initialization }
+{ #category : #action }
 TurnEffectApplicator >> next [
 
 	^ships next
 ]
 
-{ #category : #private }
+{ #category : #cardEffect }
 TurnEffectApplicator >> repeatTurn [
 
 	ships undoNext
 ]
 
-{ #category : #private }
+{ #category : #cardEffect }
 TurnEffectApplicator >> reverseTheOrderOfTurns [
 	
 	ships reversed
 ]
 
-{ #category : #initialization }
+{ #category : #accessing }
 TurnEffectApplicator >> ships [
 
 	^ships asArray
 ]
 
-{ #category : #private }
+{ #category : #cardEffect }
 TurnEffectApplicator >> skipTurnOfActualShip [
 
 	ships next.

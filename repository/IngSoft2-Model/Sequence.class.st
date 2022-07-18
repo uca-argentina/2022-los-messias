@@ -44,21 +44,9 @@ Sequence >> asArray [
 	^ collection asArray
 ]
 
-{ #category : #enumerating }
-Sequence >> detect: aBlock [
-
-	^ collection detect: aBlock
-]
-
 { #category : #'accessing - attributes' }
 Sequence >> first [
 	^ collection first 
-]
-
-{ #category : #enumerating }
-Sequence >> includes: aBlock [
-
-	^ collection includes: aBlock
 ]
 
 { #category : #initialization }
@@ -86,12 +74,6 @@ Sequence >> next [
 Sequence >> reversed [
 	
 	collection := collection reversed 
-]
-
-{ #category : #enumerating }
-Sequence >> select: aBlock [
-
-	^ collection select: aBlock
 ]
 
 { #category : #action }

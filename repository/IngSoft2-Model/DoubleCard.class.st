@@ -13,12 +13,6 @@ DoubleCard class >> thrownBy: sourceShip [
 	^ self new initializeThrownBy: sourceShip
 ]
 
-{ #category : #'instance creation' }
-DoubleCard class >> thrownBy: sourceShip to: destinationShip [
-
-	^ self new initializeThrownBy: sourceShip to: destinationShip
-]
-
 { #category : #visiting }
 DoubleCard >> effectOn: aCardApplicator [
 
@@ -29,11 +23,4 @@ DoubleCard >> effectOn: aCardApplicator [
 DoubleCard >> initializeThrownBy: aSourceShip [
 	
 	sourceShip := aSourceShip
-]
-
-{ #category : #initialization }
-DoubleCard >> initializeThrownBy: aSourceShip to: aDestinationShip [
-
-	sourceShip := aSourceShip.
-	destinationShip := aDestinationShip
 ]
