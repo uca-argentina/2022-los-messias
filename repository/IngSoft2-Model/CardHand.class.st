@@ -8,6 +8,11 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
+{ #category : #'class initialization' }
+CardHand class >> of: aShip [ 
+	^self new initializeCardHandOf: aShip with: {  }.
+]
+
 { #category : #'instance creation' }
 CardHand class >> of: aShip with: aCollectionOfCards [ 
 	^ self new initializeCardHandOf: aShip with: aCollectionOfCards .
@@ -21,8 +26,8 @@ CardHand >> add: aCard [
 { #category : #asserting }
 CardHand >> assertCardIsInHand: aCard [
 
-	(handOfCards anySatisfy: [ :card | aCard isKindOf: card class ]) ifFalse: [ 
-		Error signal: 'Card is not in Hand' ]
+	(handOfCards anySatisfy: [ :card | aCard = card ]) 
+		ifFalse: [ Error signal: 'Card is not in Hand' ]
 ]
 
 { #category : #initalization }
@@ -34,11 +39,9 @@ CardHand >> initializeCardHandOf: aShip with: cards [
 { #category : #private }
 CardHand >> remove: aCard [
 
-	| theCard |
-	theCard := 0.
-	handOfCards do: [ :card | (card isKindOf: aCard class)
-		 ifTrue: [ theCard := card ] ].
-	handOfCards remove: theCard
+	| cards |
+	cards := handOfCards select: [ :card | card = aCard ].
+	handOfCards remove: cards first
 ]
 
 { #category : #'accessing - attributes' }
@@ -47,34 +50,38 @@ CardHand >> ship [
 ]
 
 { #category : #throwing }
-CardHand >> throw: aCancelationCard removingToAll: aCard on: aCardManager [
+CardHand >> throw: aCancelationCard removingToAll: aCard on: aZathuraGame [
 
 	aCancelationCard
-		applyEffectTo: aCardManager ships
+		applyEffectTo: aZathuraGame  ships
 		removing: aCard
-		on: aCardManager.
+		on: aZathuraGame .
 	self remove: aCancelationCard
 ]
 
 { #category : #throwing }
-CardHand >> throw: aCard to: aShip on: aCardManager [
+CardHand >> throw: aCard to: aShip on: aZathuraGame [
 
 	self assertCardIsInHand: aCard.
-	aCard applyEffectTo: aShip on: aCardManager by: self ship.
+	aCard applyEffectTo: aShip on: aZathuraGame  by: self ship.
 	self remove: aCard
 ]
 
 { #category : #throwing }
-CardHand >> throw: cancellationCard to: aShip removing: aCard on: aCardManager [
+CardHand >> throw: cancellationCard to: aShip removing: aCard on: aZathuraGame [
 
-	cancellationCard applyEffectTo: {aShip} removing: aCard on: aCardManager.
+	cancellationCard
+		applyEffectTo: { aShip }
+		removing: aCard
+		on: aZathuraGame 
+		.
 	self remove: cancellationCard
 ]
 
 { #category : #throwing }
-CardHand >> throw: card toAllShipsOn: aCardManager [
+CardHand >> throw: card toAllShipsOn: aZathuraGame [
 
 	self assertCardIsInHand: card.
-	card applyEffectToAllShipsOn: aCardManager by: self ship.
+	card applyEffectToAllShipsOn: aZathuraGame by: self ship.
 	self remove: card
 ]

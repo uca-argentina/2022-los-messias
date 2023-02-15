@@ -18,7 +18,13 @@ LightYear >> initializeWith: lightYear [
 	lightYears := lightYear
 ]
 
-{ #category : #accesing }
+{ #category : #evaluating }
+LightYear >> value [
+
+	^lightYears 
+]
+
+{ #category : #accessing }
 LightYear >> valueAsParsec [
 
 	^ lightYears // 3

@@ -26,7 +26,7 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #'instance creation' }
+{ #category : #action }
 SpeedUpEffect >> applyFor: aShip on: aBoard [
 
 	aBoard move: aShip by: 4.

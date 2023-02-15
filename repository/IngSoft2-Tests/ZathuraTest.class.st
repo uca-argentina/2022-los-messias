@@ -4,14 +4,14 @@ Class {
 	#category : #'IngSoft2-Tests'
 }
 
-{ #category : #accessing }
+{ #category : #asserting }
 ZathuraTest >> assert: aShip isAt: locker with: lap in: aGame [
 
 	self assert: (aGame numberOfLockerOf: aShip) equals: locker.
 	self assert: (aGame numberOfLapOf: aShip) equals: lap.
 ]
 
-{ #category : #accessing }
+{ #category : #asserting }
 ZathuraTest >> assert: aShip isAtLocker: locker in: aGame [
 
 	self assert: (aGame numberOfLockerOf: aShip) equals: locker.
@@ -41,6 +41,21 @@ ZathuraTest >> boardDefinitionWithNoEffectsOf: numberOfLockers andParsec: parsec
 ]
 
 { #category : #boardSpecificDefinitions }
+ZathuraTest >> boardDefinitionWithOnly: effect at: effectLockerNumber of: numberOfLockers andLightYears: lightyears played: laps [
+
+	| lockers |
+	lockers := OrderedCollection new.
+	1 to: numberOfLockers do: [ :number | 
+	lockers add: LockerNoEffect new ].
+	lockers at: effectLockerNumber put: effect.
+
+	^ BoardDefinition
+		  with: lockers
+		  and: (LightYear with: lightyears)
+		  played: laps
+]
+
+{ #category : #boardSpecificDefinitions }
 ZathuraTest >> boardDefinitionWithOnly: effect at: effectLockerNumber of: numberOfLockers andParsec: parsec played: laps [
 
 	| lockers |
@@ -52,10 +67,10 @@ ZathuraTest >> boardDefinitionWithOnly: effect at: effectLockerNumber of: number
 	^ BoardDefinition with: lockers and: (Parsec with: parsec) played: laps
 ]
 
-{ #category : #cancellationCard }
+{ #category : #'test-cancellationCard' }
 ZathuraTest >> testBlueShipCantThrowCancellationCardIfNoCardsHaveBeenPlayed [
 
-	| diceCup zathura  cardManager |
+	| diceCup zathura  |
 	diceCup := DiceCup withAll: { 
 			           (LoadedDie with: 3).
 			           (LoadedDie with: 4) }.
@@ -70,10 +85,9 @@ ZathuraTest >> testBlueShipCantThrowCancellationCardIfNoCardsHaveBeenPlayed [
 		           withCards: { 
 				           OverloadCard new.
 				           CancellationCard new }.
-	cardManager := zathura cardApplicator.
 	self
 		should: [ 
-			cardManager
+			zathura
 				throws: CancellationCard new
 				to: 'RedShip'
 				removing: OverloadCard new
@@ -82,10 +96,10 @@ ZathuraTest >> testBlueShipCantThrowCancellationCardIfNoCardsHaveBeenPlayed [
 		withMessage: 'This card is not active in the table'
 ]
 
-{ #category : #cancellationCard }
+{ #category : #'test-cancellationCard' }
 ZathuraTest >> testBlueShipCantThrowCancellationCardToOverloadCardIfNoOverloadCardsHaveBeenPlayed [
 
-	| diceCup zathura cardManager |
+	| diceCup zathura  |
 	diceCup := DiceCup withAll: { 
 			           (LoadedDie with: 3).
 			           (LoadedDie with: 4) }.
@@ -100,11 +114,10 @@ ZathuraTest >> testBlueShipCantThrowCancellationCardToOverloadCardIfNoOverloadCa
 		           withCards: { 
 				           SpeedCard new.
 				           CancellationCard new }.
-	cardManager := zathura cardApplicator.
-	cardManager throws: SpeedCard new to: 'RedShip' from: 'BlueShip'.
+	zathura throws: SpeedCard new to: 'RedShip' from: 'BlueShip'.
 	self
 		should: [ 
-			cardManager
+			zathura
 				throws: CancellationCard new
 				to: 'RedShip'
 				removing: OverloadCard new
@@ -113,10 +126,10 @@ ZathuraTest >> testBlueShipCantThrowCancellationCardToOverloadCardIfNoOverloadCa
 		withMessage: 'This card is not active in the table'
 ]
 
-{ #category : #shipWithHandOfCardsTests }
+{ #category : #'test-shipWithHandOfCards' }
 ZathuraTest >> testBlueShipCantThrowOverloadCardIfNotInHand [
 
-	| zathura aDie  cardManager |
+	| zathura aDie  |
 	aDie := LoadedDie with: 1.
 	zathura := ZathuraGame
 		           playBy: { 'BlueShip'. 'RedShip' }
@@ -127,15 +140,14 @@ ZathuraTest >> testBlueShipCantThrowOverloadCardIfNotInHand [
 			            played: 1)
 		           rolling: aDie
 		           withCards: { AccelerationCard new }.
-	cardManager := zathura cardApplicator.
 	self
 		should: [ 
-		cardManager throws: OverloadCard new to: 'RedShip' from: 'BlueShip' ]
+		zathura throws: OverloadCard new to: 'RedShip' from: 'BlueShip' ]
 		raise: Error
 		withMessage: 'Card is not in Hand'
 ]
 
-{ #category : #boardTests }
+{ #category : #'test-board' }
 ZathuraTest >> testBlueShipFallsIntoAAtomicBombAndAllShipsGoToFirstLockerOfTheSameLap [
 
 	| die ships zathura boardDefinition |
@@ -177,7 +189,7 @@ ZathuraTest >> testBlueShipFallsIntoAAtomicBombAndAllShipsGoToFirstLockerOfTheSa
 		in: zathura
 ]
 
-{ #category : #boardTests }
+{ #category : #'test-board' }
 ZathuraTest >> testBlueShipFallsIntoAMoonWalkLockerAndTheResultIsItMovesAllOtherShipsBackwardsTwoLockers [
 
 	| die ships zathura boardStructure |
@@ -218,7 +230,7 @@ ZathuraTest >> testBlueShipFallsIntoAMoonWalkLockerAndTheResultIsItMovesAllOther
 		in: zathura
 ]
 
-{ #category : #boardTests }
+{ #category : #'test-board' }
 ZathuraTest >> testBlueShipFallsIntoASpeedUpLockerAndTheResultIsItAdvancesFourLockersMore [
 
 	| die ships zathura boardStructure |
@@ -243,7 +255,7 @@ ZathuraTest >> testBlueShipFallsIntoASpeedUpLockerAndTheResultIsItAdvancesFourLo
 		in: zathura
 ]
 
-{ #category : #boardTests }
+{ #category : #'test-board' }
 ZathuraTest >> testBlueShipFallsIntoAWormHoleLockerAndTheResultIsItAdvancesFourLockersBackwards [
 
 	| die ships zathura boardStructure |
@@ -268,10 +280,10 @@ ZathuraTest >> testBlueShipFallsIntoAWormHoleLockerAndTheResultIsItAdvancesFourL
 		in: zathura
 ]
 
-{ #category : #redoCard }
+{ #category : #'test-redoCard' }
 ZathuraTest >> testBlueShipThrowsARedoCardAfterARepeatCardHasBeenPlayed [
 
-	| diceCup zathura cardManager |
+	| diceCup zathura  |
 	diceCup := DiceCup withAll: { 
 			           (LoadedDie with: 3).
 			           (LoadedDie with: 4) }.
@@ -288,20 +300,23 @@ ZathuraTest >> testBlueShipThrowsARedoCardAfterARepeatCardHasBeenPlayed [
 				           RepeatCard new.
 				           RedoCard new }.
 
-	cardManager := zathura cardApplicator.
 
 	zathura playTurn.
 
-	cardManager throws: RepeatCard new to: 'BlueShip' from: 'BlueShip'.
-	cardManager throws: RedoCard new to: 'GreenShip' from: 'GreenShip'.
-	
-	self assert: 'GreenShip' isAt: 4 with: 0 in: zathura 
+	zathura throws: RepeatCard new to: 'BlueShip' from: 'BlueShip'.
+	zathura throws: RedoCard new to: 'GreenShip' from: 'GreenShip'.
+
+	self
+		assert: 'GreenShip'
+		isAt: 4
+		with: 0
+		in: zathura
 ]
 
-{ #category : #redoCard }
+{ #category : #'test-redoCard' }
 ZathuraTest >> testBlueShipThrowsARedoCardToAPermanentCardWhenItsNotHisTurn [
 
-	| diceCup zathura cardApplicator |
+	| diceCup zathura  |
 	diceCup := DiceCup withAll: { 
 			           (LoadedDie with: 3).
 			           (LoadedDie with: 4) }.
@@ -317,20 +332,19 @@ ZathuraTest >> testBlueShipThrowsARedoCardToAPermanentCardWhenItsNotHisTurn [
 				           SpeedCard new.
 				           RedoCard new }.
 
-	cardApplicator := zathura cardApplicator.
-	cardApplicator throws: SpeedCard new to: 'BlueShip' from: 'BlueShip'.
+	zathura throws: SpeedCard new to: 'BlueShip' from: 'BlueShip'.
 
 	self
 		should: [ 
-		cardApplicator throws: RedoCard new to: 'BlueShip' from: 'GreenShip' ]
+		zathura throws: RedoCard new to: 'BlueShip' from: 'GreenShip' ]
 		raise: Error
 		withMessage: 'Permanent cards can only be used when its your turn'
 ]
 
-{ #category : #redoCard }
+{ #category : #'test-redoCard' }
 ZathuraTest >> testBlueShipThrowsARedoCardToRepeatAnotherRedoCardThrownToASpeedCard [
 
-	| diceCup zathura cardManager |
+	| diceCup zathura  |
 	diceCup := DiceCup withAll: { 
 			           (LoadedDie with: 3).
 			           (LoadedDie with: 4) }.
@@ -346,14 +360,13 @@ ZathuraTest >> testBlueShipThrowsARedoCardToRepeatAnotherRedoCardThrownToASpeedC
 				           SpeedCard new.
 				           RedoCard new }.
 
-	cardManager := zathura cardApplicator.
-	cardManager throws: SpeedCard new to: 'BlueShip' from: 'BlueShip'.
+	zathura throws: SpeedCard new to: 'BlueShip' from: 'BlueShip'.
 
 	zathura playTurn.
-	cardManager throws: RedoCard new to: 'RedShip' from: 'RedShip'.
+	zathura throws: RedoCard new to: 'RedShip' from: 'RedShip'.
 
 	zathura playTurn.
-	cardManager throws: RedoCard new to: 'GreenShip' from: 'GreenShip'.
+	zathura throws: RedoCard new to: 'GreenShip' from: 'GreenShip'.
 	zathura playTurn.
 
 	self
@@ -373,10 +386,10 @@ ZathuraTest >> testBlueShipThrowsARedoCardToRepeatAnotherRedoCardThrownToASpeedC
 		in: zathura
 ]
 
-{ #category : #speedCard }
+{ #category : #'test-speedCard' }
 ZathuraTest >> testBlueShipThrowsASpeedCardToRedShipAndRedShipMovesRolledNumberPlusOneAllGame [
 
-	| diceCup zathura   cardManager |
+	| diceCup zathura  |
 	diceCup := DiceCup withAll: { 
 			           (LoadedDie with: 3).
 			           (LoadedDie with: 4) }.
@@ -389,8 +402,7 @@ ZathuraTest >> testBlueShipThrowsASpeedCardToRedShipAndRedShipMovesRolledNumberP
 			            played: 1)
 		           rolling: diceCup
 		           withCards: { SpeedCard new }.
-	cardManager := zathura cardApplicator.
-	cardManager throws: SpeedCard new to: 'RedShip' from: 'BlueShip'.
+	zathura throws: SpeedCard new to: 'RedShip' from: 'BlueShip'.
 	zathura
 		playTurn;
 		playTurn.
@@ -405,10 +417,10 @@ ZathuraTest >> testBlueShipThrowsASpeedCardToRedShipAndRedShipMovesRolledNumberP
 		assert: 'RedShip' isAtLocker: 16 in: zathura
 ]
 
-{ #category : #cancellationCard }
+{ #category : #'test-cancellationCard' }
 ZathuraTest >> testBlueShipThrowsAnAccelerationCardAndAfterTwoRoundsThrowsACancellationCard [
 
-	| diceCup zathura   cardManager |
+	| diceCup zathura  |
 	diceCup := DiceCup withAll: { 
 			           (LoadedDie with: 3).
 			           (LoadedDie with: 4) }.
@@ -423,8 +435,7 @@ ZathuraTest >> testBlueShipThrowsAnAccelerationCardAndAfterTwoRoundsThrowsACance
 		           withCards: { 
 				           AccelerationCard new.
 				           CancellationCard new }.
-	cardManager := zathura cardApplicator.
-	cardManager throws: AccelerationCard new toAllShipsFrom: 'BlueShip'.
+	zathura throws: AccelerationCard new toAllShipsFrom: 'BlueShip'.
 	zathura
 		playTurn;
 		playTurn.
@@ -437,7 +448,7 @@ ZathuraTest >> testBlueShipThrowsAnAccelerationCardAndAfterTwoRoundsThrowsACance
 	self
 		assert: 'BlueShip' isAtLocker: 16 in: zathura;
 		assert: 'RedShip' isAtLocker: 16 in: zathura.
-	cardManager
+	zathura
 		throws: CancellationCard new
 		removing: AccelerationCard new
 		from: 'BlueShip'.
@@ -449,10 +460,10 @@ ZathuraTest >> testBlueShipThrowsAnAccelerationCardAndAfterTwoRoundsThrowsACance
 		assert: 'RedShip' isAtLocker: 23 in: zathura
 ]
 
-{ #category : #redoCard }
+{ #category : #'test-redoCard' }
 ZathuraTest >> testBlueShipThrowsAnAccelerationCardAndAfterTwoRoundsThrowsARedoCard [
 
-	| diceCup zathura   cardManager |
+	| diceCup zathura  |
 	diceCup := DiceCup withAll: { 
 			           (LoadedDie with: 3).
 			           (LoadedDie with: 4) }.
@@ -467,8 +478,7 @@ ZathuraTest >> testBlueShipThrowsAnAccelerationCardAndAfterTwoRoundsThrowsARedoC
 		           withCards: { 
 				           AccelerationCard new.
 				           RedoCard new }.
-	cardManager := zathura cardApplicator.
-	cardManager throws: AccelerationCard new toAllShipsFrom: 'BlueShip'.
+	zathura throws: AccelerationCard new toAllShipsFrom: 'BlueShip'.
 	zathura
 		playTurn;
 		playTurn.
@@ -481,7 +491,7 @@ ZathuraTest >> testBlueShipThrowsAnAccelerationCardAndAfterTwoRoundsThrowsARedoC
 	self
 		assert: 'BlueShip' isAtLocker: 16 in: zathura;
 		assert: 'RedShip' isAtLocker: 16 in: zathura.
-	cardManager throws: RedoCard new toAllShipsFrom: 'BlueShip'.
+	zathura throws: RedoCard new toAllShipsFrom: 'BlueShip'.
 	zathura
 		playTurn;
 		playTurn.
@@ -490,10 +500,10 @@ ZathuraTest >> testBlueShipThrowsAnAccelerationCardAndAfterTwoRoundsThrowsARedoC
 		assert: 'RedShip' isAtLocker: 25 in: zathura
 ]
 
-{ #category : #accelerationCard }
+{ #category : #'test-accelerationCard' }
 ZathuraTest >> testBlueShipThrowsAnAccelerationCardAndAllShipMovesRolledNumberPlusOneAllGame [
 
-	| diceCup zathura lockersOfBlueShip lockersOfRedShip cardManager |
+	| diceCup zathura lockersOfBlueShip lockersOfRedShip  |
 	diceCup := DiceCup withAll: { 
 			           (LoadedDie with: 3).
 			           (LoadedDie with: 4) }.
@@ -506,8 +516,7 @@ ZathuraTest >> testBlueShipThrowsAnAccelerationCardAndAllShipMovesRolledNumberPl
 			            played: 1)
 		           rolling: diceCup
 		           withCards: { AccelerationCard new }.
-	cardManager := zathura cardApplicator.
-	cardManager throws: AccelerationCard new toAllShipsFrom: 'BlueShip'.
+	zathura throws: AccelerationCard new toAllShipsFrom: 'BlueShip'.
 	zathura
 		playTurn;
 		playTurn.
@@ -521,13 +530,13 @@ ZathuraTest >> testBlueShipThrowsAnAccelerationCardAndAllShipMovesRolledNumberPl
 	lockersOfRedShip := zathura numberOfLockerOf: 'RedShip'.
 	self
 		assert: 'BlueShip' isAtLocker: 16 in: zathura;
-		assert: 'RedShip' isAtLocker: 16 in: zathura.
+		assert: 'RedShip' isAtLocker: 16 in: zathura
 ]
 
-{ #category : #redoCard }
+{ #category : #'test-redoCard' }
 ZathuraTest >> testBlueShipThrowsAnOverloadCardToRedShipAndAfterTwoRoundsThrowsARedoCardToGreenShip [
 
-	| diceCup zathura lockersOfBlueShip lockersOfRedShip lockersOfGreenShip cardManager |
+	| diceCup zathura  |
 	diceCup := DiceCup withAll: { 
 			           (LoadedDie with: 3).
 			           (LoadedDie with: 4) }.
@@ -542,7 +551,6 @@ ZathuraTest >> testBlueShipThrowsAnOverloadCardToRedShipAndAfterTwoRoundsThrowsA
 		           withCards: { 
 				           OverloadCard new.
 				           RedoCard new }.
-	cardManager := zathura cardApplicator.
 	zathura
 		playTurn;
 		playTurn;
@@ -552,7 +560,7 @@ ZathuraTest >> testBlueShipThrowsAnOverloadCardToRedShipAndAfterTwoRoundsThrowsA
 		assert: 'RedShip' isAtLocker: 7 in: zathura.
 	self assert: 'GreenShip' isAtLocker: 7 in: zathura.
 
-	cardManager throws: OverloadCard new to: 'RedShip' from: 'BlueShip'.
+	zathura throws: OverloadCard new to: 'RedShip' from: 'BlueShip'.
 	zathura
 		playTurn;
 		playTurn;
@@ -561,7 +569,7 @@ ZathuraTest >> testBlueShipThrowsAnOverloadCardToRedShipAndAfterTwoRoundsThrowsA
 		assert: 'BlueShip' isAtLocker: 14 in: zathura;
 		assert: 'RedShip' isAtLocker: 12 in: zathura.
 	self assert: 'GreenShip' isAtLocker: 14 in: zathura.
-	cardManager throws: RedoCard new to: 'GreenShip' from: 'BlueShip'.
+	zathura throws: RedoCard new to: 'GreenShip' from: 'BlueShip'.
 	zathura
 		playTurn;
 		playTurn;
@@ -569,13 +577,13 @@ ZathuraTest >> testBlueShipThrowsAnOverloadCardToRedShipAndAfterTwoRoundsThrowsA
 	self
 		assert: 'BlueShip' isAtLocker: 21 in: zathura;
 		assert: 'RedShip' isAtLocker: 17 in: zathura.
-	self assert: 'GreenShip' isAtLocker: 19 in: zathura.
+	self assert: 'GreenShip' isAtLocker: 19 in: zathura
 ]
 
-{ #category : #overloadCard }
+{ #category : #'test-overloadCard' }
 ZathuraTest >> testBlueShipThrowsAnOverloadCardToRedShipAndRedShipMovesBackwards [
 
-	| zathura aDie cardApplicator |
+	| zathura aDie  |
 	aDie := SequencialLoadedDie with: { 4. 4. 1. 1 }.
 	zathura := ZathuraGame
 		           playBy: { 'BlueShip'. 'RedShip' }
@@ -586,10 +594,9 @@ ZathuraTest >> testBlueShipThrowsAnOverloadCardToRedShipAndRedShipMovesBackwards
 			            played: 1)
 		           rolling: aDie
 		           withCards: { OverloadCard new }.
-	cardApplicator := zathura cardApplicator.
 	zathura playTurn.
 	zathura playTurn.
-	cardApplicator throws: OverloadCard new to: 'RedShip' from: 'BlueShip'.
+	zathura throws: OverloadCard new to: 'RedShip' from: 'BlueShip'.
 	zathura playTurn.
 	zathura playTurn.
 	self
@@ -597,10 +604,10 @@ ZathuraTest >> testBlueShipThrowsAnOverloadCardToRedShipAndRedShipMovesBackwards
 		assert: 'RedShip' isAtLocker: 3 in: zathura
 ]
 
-{ #category : #overloadCard }
+{ #category : #'test-overloadCard' }
 ZathuraTest >> testBlueShipThrowsAnOverloadCardToRedShipAndRedShipMovesRolledNumberMinusTwoAllGame [
 
-	| diceCup zathura   cardManager |
+	| diceCup zathura  |
 	diceCup := DiceCup withAll: { 
 			           (LoadedDie with: 3).
 			           (LoadedDie with: 4) }.
@@ -613,8 +620,7 @@ ZathuraTest >> testBlueShipThrowsAnOverloadCardToRedShipAndRedShipMovesRolledNum
 			            played: 1)
 		           rolling: diceCup
 		           withCards: { OverloadCard new }.
-	cardManager := zathura cardApplicator.
-	cardManager throws: OverloadCard new to: 'RedShip' from: 'BlueShip'.
+	zathura throws: OverloadCard new to: 'RedShip' from: 'BlueShip'.
 	zathura
 		playTurn;
 		playTurn.
@@ -629,10 +635,10 @@ ZathuraTest >> testBlueShipThrowsAnOverloadCardToRedShipAndRedShipMovesRolledNum
 		assert: 'RedShip' isAtLocker: 10 in: zathura
 ]
 
-{ #category : #cancellationCard }
+{ #category : #'test-cancellationCard' }
 ZathuraTest >> testBlueShipThrowsAnOverloadCardToRedShipThenRedShipsThrowsACancellationCardWhichCancelsTheOverLoadCard [
 
-	| diceCup zathura   cardManager |
+	| diceCup zathura  |
 	diceCup := DiceCup withAll: { 
 			           (LoadedDie with: 3).
 			           (LoadedDie with: 4) }.
@@ -647,15 +653,14 @@ ZathuraTest >> testBlueShipThrowsAnOverloadCardToRedShipThenRedShipsThrowsACance
 		           withCards: { 
 				           OverloadCard new.
 				           CancellationCard new }.
-	cardManager := zathura cardApplicator.
-	cardManager throws: OverloadCard new to: 'RedShip' from: 'BlueShip'.
+	zathura throws: OverloadCard new to: 'RedShip' from: 'BlueShip'.
 	zathura
 		playTurn;
 		playTurn.
 	self
 		assert: 'BlueShip' isAtLocker: 7 in: zathura;
 		assert: 'RedShip' isAtLocker: 5 in: zathura.
-	cardManager
+	zathura
 		throws: CancellationCard new
 		to: 'RedShip'
 		removing: OverloadCard new
@@ -668,10 +673,10 @@ ZathuraTest >> testBlueShipThrowsAnOverloadCardToRedShipThenRedShipsThrowsACance
 		assert: 'RedShip' isAtLocker: 12 in: zathura
 ]
 
-{ #category : #redoCard }
+{ #category : #'test-redoCard' }
 ZathuraTest >> testBlueShipThrowsAnOverloadsCardsToRedShipAndGreenShipThrowsACancellationCardAndARedoCardToRedShipThrowsError [
 
-	| diceCup zathura    cardManager |
+	| diceCup zathura  |
 	diceCup := DiceCup withAll: { 
 			           (LoadedDie with: 3).
 			           (LoadedDie with: 4) }.
@@ -691,11 +696,10 @@ ZathuraTest >> testBlueShipThrowsAnOverloadsCardsToRedShipAndGreenShipThrowsACan
 				           CancellationCard new.
 				           RedoCard new }.
 
-	cardManager := zathura cardApplicator.
 
-	cardManager throws: OverloadCard new to: 'RedShip' from: 'BlueShip'.
+	zathura throws: OverloadCard new to: 'RedShip' from: 'BlueShip'.
 
-	cardManager
+	zathura
 		throws: CancellationCard new
 		to: 'RedShip'
 		removing: OverloadCard new
@@ -703,7 +707,7 @@ ZathuraTest >> testBlueShipThrowsAnOverloadsCardsToRedShipAndGreenShipThrowsACan
 
 	self
 		should: [ 
-			cardManager
+			zathura
 				throws: RedoCard new
 				to: 'RedShip'
 				removing: OverloadCard new
@@ -712,10 +716,10 @@ ZathuraTest >> testBlueShipThrowsAnOverloadsCardsToRedShipAndGreenShipThrowsACan
 		withMessage: 'This card is not active in the table'
 ]
 
-{ #category : #accelerationCard }
+{ #category : #'test-accelerationCard' }
 ZathuraTest >> testBlueShipThrowsErrorWhenUsesAnAccelerationCardAndItIsNotItsTurn [
 
-	| die ships boardStructure zathura  cardManager |
+	| die ships boardStructure zathura  |
 	die := LoadedDie with: 7.
 	ships := #( 'BlueShip' 'RedShip' ).
 	boardStructure := self
@@ -729,20 +733,19 @@ ZathuraTest >> testBlueShipThrowsErrorWhenUsesAnAccelerationCardAndItIsNotItsTur
 		           rolling: die
 		           withCards: { AccelerationCard new }.
 
-	cardManager := zathura cardApplicator.
 	zathura playTurn.
 
 	self
 		should: [ 
-		cardManager throws: AccelerationCard new toAllShipsFrom: 'BlueShip' ]
+		zathura throws: AccelerationCard new toAllShipsFrom: 'BlueShip' ]
 		raise: Error
 		withMessage: 'Permanent cards can only be used when its your turn'
 ]
 
-{ #category : #overloadCard }
+{ #category : #'test-overloadCard' }
 ZathuraTest >> testBlueShipThrowsErrorWhenUsesAnOverloadCardAndItIsNotItsTurn [
 
-	| die ships boardStructure zathura  cardManager |
+	| die ships boardStructure zathura  |
 	die := LoadedDie with: 7.
 	ships := #( 'BlueShip' 'RedShip' ).
 	boardStructure := self
@@ -756,19 +759,18 @@ ZathuraTest >> testBlueShipThrowsErrorWhenUsesAnOverloadCardAndItIsNotItsTurn [
 		           rolling: die
 		           withCards: { OverloadCard new }.
 	zathura playTurn.
-	cardManager := zathura cardApplicator.
 
 	self
 		should: [ 
-		cardManager throws: OverloadCard new to: 'RedShip' from: 'BlueShip' ]
+		zathura throws: OverloadCard new to: 'RedShip' from: 'BlueShip' ]
 		raise: Error
 		withMessage: 'Permanent cards can only be used when its your turn'
 ]
 
-{ #category : #speedCard }
+{ #category : #'test-speedCard' }
 ZathuraTest >> testBlueShipThrowsErrorWhenUsesAnSpeedCardAndItIsNotItsTurn [
 
-	| die ships boardStructure zathura cardManager |
+	| die ships boardStructure zathura  |
 	die := LoadedDie with: 7.
 	ships := #( 'BlueShip' 'RedShip' ).
 	boardStructure := self
@@ -782,19 +784,18 @@ ZathuraTest >> testBlueShipThrowsErrorWhenUsesAnSpeedCardAndItIsNotItsTurn [
 		           rolling: die
 		           withCards: { SpeedCard new }.
 	zathura playTurn.
-	cardManager := zathura cardApplicator.
 
 	self
 		should: [ 
-		cardManager throws: SpeedCard new to: 'RedShip' from: 'BlueShip' ]
+		zathura throws: SpeedCard new to: 'RedShip' from: 'BlueShip' ]
 		raise: Error
 		withMessage: 'Permanent cards can only be used when its your turn'
 ]
 
-{ #category : #redoCard }
+{ #category : #'test-redoCard' }
 ZathuraTest >> testBlueShipThrowsTwoOverloadsCardsToRedShipAndGreenShipThrowsACancellationCardAndARedoCardToRedShip [
 
-	| diceCup zathura    cardManager |
+	| diceCup zathura  |
 	diceCup := DiceCup withAll: { 
 			           (LoadedDie with: 3).
 			           (LoadedDie with: 4) }.
@@ -813,7 +814,6 @@ ZathuraTest >> testBlueShipThrowsTwoOverloadsCardsToRedShipAndGreenShipThrowsACa
 				           OverloadCard new.
 				           CancellationCard new.
 				           RedoCard new }.
-	cardManager := zathura cardApplicator.
 	zathura
 		playTurn;
 		playTurn;
@@ -823,8 +823,8 @@ ZathuraTest >> testBlueShipThrowsTwoOverloadsCardsToRedShipAndGreenShipThrowsACa
 		assert: 'RedShip' isAtLocker: 7 in: zathura.
 	self assert: 'GreenShip' isAtLocker: 7 in: zathura.
 
-	cardManager throws: OverloadCard new to: 'RedShip' from: 'BlueShip'.
-	cardManager throws: OverloadCard new to: 'RedShip' from: 'BlueShip'.
+	zathura throws: OverloadCard new to: 'RedShip' from: 'BlueShip'.
+	zathura throws: OverloadCard new to: 'RedShip' from: 'BlueShip'.
 	zathura
 		playTurn;
 		playTurn;
@@ -833,12 +833,12 @@ ZathuraTest >> testBlueShipThrowsTwoOverloadsCardsToRedShipAndGreenShipThrowsACa
 		assert: 'BlueShip' isAtLocker: 14 in: zathura;
 		assert: 'RedShip' isAtLocker: 10 in: zathura.
 	self assert: 'GreenShip' isAtLocker: 14 in: zathura.
-	cardManager
+	zathura
 		throws: CancellationCard new
 		to: 'RedShip'
 		removing: OverloadCard new
 		from: 'GreenShip'.
-	cardManager
+	zathura
 		throws: RedoCard new
 		to: 'RedShip'
 		removing: OverloadCard new
@@ -853,10 +853,10 @@ ZathuraTest >> testBlueShipThrowsTwoOverloadsCardsToRedShipAndGreenShipThrowsACa
 	self assert: 'GreenShip' isAtLocker: 21 in: zathura
 ]
 
-{ #category : #boardTests }
+{ #category : #'test-board' }
 ZathuraTest >> testBlueShipsFallsIntoaCardGetterLockerAndGetsAnOverLoadCard [
 
-	| die ships boardDefinition zathura cardApplicator |
+	| die ships boardDefinition zathura  |
 	die := LoadedDie with: 1.
 	ships := #( 'BlueShip' 'RedShip' ).
 	boardDefinition := self
@@ -870,24 +870,14 @@ ZathuraTest >> testBlueShipsFallsIntoaCardGetterLockerAndGetsAnOverLoadCard [
 		           movedInBoardOf: boardDefinition
 		           rolling: die
 		           withCards: { OverloadCard new }.
-	cardApplicator := zathura cardApplicator.
-	cardApplicator
-		throws: OverloadCard new
-		to: 'RedShip'
-		from: 'BlueShip'.
-	cardApplicator
-		throws: OverloadCard new
-		to: 'RedShip'
-		from: 'BlueShip'.
+	zathura throws: OverloadCard new to: 'RedShip' from: 'BlueShip'.
+	zathura throws: OverloadCard new to: 'RedShip' from: 'BlueShip'.
 	zathura playTurn.
 	zathura playTurn.
-	cardApplicator
-		throws: OverloadCard new
-		to: 'RedShip'
-		from: 'BlueShip'
+	zathura throws: OverloadCard new to: 'RedShip' from: 'BlueShip'
 ]
 
-{ #category : #boardTests }
+{ #category : #'test-board' }
 ZathuraTest >> testBoardCanBeInitializedWithLightyears [
 
 	| board |
@@ -896,10 +886,10 @@ ZathuraTest >> testBoardCanBeInitializedWithLightyears [
 		         and: (LightYear with: 60)
 		         played: 3.
 
-	self assert: board parsecsPerLocker equals: 1
+	self assert: board distancePerLockerAsParsecs equals: 1.
 ]
 
-{ #category : #boardDefinitionAssertionTests }
+{ #category : #'test-boardDefinitionAssertion' }
 ZathuraTest >> testBoardStructureCannotHaveLessThanTwoLockers [
 
 	self
@@ -909,7 +899,7 @@ ZathuraTest >> testBoardStructureCannotHaveLessThanTwoLockers [
 		withMessage: 'Board Structure cannot have less than two lockers'
 ]
 
-{ #category : #boardDefinitionAssertionTests }
+{ #category : #'test-boardDefinitionAssertion' }
 ZathuraTest >> testBoardStructureCannotHaveLessThanZeroLaps [
 
 	self
@@ -935,7 +925,7 @@ ZathuraTest >> testBoardStructureCannotHaveLessThanZeroLaps [
 		withMessage: 'Board Structure cannot have less than zero laps'
 ]
 
-{ #category : #boardDefinitionAssertionTests }
+{ #category : #'test-boardDefinitionAssertion' }
 ZathuraTest >> testBoardStructureCannotHaveLessThanZeroParsecs [
 
 	self
@@ -961,10 +951,10 @@ ZathuraTest >> testBoardStructureCannotHaveLessThanZeroParsecs [
 		withMessage: 'Board Structure cannot have less than zero parsecs'
 ]
 
-{ #category : #shipWithHandOfCardsTests }
+{ #category : #'test-shipWithHandOfCards' }
 ZathuraTest >> testCardHandThrowsErrorWhenThrownTheThirdCardBeacauseItStartsTheGameWithTwoCard [
 
-	| die ships boardStructure zathura cardApplicator |
+	| die ships boardStructure zathura |
 	die := LoadedDie with: 2.
 	ships := #( 'BlueShip' 'RedShip' ).
 	boardStructure := self
@@ -976,23 +966,16 @@ ZathuraTest >> testCardHandThrowsErrorWhenThrownTheThirdCardBeacauseItStartsTheG
 		           movedInBoardOf: boardStructure
 		           rolling: die
 		           withCards: { OverloadCard new }.
-	cardApplicator := zathura cardApplicator.
-	cardApplicator
-		throws: OverloadCard new
-		to: 'RedShip'
-		from: 'BlueShip'.
-	cardApplicator
-		throws: OverloadCard new
-		to: 'RedShip'
-		from: 'BlueShip'.
+	zathura throws: OverloadCard new to: 'RedShip' from: 'BlueShip'.
+	zathura throws: OverloadCard new to: 'RedShip' from: 'BlueShip'.
 	self
 		should: [ 
-		cardApplicator throws: OverloadCard new to: 'RedShip' from: 'BlueShip' ]
+		zathura throws: OverloadCard new to: 'RedShip' from: 'BlueShip' ]
 		raise: Error
 		withMessage: 'Card is not in Hand'
 ]
 
-{ #category : #tests }
+{ #category : #'test-zathuraGame' }
 ZathuraTest >> testGreenShipWinsAndFinishesInPositionZeroWithOneLapCompleted [
 
 	| zathura die ships boardStructure |
@@ -1039,7 +1022,7 @@ ZathuraTest >> testGreenShipWinsAndFinishesInPositionZeroWithOneLapCompleted [
 	self assert: zathura winner  equals: 'GreenShip'
 ]
 
-{ #category : #boardTests }
+{ #category : #'test-board' }
 ZathuraTest >> testHyperJumpUnderstandBothLightYearsAndParsecsInTheSameSequence [
 
 	| sequence die ships boardDefinition zathura |
@@ -1059,7 +1042,7 @@ ZathuraTest >> testHyperJumpUnderstandBothLightYearsAndParsecsInTheSameSequence 
 		                   (HyperJumpEffect with: sequence)
 		                   at: 2
 		                   of: 10
-		                   andParsec: 10
+		                   andLightYears: 30
 		                   played: 3.
 
 	zathura := ZathuraGame
@@ -1069,15 +1052,13 @@ ZathuraTest >> testHyperJumpUnderstandBothLightYearsAndParsecsInTheSameSequence 
 		           withCards: { OverloadCard new }.
 
 	zathura playTurn.
-		self
-		assert: 'BlueShip' isAtLocker: 7 in: zathura.
+	self assert: 'BlueShip' isAtLocker: 7 in: zathura.
 
 	zathura playTurn.
-		self
-		assert: 'RedShip' isAtLocker: 2 in: zathura.
+	self assert: 'RedShip' isAtLocker: 2 in: zathura
 ]
 
-{ #category : #boardDefinitionAssertionTests }
+{ #category : #'test-boardDefinitionAssertion' }
 ZathuraTest >> testHyperjumpCannotHaveANullParsecSequence [
 
 	self
@@ -1086,7 +1067,7 @@ ZathuraTest >> testHyperjumpCannotHaveANullParsecSequence [
 		withMessage: 'Hyperjump cannot have a null parsec sequence'
 ]
 
-{ #category : #boardDefinitionAssertionTests }
+{ #category : #'test-boardDefinitionAssertion' }
 ZathuraTest >> testHyperjumpCannotHaveLessThanZeroParsecsInTheSequence [
 
 	self
@@ -1096,7 +1077,7 @@ ZathuraTest >> testHyperjumpCannotHaveLessThanZeroParsecsInTheSequence [
 		'Hyperjump cannot have less than zero parsecs in the sequence'
 ]
 
-{ #category : #boardDefinitionAssertionTests }
+{ #category : #'test-boardDefinitionAssertion' }
 ZathuraTest >> testMoonwalkCannotHaveLessThanZeroLockers [
 
 	self
@@ -1112,10 +1093,10 @@ ZathuraTest >> testMoonwalkCannotHaveLessThanZeroLockers [
 		'MoonWalk cannot be created with less than zero lockers'
 ]
 
-{ #category : #redoCard }
+{ #category : #'test-redoCard' }
 ZathuraTest >> testRedoCardThrowsErrorWhenBlueShipThrowsItBeforeAnyOtherCardHasBeenThrownInTheGame [
 
-	| diceCup zathura cardManager |
+	| diceCup zathura  |
 	diceCup := DiceCup withAll: { 
 			           (LoadedDie with: 3).
 			           (LoadedDie with: 4) }.
@@ -1131,19 +1112,19 @@ ZathuraTest >> testRedoCardThrowsErrorWhenBlueShipThrowsItBeforeAnyOtherCardHasB
 				           SpeedCard new.
 				           RedoCard new }.
 
-	cardManager := zathura cardApplicator.
 
 	self
 		should: [ 
-		cardManager throws: RedoCard new to: 'RedShip' from: 'RedShip' ]
+		zathura throws: RedoCard new to: 'RedShip' from: 'RedShip' ]
 		raise: Error
-		withMessage: 'Redo card must be thrown before another card has been played'
+		withMessage:
+		'Redo card must be thrown before another card has been played'
 ]
 
-{ #category : #cancellationCard }
+{ #category : #'test-cancellationCard' }
 ZathuraTest >> testShipCantThrowCancellationCardToCancelACardToTheWrongShip [
 
-	| diceCup zathura lockersOfBlueShip lockersOfRedShip cardManager |
+	| diceCup zathura  |
 	diceCup := DiceCup withAll: { 
 			           (LoadedDie with: 3).
 			           (LoadedDie with: 4) }.
@@ -1158,8 +1139,7 @@ ZathuraTest >> testShipCantThrowCancellationCardToCancelACardToTheWrongShip [
 		           withCards: { 
 				           OverloadCard new.
 				           CancellationCard new }.
-	cardManager := zathura cardApplicator.
-	cardManager throws: OverloadCard new to: 'RedShip' from: 'BlueShip'.
+	zathura throws: OverloadCard new to: 'RedShip' from: 'BlueShip'.
 	zathura
 		playTurn;
 		playTurn.
@@ -1169,7 +1149,7 @@ ZathuraTest >> testShipCantThrowCancellationCardToCancelACardToTheWrongShip [
 
 	self
 		should: [ 
-			cardManager
+			zathura
 				throws: CancellationCard new
 				to: 'BlueShip'
 				removing: OverloadCard new
@@ -1178,7 +1158,7 @@ ZathuraTest >> testShipCantThrowCancellationCardToCancelACardToTheWrongShip [
 		withMessage: 'This card is not active in the table'
 ]
 
-{ #category : #boardTests }
+{ #category : #'test-board' }
 ZathuraTest >> testShipLandsOnAWormholeEffectAndGoesBackOneLap [
 
 	| zathura sequencialDie ships boardStructure |
@@ -1211,7 +1191,7 @@ ZathuraTest >> testShipLandsOnAWormholeEffectAndGoesBackOneLap [
 		in: zathura
 ]
 
-{ #category : #boardTests }
+{ #category : #'test-board' }
 ZathuraTest >> testShipsFallIntoAHyperJumpLockerAndMovesByTheLightYearsInASequence [
 
 	| die ships zathura boardStructure  sequence |
@@ -1257,7 +1237,7 @@ ZathuraTest >> testShipsFallIntoAHyperJumpLockerAndMovesByTheLightYearsInASequen
 		in: zathura
 ]
 
-{ #category : #boardTests }
+{ #category : #'test-board' }
 ZathuraTest >> testShipsFallIntoAHyperJumpLockerAndMovesByTheParsecsInASequence [
 
 	| die ships zathura boardStructure sequence |
@@ -1303,7 +1283,7 @@ ZathuraTest >> testShipsFallIntoAHyperJumpLockerAndMovesByTheParsecsInASequence 
 		in: zathura
 ]
 
-{ #category : #tests }
+{ #category : #'test-zathuraGame' }
 ZathuraTest >> testThePositionOfEachShipCanBeKnownWhenTheGameIsFinished [
 
 	| zathura diceCup ships boardStructure |
@@ -1342,7 +1322,7 @@ ZathuraTest >> testThePositionOfEachShipCanBeKnownWhenTheGameIsFinished [
 		in: zathura
 ]
 
-{ #category : #tests }
+{ #category : #'test-zathuraGame' }
 ZathuraTest >> testWhenShipGoesBackwardsInTheFirstLapItStayesAtTheLapZero [
 
 	| zathura diceCup ships boardStructure |
@@ -1370,7 +1350,7 @@ ZathuraTest >> testWhenShipGoesBackwardsInTheFirstLapItStayesAtTheLapZero [
 		assert: 'BlueShip' isAt: 0 with: 0 in: zathura . 
 ]
 
-{ #category : #zathuraAssertionTests }
+{ #category : #'test-zathuraAssertion' }
 ZathuraTest >> testZathuraCannotBePlayedMoreThanOnce [
 
 	| ships aDie zathura boardStructure |
@@ -1394,7 +1374,7 @@ ZathuraTest >> testZathuraCannotBePlayedMoreThanOnce [
 		withMessage: 'Zathura cannot be played more than once'
 ]
 
-{ #category : #tests }
+{ #category : #'test-zathuraGame' }
 ZathuraTest >> testZathuraGamePlaysATurnAndDoNotFinish [
 
 	| ships aDie zathura boardStructure |
@@ -1416,7 +1396,7 @@ ZathuraTest >> testZathuraGamePlaysATurnAndDoNotFinish [
 	self deny: zathura hasFinished
 ]
 
-{ #category : #zathuraAssertionTests }
+{ #category : #'test-zathuraAssertion' }
 ZathuraTest >> testZathuraInitializedWithLessThanTwoShipsThrowsError [
 
 	| die ships |
@@ -1435,7 +1415,7 @@ ZathuraTest >> testZathuraInitializedWithLessThanTwoShipsThrowsError [
 		withMessage: 'Zathura cannot be played with less than two ships'
 ]
 
-{ #category : #tests }
+{ #category : #'test-zathuraGame' }
 ZathuraTest >> testZathuraIsInitializedWithAllShipsInPositionZeroAndLapZero [
 
 	| die ships zathura boardStructure |
@@ -1463,7 +1443,7 @@ ZathuraTest >> testZathuraIsInitializedWithAllShipsInPositionZeroAndLapZero [
 		in: zathura
 ]
 
-{ #category : #tests }
+{ #category : #'test-zathuraGame' }
 ZathuraTest >> testZathuraKnowsTheRankingOfAShip [
 
 	| die ships zathura faces boardStructure |
@@ -1497,10 +1477,10 @@ ZathuraTest >> testZathuraKnowsTheRankingOfAShip [
 	self assert: (zathura rankingOf: 'RedShip') equals: 3
 ]
 
-{ #category : #repeatCard }
+{ #category : #'test-repeatCard' }
 ZathuraTest >> testZathuraRedShipThrowsRepeatCardToBlueShip [
 
-	|  zathura aDie  cardManager |
+	| zathura aDie  |
 	aDie := LoadedDie with: 2.
 	zathura := ZathuraGame
 		           playBy: { 'BlueShip'. 'RedShip' }
@@ -1527,8 +1507,7 @@ ZathuraTest >> testZathuraRedShipThrowsRepeatCardToBlueShip [
 		with: 0
 		in: zathura.
 
-	cardManager := zathura cardApplicator.
-	cardManager throws: RepeatCard new to: 'RedShip' from: 'RedShip'.
+	zathura throws: RepeatCard new to: 'RedShip' from: 'RedShip'.
 
 	self
 		assert: 'RedShip'
@@ -1542,10 +1521,10 @@ ZathuraTest >> testZathuraRedShipThrowsRepeatCardToBlueShip [
 		in: zathura
 ]
 
-{ #category : #repeatCard }
+{ #category : #'test-repeatCard' }
 ZathuraTest >> testZathuraRedShipThrowsRepeatCardToHimselfWhenTheLastLockerWasANoEffectLockerAndNothingHappens [
 
-	| zathura aDie cardManager |
+	| zathura aDie  |
 	aDie := LoadedDie with: 2.
 	zathura := ZathuraGame
 		           playBy: { 'BlueShip'. 'RedShip' }
@@ -1571,8 +1550,7 @@ ZathuraTest >> testZathuraRedShipThrowsRepeatCardToHimselfWhenTheLastLockerWasAN
 		with: 0
 		in: zathura.
 
-	cardManager := zathura cardApplicator.
-	cardManager throws: RepeatCard new to: 'RedShip' from: 'RedShip'.
+	zathura throws: RepeatCard new to: 'RedShip' from: 'RedShip'.
 
 	self
 		assert: 'RedShip'
@@ -1581,7 +1559,7 @@ ZathuraTest >> testZathuraRedShipThrowsRepeatCardToHimselfWhenTheLastLockerWasAN
 		in: zathura
 ]
 
-{ #category : #boardTests }
+{ #category : #'test-board' }
 ZathuraTest >> testZathuraShipFallsIntoASpeedUpMovesFourLockersAndStaysThere [
 
 	| die ships zathura lockers boardStructure |
@@ -1618,7 +1596,7 @@ ZathuraTest >> testZathuraShipFallsIntoASpeedUpMovesFourLockersAndStaysThere [
 		in: zathura
 ]
 
-{ #category : #boardTests }
+{ #category : #'test-board' }
 ZathuraTest >> testZathuraWhenCrossingTheLastLockerTheShipsStartsAnotherLap [
 
 	| die ships zathura boardStructure |
@@ -1649,7 +1627,7 @@ ZathuraTest >> testZathuraWhenCrossingTheLastLockerTheShipsStartsAnotherLap [
 		in: zathura
 ]
 
-{ #category : #zathuraAssertionTests }
+{ #category : #'test-zathuraAssertion' }
 ZathuraTest >> testZathuraWhileItHasNotFinishedAsksWinnerThrowsError [
 
 	| die ships zathura boardStructure |

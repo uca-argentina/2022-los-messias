@@ -25,18 +25,61 @@ Internal Representation and Key Implementation Points.
 "
 Class {
 	#name : #Sequence,
-	#superclass : #OrderedCollection,
+	#superclass : #Object,
 	#instVars : [
 		'collection'
 	],
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #'change set' }
+{ #category : #'class initialization' }
+Sequence class >> newEmpty [
+	^ self new initializeWith: {  }
+]
+
+{ #category : #'instance creation' }
+Sequence class >> with: aCollection [
+
+	^ self new initializeWith: aCollection
+]
+
+{ #category : #private }
+Sequence >> add: anObject [ 
+	collection  add: anObject .
+]
+
+{ #category : #actions }
+Sequence >> detect: aFindingBlock [ 
+	^collection detect: aFindingBlock .
+]
+
+{ #category : #actions }
+Sequence >> do: anAction [ 
+	collection do: anAction 
+]
+
+{ #category : #'find-select' }
+Sequence >> first [
+	^collection first .
+]
+
+{ #category : #initialization }
+Sequence >> initializeWith: aCollection [
+
+	collection := OrderedCollection new.
+	aCollection do: [ :element | collection add: element ]
+]
+
+{ #category : #actions }
 Sequence >> next [
 
 	| aValue |
-	aValue := self removeFirst.
-	self addLast: aValue.
+	aValue := collection  removeFirst.
+	collection  addLast: aValue.
 	^aValue 
+]
+
+{ #category : #actions }
+Sequence >> sort: aSortingFunction [ 
+	collection sort: aSortingFunction 
 ]

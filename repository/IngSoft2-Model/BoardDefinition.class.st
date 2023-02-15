@@ -30,8 +30,8 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'lockers',
-		'parsecs',
-		'laps'
+		'laps',
+		'distance'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -57,35 +57,48 @@ BoardDefinition class >> assertParsecsAreValid: parsecs [
 		Error signal: 'Board Structure cannot have less than zero parsecs' ]
 ]
 
+{ #category : #asserting }
+BoardDefinition class >> assertUnitIsValid: distance [
+
+	distance  > 0 ifFalse: [ 
+		Error signal: 'Board Structure cannot have less than zero parsecs' ]
+]
+
 { #category : #'instance creation' }
 BoardDefinition class >> with: lockers and: unit played: laps [
 
 	self assertLockersAreValid: lockers size.
-	self assertParsecsAreValid: unit valueAsParsec .
+	self assertUnitIsValid: unit value.
 	self assertLapsAreValid: laps.
 	^ self new initializeWith: lockers and: unit played: laps
 ]
 
+{ #category : #accessing }
+BoardDefinition >> distancePerLockerAsParsecs [
+
+	^ (lockers size / distance valueAsParsec ) asFloat
+]
+
 { #category : #initialization }
-BoardDefinition >> initializeWith: aCollectionOfLockers and: aNumberParsecs played: aNumberLaps [
+BoardDefinition >> initializeWith: aCollectionOfLockers and: aDistance played: aNumberLaps [
 
 	lockers := aCollectionOfLockers.
-	parsecs := aNumberParsecs valueAsParsec.
+	distance := aDistance.
 	laps := aNumberLaps
 ]
 
-{ #category : #accesing }
+{ #category : #accessing }
 BoardDefinition >> laps [
 	^ laps
 ]
 
-{ #category : #accesing }
+{ #category : #accessing }
 BoardDefinition >> lockerAt: num [
 
 	^ lockers at: num
 ]
 
-{ #category : #accesing }
+{ #category : #accessing }
 BoardDefinition >> numberOfLockers [
 
 ^ lockers size
