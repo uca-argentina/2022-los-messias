@@ -4,13 +4,7 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #evaluating }
-UnitMeasure >> value [
-
-self subclassResponsibility .
-]
-
-{ #category : #accessing }
+{ #category : #accesing }
 UnitMeasure >> valueAsParsec [
 
 	self subclassResponsibility

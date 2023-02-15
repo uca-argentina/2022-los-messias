@@ -49,21 +49,11 @@ SequencialLoadedDie class >> with: anArrayOfNumbers [
 { #category : #initialization }
 SequencialLoadedDie >> initializeWith: aCollectionOfNumbers [
 
-	dies := Sequence with: (self loadSequenceOfDiesWith: aCollectionOfNumbers)
+	dies := Sequence withAll: (self loadSequence: aCollectionOfNumbers)
 ]
 
 { #category : #initialization }
 SequencialLoadedDie >> loadSequence: aCollectionOfNumbers [
-
-	| collectionOfDies |
-	collectionOfDies := OrderedCollection new.
-	aCollectionOfNumbers do: [ :number | 
-		collectionOfDies add: (LoadedDie with: number) ].
-	^ collectionOfDies
-]
-
-{ #category : #initialization }
-SequencialLoadedDie >> loadSequenceOfDiesWith: aCollectionOfNumbers [
 
 	| collectionOfDies |
 	collectionOfDies := OrderedCollection new.

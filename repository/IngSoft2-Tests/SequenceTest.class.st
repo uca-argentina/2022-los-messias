@@ -8,8 +8,7 @@ Class {
 SequenceTest >> testTheRotationOfTheSequenceWorksCorrectly [
 
 	| aSequence |
-	
-	aSequence := Sequence with: (OrderedCollection with: 1 with:2  with: 3).
+	aSequence := Sequence with: 1 with: 2 with: 3.
 
 	self assert: aSequence next equals: 1.
 	self assert: aSequence next equals: 2.

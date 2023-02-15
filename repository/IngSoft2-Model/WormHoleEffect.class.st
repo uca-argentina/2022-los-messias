@@ -26,7 +26,7 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #action }
+{ #category : #actions }
 WormHoleEffect >> applyFor: aShip on: aBoard [
 
 	aBoard move: aShip by: -4
