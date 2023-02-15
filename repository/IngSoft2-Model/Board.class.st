@@ -57,18 +57,6 @@ Board >> addIntoGame: aCollectionOfShips [
 ]
 
 { #category : #private }
-Board >> applyEffectOnLockerOrCorrectPositionIfShipCrossedTheFinishLine: aShip [
-
-	| thisLocker |
-	thisLocker := boardDefinition lockerAt:
-		              (self numberOfLockerOf: aShip) + 1.
-	lastEffect := thisLocker.
-	(self hasCrossFinishLine: aShip) ifFalse: [ 
-		thisLocker applyFor: aShip on: self] ifTrue: [ self correctPositionOfWinner: aShip ]
-	
-]
-
-{ #category : #private }
 Board >> applyEffectOnLockerOrCorrectThePositionOfWinnerTo: aShip [
 
 	| thisLocker |
@@ -90,7 +78,7 @@ Board >> applyLastEffectOn: aShip [
 Board >> changePositionOf: aShip by: aNumberOfLockers [
 
 	self move: aShip by: aNumberOfLockers.
-	self applyEffectOnLockerOrCorrectPositionIfShipCrossedTheFinishLine: aShip
+	self applyEffectOnLockerOrCorrectThePositionOfWinnerTo: aShip
 ]
 
 { #category : #private }
@@ -141,22 +129,11 @@ Board >> move: aShip by: aNumberOfLockers [
 { #category : #private }
 Board >> move: aShip byParsecs: numberOfParsecs [
 
-	self
-		move: aShip
-		by: (numberOfParsecs * boardDefinition distancePerLockerAsParsecs ) floor.
+	self move: aShip by: (numberOfParsecs * (boardDefinition parsecsPerLocker )) asInteger
 ]
 
 { #category : #private }
 Board >> moveAllExcept: aShip by: aNumberOfLockers [
-
-	| ships |
-	ships := (positionOfShips collect: [ :positionOfShip | 
-		          positionOfShip ship ]) copyWithout: aShip.
-	ships do: [ :ship | self move: ship by: aNumberOfLockers * -1 ]
-]
-
-{ #category : #private }
-Board >> moveAllShipsBackwardsExcept: aShip by: aNumberOfLockers [
 
 	| ships |
 	ships := (positionOfShips collect: [ :positionOfShip | 

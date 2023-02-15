@@ -4,16 +4,10 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #comparing }
-CancellationCard >> = aCard [
-
-^(self class == aCard class).
-]
-
 { #category : #action }
-CancellationCard >> applyEffectTo: aShip removing: aCard on: aZathuraGame [
+CancellationCard >> applyEffectTo: aShip removing: aCard on: aCardManager [
 
-	aZathuraGame
-		removeFromCardsOnTable: (ActiveCard with: aCard appliedTo: aShip)
-		with: self
+	aCardManager removeFromCardsOnTable:
+		(ActiveCard with: aCard appliedTo: aShip).
+	aCardManager addToTheCardsStack: self
 ]

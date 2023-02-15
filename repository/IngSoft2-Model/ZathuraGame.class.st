@@ -37,8 +37,7 @@ Class {
 		'timesPlayed',
 		'ships',
 		'cardManager',
-		'cardHands',
-		'cardThrower'
+		'cardApplicator'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -60,21 +59,9 @@ ZathuraGame class >> playBy: ships movedInBoardOf: boardStructure rolling: die w
 		  withCards: cards
 ]
 
-{ #category : #actions }
-ZathuraGame >> addCardToTable: aCard [ 
-	cardManager addCardToTable: aCard.
-]
-
 { #category : #resendingToBoard }
 ZathuraGame >> applyLastEffectOn: aShip [ 
 	board applyLastEffectOn: (aShip).
-]
-
-{ #category : #actions }
-ZathuraGame >> applyLastEffectOn: aShip with: aRepeatCard [
-
-	board applyLastEffectOn: aShip.
-	cardManager addToTheCardsStack: aRepeatCard
 ]
 
 { #category : #asserting }
@@ -99,14 +86,9 @@ ZathuraGame >> cardApplicator [
 { #category : #accessing }
 ZathuraGame >> checkIfWon: aShip [
 
-	(board hasCrossFinishLine: aShip) ifFalse: [ ^ self ].
-	timesPlayed := 1.
-	finished := true
-]
-
-{ #category : #actions }
-ZathuraGame >> giveCardTo: aShip [ 
-	cardHands giveCard: (cardManager giveCard ) to: aShip.
+	(board hasCrossFinishLine: aShip) ifTrue: [ 
+		timesPlayed := 1.
+		finished := true ]
 ]
 
 { #category : #state }
@@ -119,21 +101,17 @@ ZathuraGame >> hasFinished [
 ZathuraGame >> initializePlayingBy: aCollectionOfShips movedInBoardOf: boardStructure rolling: aDiceCup withCards: aCollectionOfCards [
 
 	diceCup := aDiceCup.
-	cardManager := CardsInZathura
+	cardManager := CardManager
 		               with: aCollectionOfShips
 		               and: aCollectionOfCards
 		               from: self.
 	ships := aCollectionOfShips asOrderedCollection asSequence.
-
+	cardApplicator := CardApplicator with: cardManager.
 	board := Board
 		         of: boardStructure
 		         withAll: ships
 		         andCardManager: cardManager.
-cardHands := CardHandsInGame with: aCollectionOfShips.
-cardThrower := CardThrower createNewWith: cardHands  in: self.
-aCollectionOfShips do: [ :ship | 
-		self  giveCardTo: ship.
-		self  giveCardTo: ship ].
+
 	finished := false.
 	timesPlayed := 0
 ]
@@ -142,11 +120,6 @@ aCollectionOfShips do: [ :ship |
 ZathuraGame >> isTurnOf: aShip [
 
 	^ ((ships first) == aShip)
-]
-
-{ #category : #accessing }
-ZathuraGame >> lastCardThrownOnTheGame [
-	^cardManager lastCardThrownOnTheGame .
 ]
 
 { #category : #positioning }
@@ -185,50 +158,9 @@ ZathuraGame >> rankingOf: aShip [
 	^ board rankingOf: aShip.
 ]
 
-{ #category : #actions }
-ZathuraGame >> removeFromCardsOnTable: aCard with: aCancellationCard [ 
-	cardManager removeFromCardsOnTable: aCard with: aCancellationCard 
-]
-
-{ #category : #'accessing - attributes' }
-ZathuraGame >> ships [
-	| nameShips |
-	nameShips := OrderedCollection new.
-	ships do: [ :aShip | nameShips add: aShip ].
-	^nameShips.
-]
-
-{ #category : #'card - actions' }
-ZathuraGame >> throws: aCancellationCard removing: aCard from: aShip [
-
-	cardThrower   throws: aCancellationCard removing: aCard from: aShip
-]
-
-{ #category : #'card - actions' }
-ZathuraGame >> throws: aCard to: aTargetShip from: aShip [
-
-	cardThrower   throws: aCard to: aTargetShip from: aShip
-]
-
-{ #category : #'card - actions' }
-ZathuraGame >> throws: aCancellationCard to: aTargetShip removing: aCard from: aShip [
-
-	cardThrower  
-		throw: aCancellationCard
-		to: aTargetShip
-		removing: aCard
-		from: aShip
-]
-
-{ #category : #'card - actions' }
-ZathuraGame >> throws: aCard toAllShipsFrom: aShip [
-
-	cardThrower  throw: aCard toAllShipsFrom: aShip
-]
-
 { #category : #accessing }
 ZathuraGame >> winner [
 
 	self assertZathuraHasFinished.
-	^ (ships detect: [ :ship | (self rankingOf: ship) == 1 ]).
+	^ (ships select: [ :ship | (self rankingOf: ship) == 1 ]) first
 ]

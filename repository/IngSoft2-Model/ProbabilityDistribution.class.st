@@ -13,7 +13,7 @@ ProbabilityDistribution class >> assertValid: points [
 	| sum |
 	points size <= 0 ifTrue: [ Error signal: 'There must be at least one point' ].
 	
-	sum := points sum: [ :point | point probability  ].
+	sum := points sum: [ :point | point y ].
 	sum == 100 ifFalse: [ 
 		Error signal: 'The sum of the probabilities must be 100%' ].
 ]
@@ -25,8 +25,8 @@ ProbabilityDistribution class >> with: aCollectionOfPoints [
 	indices := OrderedCollection new.
 	probabilities := OrderedCollection new.
 	aCollectionOfPoints do: [ :aPoint | 
-		indices add: aPoint event.
-		probabilities add: aPoint probability  ].
+		indices add: aPoint x.
+		probabilities add: aPoint y ].
 	self assertValid: aCollectionOfPoints.
 	^ self new with: aCollectionOfPoints
 ]
@@ -45,9 +45,9 @@ ProbabilityDistribution >> getGeneratedObjectWith: result [
 	| prob sum |
 	sum := 0.
 	points do: [ :aPoint | 
-		prob := aPoint probability .
+		prob := aPoint y.
 		result <= (prob + sum)
-			ifTrue: [ ^ aPoint event ]
+			ifTrue: [ ^ aPoint x ]
 			ifFalse: [ sum := sum + prob ] ]
 ]
 

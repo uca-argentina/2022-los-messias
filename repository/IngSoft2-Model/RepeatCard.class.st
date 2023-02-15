@@ -4,14 +4,9 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #comparing }
-RepeatCard >> = aCard [
-
-^(self class == aCard class).
-]
-
 { #category : #actions }
-RepeatCard >> applyEffectTo: aShip on: aZathuraGame by: sourceShip [
+RepeatCard >> applyEffectTo: aShip on: aCardManager by: sourceShip [
 
-	aZathuraGame applyLastEffectOn: aShip with: self
+	aCardManager applyLastEffectOn: aShip.
+	aCardManager addToTheCardsStack: self
 ]

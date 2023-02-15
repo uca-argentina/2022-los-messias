@@ -49,7 +49,7 @@ HyperJumpEffect class >> with: parsecSequence [
 	^ self new initializeWith: parsecSequence asOrderedCollection 
 ]
 
-{ #category : #action }
+{ #category : #'instance creation' }
 HyperJumpEffect >> applyFor: aShip on: aBoard [
 
 	| parsecs |

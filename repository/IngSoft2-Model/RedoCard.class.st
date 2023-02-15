@@ -4,32 +4,32 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #comparing }
-RedoCard >> = aCard [
+{ #category : #action }
+RedoCard >> applyEffectTo: aShip on: aCardManager by: sourceShip [
 
-^(self class == aCard class).
+	| aCard |
+	aCard := aCardManager lastCardThrownOnTheGame.
+	aCard applyEffectTo: aShip on: aCardManager by: sourceShip.
+
+	aCardManager addToTheCardsStack: aCard
 ]
 
 { #category : #action }
-RedoCard >> applyEffectTo: aShip on: aZathuraGame by: sourceShip [
+RedoCard >> applyEffectTo: aShip removing: card on: aCardManager [
 
 	| aCard |
-	aCard := aZathuraGame lastCardThrownOnTheGame.
-	aCard applyEffectTo: aShip on: aZathuraGame by: sourceShip
+	aCard := aCardManager lastCardThrownOnTheGame.
+	aCard applyEffectTo: aShip removing: card on: aCardManager.
+
+	aCardManager addToTheCardsStack: aCard
 ]
 
 { #category : #action }
-RedoCard >> applyEffectTo: aShip removing: card on: aZathuraGame [
+RedoCard >> applyEffectToAllShipsOn: aCardManager by: sourceShip [
 
 	| aCard |
-	aCard := aZathuraGame lastCardThrownOnTheGame.
-	aCard applyEffectTo: aShip removing: card on: aZathuraGame
-]
-
-{ #category : #action }
-RedoCard >> applyEffectToAllShipsOn: zathura by: sourceShip [
-
-	| aCard |
-	aCard := zathura lastCardThrownOnTheGame.
-	aCard applyEffectToAllShipsOn: zathura by: sourceShip
+	aCard := aCardManager lastCardThrownOnTheGame.
+	aCard applyEffectToAllShipsOn: aCardManager by: sourceShip.
+	
+	aCardManager addToTheCardsStack: aCard
 ]
