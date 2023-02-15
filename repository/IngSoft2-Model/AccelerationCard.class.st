@@ -4,25 +4,29 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #action }
-AccelerationCard >> applyEffectToAllShipsOn: aCardManager by: sourceShip [
+{ #category : #comparing }
+AccelerationCard >> = aCard [
 
-	self assertIsYourTurn: sourceShip in: aCardManager.
-	
-	aCardManager addCardToTable:
-		(ActiveCard with: self appliedTo: aCardManager ships).
-	
-	aCardManager addToTheCardsStack: self
+^(self class == aCard class).
+]
+
+{ #category : #action }
+AccelerationCard >> applyEffectToAllShipsOn: aZathuraGame by: sourceShip [
+
+	self assertIsYourTurn: sourceShip in: aZathuraGame .
+
+	aZathuraGame  addCardToTable:
+		(ActiveCard with: self appliedTo: aZathuraGame  ships)
 ]
 
 { #category : #asserting }
-AccelerationCard >> assertIsYourTurn: aShip in: aCardManager [
+AccelerationCard >> assertIsYourTurn: aShip in: aZathuraGame [
 
-	(aCardManager isTurnOf: aShip) ifFalse: [ 
+	(aZathuraGame isTurnOf: aShip) ifFalse: [ 
 		Error signal: 'Permanent cards can only be used when its your turn' ]
 ]
 
-{ #category : #accesing }
+{ #category : #accessing }
 AccelerationCard >> changeOfRoll [
 	^1
 ]

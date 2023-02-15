@@ -7,7 +7,7 @@ Class {
 { #category : #tests }
 PointProbabilityTest >> testPointProbabilityThrowsErrorWhenItIsLoadedWithANegativeProbability [
 		self
-		should: [ PointProbability withX: 'c' andY: -10 ]
+		should: [ ProbabilityPoint initializeEvent: 'c' withProbability: -10 ]
 		raise: Error
 		withMessage: 'A probabilty can not be negative'
 	

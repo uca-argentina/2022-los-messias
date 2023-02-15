@@ -13,17 +13,17 @@ ZathuraFunctionalTest >> boardDefinitionWithRandomEffects [
 		            (Parsec with: 4).
 		            (Parsec with: 8) }.
 	points := { 
-		          (PointProbability withX: LockerNoEffect new andY: 30).
-		          (PointProbability withX: AtomicBombEffect new andY: 2).
-		          (PointProbability
-			           withX: (HyperJumpEffect with: sequence)
-			           andY: 8).
-		          (PointProbability
-			           withX: (MoonWalkEffect with: 10)
-			           andY: 10).
-		          (PointProbability withX: SpeedUpEffect new andY: 20).
-		          (PointProbability withX: WormHoleEffect new andY: 20).
-		          (PointProbability withX: CardEffect new andY: 10) }.
+		          (ProbabilityPoint initializeEvent: LockerNoEffect new withProbability: 30).
+		          (ProbabilityPoint initializeEvent: AtomicBombEffect new withProbability: 2).
+		          (ProbabilityPoint
+			           initializeEvent: (HyperJumpEffect with: sequence)
+			           withProbability: 8).
+		          (ProbabilityPoint
+			           initializeEvent: (MoonWalkEffect with: 10)
+			           withProbability: 10).
+		          (ProbabilityPoint initializeEvent: SpeedUpEffect new withProbability: 20).
+		          (ProbabilityPoint initializeEvent: WormHoleEffect new withProbability: 20).
+		          (ProbabilityPoint initializeEvent: CardEffect new withProbability: 10) }.
 
 	probabilityDistribution := ProbabilityDistribution with: points.
 	boardDefinition := BoardDefinition with:

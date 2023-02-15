@@ -21,12 +21,12 @@ ActiveCard >> = activeCard [
 		  self card class = activeCard card class ]
 ]
 
-{ #category : #accesing }
+{ #category : #accessing }
 ActiveCard >> card [
 	^ card
 ]
 
-{ #category : #accesing }
+{ #category : #accessing }
 ActiveCard >> changeOfRoll [ 
 
 ^card changeOfRoll.
@@ -38,7 +38,7 @@ ActiveCard >> initializeWith: aCard appliedTo: aShip [
 	ship := aShip 
 ]
 
-{ #category : #accesing }
+{ #category : #accessing }
 ActiveCard >> ship [
 	^ ship
 ]

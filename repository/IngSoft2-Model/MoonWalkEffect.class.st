@@ -45,10 +45,10 @@ MoonWalkEffect class >> with: aNumberOfLockers [
 	^ self new intializeWith: aNumberOfLockers
 ]
 
-{ #category : #'class initialization' }
+{ #category : #action }
 MoonWalkEffect >> applyFor: aShip on: aBoard [
 
-aBoard moveAllExcept: aShip by: lockers
+aBoard moveAllShipsBackwardsExcept: aShip by: lockers
 ]
 
 { #category : #'class initialization' }

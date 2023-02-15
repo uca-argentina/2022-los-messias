@@ -9,8 +9,8 @@ ProbabilityDistributionTest >> testProbabilityDistributionReceivesACollectionWit
 
 	| aProbabilityDistribution |
 	aProbabilityDistribution := ProbabilityDistribution with: { 
-			                            (PointProbability withX: 'a' andY: 100).
-			                            (PointProbability withX: 'b' andY: 0) }.
+			                            (ProbabilityPoint initializeEvent: 'a' withProbability: 100).
+			                            (ProbabilityPoint initializeEvent: 'b' withProbability: 0) }.
 	self assert: aProbabilityDistribution generateRandom equals: 'a'
 ]
 
@@ -19,9 +19,9 @@ ProbabilityDistributionTest >> testProbabilityDistributionReceivesACollectionWit
 
 	| aProbabilityDistribution aCollection |
 	aProbabilityDistribution := ProbabilityDistribution with: { 
-			                            (PointProbability withX: 'a' andY: 75).
-			                            (PointProbability  withX: 'b' andY: 20).
-			                            (PointProbability  withX: 'c' andY: 5) }.
+			                            (ProbabilityPoint initializeEvent: 'a' withProbability: 75).
+			                            (ProbabilityPoint  initializeEvent: 'b' withProbability: 20).
+			                            (ProbabilityPoint  initializeEvent: 'c' withProbability: 5) }.
 
 	aCollection := OrderedCollection new.
 	1 to: 100000 do: [ :i | 
@@ -45,8 +45,8 @@ ProbabilityDistributionTest >> testProbabilityDistributionThrowsErrorWhenIsIitia
 
 	self
 		should: [ ProbabilityDistribution with: { 
-					(PointProbability withX: 'a' andY: 10).
-					(PointProbability withX: 'b' andY: 89) }]
+					(ProbabilityPoint initializeEvent: 'a' withProbability: 10).
+					(ProbabilityPoint initializeEvent: 'b' withProbability: 89) }]
 		raise: Error
 		withMessage: 'The sum of the probabilities must be 100%'
 ]

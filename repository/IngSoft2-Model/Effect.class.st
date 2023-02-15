@@ -26,6 +26,12 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
+{ #category : #comparing }
+Effect >> = anEffect [
+
+^(self class == anEffect class).
+]
+
 { #category : #action }
 Effect >> applyFor: aShip on: aBoard [
 
